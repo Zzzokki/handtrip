@@ -1,4 +1,4 @@
-import { gql } from 'graphql-tag';
+import { gql } from "graphql-tag";
 
 export const authTypeDefs = gql`
   input RegisterAsCustomerInput {
@@ -10,20 +10,22 @@ export const authTypeDefs = gql`
     email: String!
   }
 
-  type AuthResponse {
+  # Responses
+
+  type LoginAsCustomerResponse {
     token: String!
-    user: Customer!
+    customer: Customer!
   }
 
-  type CompanyAuthResponse {
+  type LoginAsCompanyResponse {
     token: String!
-    user: Company!
+    company: Company!
   }
 
   type Mutation {
-    loginAsCustomer(username: String!, password: String!): AuthResponse!
-    loginAsCompany(username: String!, password: String!): CompanyAuthResponse!
+    loginAsCustomer(username: String!, password: String!): LoginAsCustomerResponse!
+    loginAsCompany(username: String!, password: String!): LoginAsCompanyResponse!
 
-    registerAsCustomer(input: RegisterAsCustomerInput): AuthResponse!
+    registerAsCustomer(input: RegisterAsCustomerInput!): LoginAsCustomerResponse!
   }
 `;

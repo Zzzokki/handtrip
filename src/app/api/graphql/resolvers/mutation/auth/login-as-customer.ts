@@ -1,7 +1,7 @@
-
 import { verifyPassword } from "@/lib/utils/password";
-import { db } from "../../../database";
-import { MutationResolvers } from "../../../types/generated.ts/types.generated";
+import { db } from "@/database";
+import jwt from "jsonwebtoken";
+import { MutationResolvers } from "@/api/types";
 
 export const loginAsCustomer: MutationResolvers["loginAsCustomer"] = async (_, { username, password }) => {
   const customer = await db.query.customerTable.findFirst({
@@ -14,5 +14,9 @@ export const loginAsCustomer: MutationResolvers["loginAsCustomer"] = async (_, {
 
   if (!isPasswordValid) throw new Error("Invalid username or password");
 
-  return customer
-}
+  const token = jwt.sign({ id: customer.id, role: "customer" }, process.env.JWT_SECRET!, {
+    expiresIn: "7d",
+  });
+
+  return { token, customer };
+};

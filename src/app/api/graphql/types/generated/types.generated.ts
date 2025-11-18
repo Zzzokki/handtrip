@@ -17,12 +17,6 @@ export type Scalars = {
   Timestamp: { input: Date | string | number; output: Date | string | number; }
 };
 
-export type AuthResponse = {
-  __typename?: 'AuthResponse';
-  token: Scalars['String']['output'];
-  user: Customer;
-};
-
 export type Category = {
   __typename?: 'Category';
   createdAt: Scalars['Timestamp']['output'];
@@ -44,12 +38,6 @@ export type Company = {
   updatedAt: Scalars['Timestamp']['output'];
 };
 
-export type CompanyAuthResponse = {
-  __typename?: 'CompanyAuthResponse';
-  token: Scalars['String']['output'];
-  user: Company;
-};
-
 export type Customer = {
   __typename?: 'Customer';
   createdAt: Scalars['Timestamp']['output'];
@@ -62,11 +50,23 @@ export type Customer = {
   username: Scalars['String']['output'];
 };
 
+export type LoginAsCompanyResponse = {
+  __typename?: 'LoginAsCompanyResponse';
+  company: Company;
+  token: Scalars['String']['output'];
+};
+
+export type LoginAsCustomerResponse = {
+  __typename?: 'LoginAsCustomerResponse';
+  customer: Customer;
+  token: Scalars['String']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
-  loginAsCompany: CompanyAuthResponse;
-  loginAsCustomer: AuthResponse;
-  registerAsCustomer: AuthResponse;
+  loginAsCompany: LoginAsCompanyResponse;
+  loginAsCustomer: LoginAsCustomerResponse;
+  registerAsCustomer: LoginAsCustomerResponse;
 };
 
 
@@ -83,7 +83,7 @@ export type MutationloginAsCustomerArgs = {
 
 
 export type MutationregisterAsCustomerArgs = {
-  input?: InputMaybe<RegisterAsCustomerInput>;
+  input: RegisterAsCustomerInput;
 };
 
 export type Query = {
@@ -224,13 +224,13 @@ export type DirectiveResolverFn<TResult = Record<PropertyKey, never>, TParent = 
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  AuthResponse: ResolverTypeWrapper<AuthResponse>;
-  String: ResolverTypeWrapper<Scalars['String']['output']>;
   Category: ResolverTypeWrapper<Category>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  String: ResolverTypeWrapper<Scalars['String']['output']>;
   Company: ResolverTypeWrapper<Company>;
-  CompanyAuthResponse: ResolverTypeWrapper<CompanyAuthResponse>;
   Customer: ResolverTypeWrapper<Customer>;
+  LoginAsCompanyResponse: ResolverTypeWrapper<LoginAsCompanyResponse>;
+  LoginAsCustomerResponse: ResolverTypeWrapper<LoginAsCustomerResponse>;
   Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
   Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
@@ -243,13 +243,13 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  AuthResponse: AuthResponse;
-  String: Scalars['String']['output'];
   Category: Category;
   Int: Scalars['Int']['output'];
+  String: Scalars['String']['output'];
   Company: Company;
-  CompanyAuthResponse: CompanyAuthResponse;
   Customer: Customer;
+  LoginAsCompanyResponse: LoginAsCompanyResponse;
+  LoginAsCustomerResponse: LoginAsCustomerResponse;
   Mutation: Record<PropertyKey, never>;
   Query: Record<PropertyKey, never>;
   ID: Scalars['ID']['output'];
@@ -258,11 +258,6 @@ export type ResolversParentTypes = {
   Timestamp: Scalars['Timestamp']['output'];
   Travel: Travel;
   Boolean: Scalars['Boolean']['output'];
-};
-
-export type AuthResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthResponse'] = ResolversParentTypes['AuthResponse']> = {
-  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  user?: Resolver<ResolversTypes['Customer'], ParentType, ContextType>;
 };
 
 export type CategoryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Category'] = ResolversParentTypes['Category']> = {
@@ -284,11 +279,6 @@ export type CompanyResolvers<ContextType = any, ParentType extends ResolversPare
   updatedAt?: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
 };
 
-export type CompanyAuthResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['CompanyAuthResponse'] = ResolversParentTypes['CompanyAuthResponse']> = {
-  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  user?: Resolver<ResolversTypes['Company'], ParentType, ContextType>;
-};
-
 export type CustomerResolvers<ContextType = any, ParentType extends ResolversParentTypes['Customer'] = ResolversParentTypes['Customer']> = {
   createdAt?: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -300,10 +290,20 @@ export type CustomerResolvers<ContextType = any, ParentType extends ResolversPar
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 };
 
+export type LoginAsCompanyResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['LoginAsCompanyResponse'] = ResolversParentTypes['LoginAsCompanyResponse']> = {
+  company?: Resolver<ResolversTypes['Company'], ParentType, ContextType>;
+  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+};
+
+export type LoginAsCustomerResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['LoginAsCustomerResponse'] = ResolversParentTypes['LoginAsCustomerResponse']> = {
+  customer?: Resolver<ResolversTypes['Customer'], ParentType, ContextType>;
+  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  loginAsCompany?: Resolver<ResolversTypes['CompanyAuthResponse'], ParentType, ContextType, RequireFields<MutationloginAsCompanyArgs, 'password' | 'username'>>;
-  loginAsCustomer?: Resolver<ResolversTypes['AuthResponse'], ParentType, ContextType, RequireFields<MutationloginAsCustomerArgs, 'password' | 'username'>>;
-  registerAsCustomer?: Resolver<ResolversTypes['AuthResponse'], ParentType, ContextType, Partial<MutationregisterAsCustomerArgs>>;
+  loginAsCompany?: Resolver<ResolversTypes['LoginAsCompanyResponse'], ParentType, ContextType, RequireFields<MutationloginAsCompanyArgs, 'password' | 'username'>>;
+  loginAsCustomer?: Resolver<ResolversTypes['LoginAsCustomerResponse'], ParentType, ContextType, RequireFields<MutationloginAsCustomerArgs, 'password' | 'username'>>;
+  registerAsCustomer?: Resolver<ResolversTypes['LoginAsCustomerResponse'], ParentType, ContextType, RequireFields<MutationregisterAsCustomerArgs, 'input'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -344,11 +344,11 @@ export type TravelResolvers<ContextType = any, ParentType extends ResolversParen
 };
 
 export type Resolvers<ContextType = any> = {
-  AuthResponse?: AuthResponseResolvers<ContextType>;
   Category?: CategoryResolvers<ContextType>;
   Company?: CompanyResolvers<ContextType>;
-  CompanyAuthResponse?: CompanyAuthResponseResolvers<ContextType>;
   Customer?: CustomerResolvers<ContextType>;
+  LoginAsCompanyResponse?: LoginAsCompanyResponseResolvers<ContextType>;
+  LoginAsCustomerResponse?: LoginAsCustomerResponseResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   SubCategory?: SubCategoryResolvers<ContextType>;

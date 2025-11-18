@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import { type Metadata } from "next";
+import { type PropsWithChildren } from "react";
+
 import localFont from "next/font/local";
 import "./globals.css";
-import { PropsWithChildren } from "react";
 import { ApolloWrapper } from "@/components/providers/ApolloWrapper";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 
@@ -24,9 +25,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ApolloWrapper>
           <AuthProvider>{children}</AuthProvider>
         </ApolloWrapper>

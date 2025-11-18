@@ -1,22 +1,12 @@
-import { db } from "../../../database";
-import type { QueryResolvers } from "../../../types/generated.ts/types.generated";
+import { QueryResolvers } from "@/api/types";
+import { db } from "@/database";
 
-export const getTravels: NonNullable<
-  QueryResolvers["getTravels"]
-> = async () => {
+export const getTravels: QueryResolvers["getTravels"] = async () => {
   const allTravels = await db.query.travelTable.findMany({
     with: {
       company: true,
-      subCategories: {
-        with: {
-          subCategory: true,
-        },
-      },
-      categories: {
-        with: {
-          category: true,
-        },
-      },
+      subCategories: { with: { subCategory: true } },
+      categories: { with: { category: true } },
     },
     limit: 50,
   });

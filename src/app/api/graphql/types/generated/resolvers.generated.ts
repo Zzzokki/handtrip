@@ -10,11 +10,11 @@ import    { getTravelsBySubCategory as Query_getTravelsBySubCategory } from './.
 import    { loginAsCompany as Mutation_loginAsCompany } from './../../schemas/resolvers/Mutation/loginAsCompany';
 import    { loginAsCustomer as Mutation_loginAsCustomer } from './../../schemas/resolvers/Mutation/loginAsCustomer';
 import    { registerAsCustomer as Mutation_registerAsCustomer } from './../../schemas/resolvers/Mutation/registerAsCustomer';
-import    { AuthResponse } from './../../schemas/resolvers/AuthResponse';
 import    { Category } from './../../schemas/resolvers/Category';
 import    { Company } from './../../schemas/resolvers/Company';
-import    { CompanyAuthResponse } from './../../schemas/resolvers/CompanyAuthResponse';
 import    { Customer } from './../../schemas/resolvers/Customer';
+import    { LoginAsCompanyResponse } from './../../schemas/resolvers/LoginAsCompanyResponse';
+import    { LoginAsCustomerResponse } from './../../schemas/resolvers/LoginAsCustomerResponse';
 import    { SubCategory } from './../../schemas/resolvers/SubCategory';
 import    { Travel } from './../../schemas/resolvers/Travel';
 import    { TimestampResolver } from 'graphql-scalars';
@@ -22,11 +22,11 @@ import    { TimestampResolver } from 'graphql-scalars';
       Query: { getCategories: Query_getCategories,getCompany: Query_getCompany,getCustomer: Query_getCustomer,getSubCategories: Query_getSubCategories,getTravel: Query_getTravel,getTravels: Query_getTravels,getTravelsBySubCategory: Query_getTravelsBySubCategory },
       Mutation: { loginAsCompany: Mutation_loginAsCompany,loginAsCustomer: Mutation_loginAsCustomer,registerAsCustomer: Mutation_registerAsCustomer },
       
-      AuthResponse: AuthResponse,
-Category: Category,
+      Category: Category,
 Company: Company,
-CompanyAuthResponse: CompanyAuthResponse,
 Customer: Customer,
+LoginAsCompanyResponse: LoginAsCompanyResponse,
+LoginAsCustomerResponse: LoginAsCustomerResponse,
 SubCategory: SubCategory,
 Travel: Travel,
 Timestamp: TimestampResolver

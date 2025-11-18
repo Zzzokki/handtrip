@@ -1,7 +1,7 @@
 mutation LoginAsCompany($username: String!, $password: String!) {
   loginAsCompany(username: $username, password: $password) {
     token
-    user {
+    company {
       id
       name
       logo
@@ -18,29 +18,29 @@ mutation LoginAsCompany($username: String!, $password: String!) {
 mutation LoginAsCustomer($username: String!, $password: String!) {
   loginAsCustomer(username: $username, password: $password) {
     token
-    user {
+    customer {
       id
-      username
       firstName
       lastName
       phoneNumber
       email
+      username
       createdAt
       updatedAt
     }
   }
 }
 
-mutation RegisterAsCustomer($input: RegisterAsCustomerInput) {
+mutation RegisterAsCustomer($input: RegisterAsCustomerInput!) {
   registerAsCustomer(input: $input) {
     token
-    user {
+    customer {
       id
-      username
       firstName
       lastName
       phoneNumber
       email
+      username
       createdAt
       updatedAt
     }

@@ -18,7 +18,10 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/api/types": ["./src/app/api/graphql/types/generated/types.generated.ts"],
+      "@/lib/*": ["./src/lib/*"],
+      "@/database": ["./src/app/api/graphql/database/index.ts"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

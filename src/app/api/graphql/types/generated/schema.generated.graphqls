@@ -1,8 +1,3 @@
-type AuthResponse {
-  token: String!
-  user: Customer!
-}
-
 type Category {
   createdAt: Timestamp!
   id: Int!
@@ -22,11 +17,6 @@ type Company {
   updatedAt: Timestamp!
 }
 
-type CompanyAuthResponse {
-  token: String!
-  user: Company!
-}
-
 type Customer {
   createdAt: Timestamp!
   email: String!
@@ -38,10 +28,20 @@ type Customer {
   username: String!
 }
 
+type LoginAsCompanyResponse {
+  company: Company!
+  token: String!
+}
+
+type LoginAsCustomerResponse {
+  customer: Customer!
+  token: String!
+}
+
 type Mutation {
-  loginAsCompany(password: String!, username: String!): CompanyAuthResponse!
-  loginAsCustomer(password: String!, username: String!): AuthResponse!
-  registerAsCustomer(input: RegisterAsCustomerInput): AuthResponse!
+  loginAsCompany(password: String!, username: String!): LoginAsCompanyResponse!
+  loginAsCustomer(password: String!, username: String!): LoginAsCustomerResponse!
+  registerAsCustomer(input: RegisterAsCustomerInput!): LoginAsCustomerResponse!
 }
 
 type Query {
