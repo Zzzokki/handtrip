@@ -18,7 +18,29 @@ export const customerTypeDefs = gql`
     updatedAt: Timestamp!
   }
 
+  input CreateCustomerInput {
+    firstName: String!
+    lastName: String!
+    phoneNumber: String!
+    email: String!
+    username: String!
+    password: String!
+  }
+  input UpdateCustomerInput {
+    id: Int!
+    firstName: String
+    lastName: String
+    phoneNumber: String
+    email: String
+    username: String
+  }
+
   type Query {
-    getCustomer(id: ID!): Customer!
+    getCustomer(id: Int!): Customer!
+  }
+  type Mutation {
+    createCustomer(input: CreateCustomerInput!): Customer!
+    updateCustomer(input: UpdateCustomerInput!): Customer!
+    deleteCustomer(id: Int!): Customer!
   }
 `;

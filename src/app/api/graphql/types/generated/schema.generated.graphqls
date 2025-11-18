@@ -24,6 +24,27 @@ type Company {
   name: String!
   phoneNumber: String!
   updatedAt: Timestamp!
+  username: String!
+}
+
+input CreateCompanyInput {
+  coverImage: String!
+  description: String!
+  email: String!
+  logo: String!
+  name: String!
+  password: String!
+  phoneNumber: String!
+  username: String!
+}
+
+input CreateCustomerInput {
+  email: String!
+  firstName: String!
+  lastName: String!
+  password: String!
+  phoneNumber: String!
+  username: String!
 }
 
 type Customer {
@@ -67,16 +88,22 @@ type LoginAsCustomerResponse {
 }
 
 type Mutation {
+  createCompany(input: CreateCompanyInput!): Company!
+  createCustomer(input: CreateCustomerInput!): Customer!
   createDestination(location: String!, name: String!): Destination!
+  deleteCompany(id: Int!): Company!
+  deleteCustomer(id: Int!): Customer!
   loginAsCompany(password: String!, username: String!): LoginAsCompanyResponse!
   loginAsCustomer(password: String!, username: String!): LoginAsCustomerResponse!
   registerAsCustomer(input: RegisterAsCustomerInput!): LoginAsCustomerResponse!
+  updateCompany(input: UpdateCompanyInput!): Company!
+  updateCustomer(input: UpdateCustomerInput!): Customer!
 }
 
 type Query {
   getCategories: [Category!]!
-  getCompany(id: ID!): Company!
-  getCustomer(id: ID!): Customer!
+  getCompany(id: Int!): Company!
+  getCustomer(id: Int!): Customer!
   getDestinations: [Destination!]!
   getSubCategories: [SubCategory!]!
   getTravel(id: Int!): Travel!
@@ -132,4 +159,24 @@ type TravelSession {
   startDate: Timestamp!
   travelId: Int!
   updatedAt: Timestamp!
+}
+
+input UpdateCompanyInput {
+  coverImage: String
+  description: String
+  email: String
+  id: Int!
+  logo: String
+  name: String
+  phoneNumber: String
+  username: String
+}
+
+input UpdateCustomerInput {
+  email: String
+  firstName: String
+  id: Int!
+  lastName: String
+  phoneNumber: String
+  username: String
 }

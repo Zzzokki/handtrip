@@ -7,6 +7,9 @@ const config: CodegenConfig = {
   generates: {
     "./src/app/api/graphql/types/generated": defineConfig({
       resolverGeneration: "disabled",
+      typesPluginsConfig: {
+        inputMaybeValue: "T | undefined",
+      },
     }),
   },
 };

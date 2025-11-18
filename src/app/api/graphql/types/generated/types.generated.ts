@@ -1,6 +1,6 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 export type Maybe<T> = T | null | undefined;
-export type InputMaybe<T> = T | null | undefined;
+export type InputMaybe<T> = T | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -46,6 +46,27 @@ export type Company = {
   name: Scalars['String']['output'];
   phoneNumber: Scalars['String']['output'];
   updatedAt: Scalars['Timestamp']['output'];
+  username: Scalars['String']['output'];
+};
+
+export type CreateCompanyInput = {
+  coverImage: Scalars['String']['input'];
+  description: Scalars['String']['input'];
+  email: Scalars['String']['input'];
+  logo: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  phoneNumber: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+};
+
+export type CreateCustomerInput = {
+  email: Scalars['String']['input'];
+  firstName: Scalars['String']['input'];
+  lastName: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  phoneNumber: Scalars['String']['input'];
+  username: Scalars['String']['input'];
 };
 
 export type Customer = {
@@ -95,16 +116,42 @@ export type LoginAsCustomerResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createCompany: Company;
+  createCustomer: Customer;
   createDestination: Destination;
+  deleteCompany: Company;
+  deleteCustomer: Customer;
   loginAsCompany: LoginAsCompanyResponse;
   loginAsCustomer: LoginAsCustomerResponse;
   registerAsCustomer: LoginAsCustomerResponse;
+  updateCompany: Company;
+  updateCustomer: Customer;
+};
+
+
+export type MutationcreateCompanyArgs = {
+  input: CreateCompanyInput;
+};
+
+
+export type MutationcreateCustomerArgs = {
+  input: CreateCustomerInput;
 };
 
 
 export type MutationcreateDestinationArgs = {
   location: Scalars['String']['input'];
   name: Scalars['String']['input'];
+};
+
+
+export type MutationdeleteCompanyArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type MutationdeleteCustomerArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -124,6 +171,16 @@ export type MutationregisterAsCustomerArgs = {
   input: RegisterAsCustomerInput;
 };
 
+
+export type MutationupdateCompanyArgs = {
+  input: UpdateCompanyInput;
+};
+
+
+export type MutationupdateCustomerArgs = {
+  input: UpdateCustomerInput;
+};
+
 export type Query = {
   __typename?: 'Query';
   getCategories: Array<Category>;
@@ -138,12 +195,12 @@ export type Query = {
 
 
 export type QuerygetCompanyArgs = {
-  id: Scalars['ID']['input'];
+  id: Scalars['Int']['input'];
 };
 
 
 export type QuerygetCustomerArgs = {
-  id: Scalars['ID']['input'];
+  id: Scalars['Int']['input'];
 };
 
 
@@ -205,6 +262,26 @@ export type TravelSession = {
   startDate: Scalars['Timestamp']['output'];
   travelId: Scalars['Int']['output'];
   updatedAt: Scalars['Timestamp']['output'];
+};
+
+export type UpdateCompanyInput = {
+  coverImage?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['Int']['input'];
+  logo?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateCustomerInput = {
+  email?: InputMaybe<Scalars['String']['input']>;
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['Int']['input'];
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -285,6 +362,8 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Category: ResolverTypeWrapper<Category>;
   Company: ResolverTypeWrapper<Company>;
+  CreateCompanyInput: CreateCompanyInput;
+  CreateCustomerInput: CreateCustomerInput;
   Customer: ResolverTypeWrapper<Customer>;
   Destination: ResolverTypeWrapper<Destination>;
   Guide: ResolverTypeWrapper<Guide>;
@@ -292,12 +371,14 @@ export type ResolversTypes = {
   LoginAsCustomerResponse: ResolverTypeWrapper<LoginAsCustomerResponse>;
   Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
   Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
-  ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   RegisterAsCustomerInput: RegisterAsCustomerInput;
   SubCategory: ResolverTypeWrapper<SubCategory>;
+  ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Timestamp: ResolverTypeWrapper<Scalars['Timestamp']['output']>;
   Travel: ResolverTypeWrapper<Travel>;
   TravelSession: ResolverTypeWrapper<TravelSession>;
+  UpdateCompanyInput: UpdateCompanyInput;
+  UpdateCustomerInput: UpdateCustomerInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
 };
 
@@ -308,6 +389,8 @@ export type ResolversParentTypes = {
   Int: Scalars['Int']['output'];
   Category: Category;
   Company: Company;
+  CreateCompanyInput: CreateCompanyInput;
+  CreateCustomerInput: CreateCustomerInput;
   Customer: Customer;
   Destination: Destination;
   Guide: Guide;
@@ -315,12 +398,14 @@ export type ResolversParentTypes = {
   LoginAsCustomerResponse: LoginAsCustomerResponse;
   Mutation: Record<PropertyKey, never>;
   Query: Record<PropertyKey, never>;
-  ID: Scalars['ID']['output'];
   RegisterAsCustomerInput: RegisterAsCustomerInput;
   SubCategory: SubCategory;
+  ID: Scalars['ID']['output'];
   Timestamp: Scalars['Timestamp']['output'];
   Travel: Travel;
   TravelSession: TravelSession;
+  UpdateCompanyInput: UpdateCompanyInput;
+  UpdateCustomerInput: UpdateCustomerInput;
   Boolean: Scalars['Boolean']['output'];
 };
 
@@ -350,6 +435,7 @@ export type CompanyResolvers<ContextType = any, ParentType extends ResolversPare
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   phoneNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
+  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 };
 
 export type CustomerResolvers<ContextType = any, ParentType extends ResolversParentTypes['Customer'] = ResolversParentTypes['Customer']> = {
@@ -393,10 +479,16 @@ export type LoginAsCustomerResponseResolvers<ContextType = any, ParentType exten
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createCompany?: Resolver<ResolversTypes['Company'], ParentType, ContextType, RequireFields<MutationcreateCompanyArgs, 'input'>>;
+  createCustomer?: Resolver<ResolversTypes['Customer'], ParentType, ContextType, RequireFields<MutationcreateCustomerArgs, 'input'>>;
   createDestination?: Resolver<ResolversTypes['Destination'], ParentType, ContextType, RequireFields<MutationcreateDestinationArgs, 'location' | 'name'>>;
+  deleteCompany?: Resolver<ResolversTypes['Company'], ParentType, ContextType, RequireFields<MutationdeleteCompanyArgs, 'id'>>;
+  deleteCustomer?: Resolver<ResolversTypes['Customer'], ParentType, ContextType, RequireFields<MutationdeleteCustomerArgs, 'id'>>;
   loginAsCompany?: Resolver<ResolversTypes['LoginAsCompanyResponse'], ParentType, ContextType, RequireFields<MutationloginAsCompanyArgs, 'password' | 'username'>>;
   loginAsCustomer?: Resolver<ResolversTypes['LoginAsCustomerResponse'], ParentType, ContextType, RequireFields<MutationloginAsCustomerArgs, 'password' | 'username'>>;
   registerAsCustomer?: Resolver<ResolversTypes['LoginAsCustomerResponse'], ParentType, ContextType, RequireFields<MutationregisterAsCustomerArgs, 'input'>>;
+  updateCompany?: Resolver<ResolversTypes['Company'], ParentType, ContextType, RequireFields<MutationupdateCompanyArgs, 'input'>>;
+  updateCustomer?: Resolver<ResolversTypes['Customer'], ParentType, ContextType, RequireFields<MutationupdateCustomerArgs, 'input'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
