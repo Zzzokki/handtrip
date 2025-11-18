@@ -9,15 +9,26 @@ export const travelTypeDefs = gql`
     description: String!
     coverImage: String
     duration: Int!
-    maxGuests: Int!
+    totalSeatNumber: Int!
 
-    # Relations
+    # Company
     companyId: Int!
     company: Company!
+
+    # Agenda
+    agendaId: Int!
+    agenda: Agenda!
+
+    # Destination
+    destinationId: Int!
+    destination: Destination!
 
     # Categories
     categories: [Category!]!
     subCategories: [SubCategory!]!
+
+    # Travel Sessions
+    travelSessions: [TravelSession!]!
 
     # Timestamps
     createdAt: Timestamp!

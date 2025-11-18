@@ -12,7 +12,7 @@ export const seatTable = pgTable("seat", {
   // Foreign key to Travel Session
   travelSessionId: integer("travel_session_id").notNull(),
 
-  // Foreign key to Seat Cost 
+  // Foreign key to Seat Cost
   seatCostId: integer("seat_cost_id").notNull(),
 
   // Timestamps

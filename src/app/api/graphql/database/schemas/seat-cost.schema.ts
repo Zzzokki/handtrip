@@ -1,11 +1,4 @@
-import { relations } from "drizzle-orm";
-import {
-  pgTable,
-  serial,
-  integer,
-  timestamp,
-} from "drizzle-orm/pg-core";
-import { seatTable } from "./seat.schema";
+import { pgTable, serial, integer, timestamp } from "drizzle-orm/pg-core";
 
 export const seatCostTable = pgTable("seat-cost", {
   id: serial("id").primaryKey(),
@@ -17,7 +10,3 @@ export const seatCostTable = pgTable("seat-cost", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
-
-export const seatCostTableRelations = relations(seatCostTable, ({ many }) => ({
-  suudal: many(seatTable),
-}));

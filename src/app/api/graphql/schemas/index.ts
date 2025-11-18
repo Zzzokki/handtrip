@@ -1,11 +1,13 @@
-import { mergeTypeDefs } from '@graphql-tools/merge';
-import { TimestampTypeDefinition } from 'graphql-scalars';
-import { commonTypeDefs } from './common.schema';
-import { customerTypeDefs } from './customer.schema';
-import { authTypeDefs } from './auth.schema';
-import { companyTypeDefs } from './company.schema';
-import { travelTypeDefs } from './travel.schema';
-import { categoryTypeDefs } from './category.schema';
+import { mergeTypeDefs } from "@graphql-tools/merge";
+import { TimestampTypeDefinition } from "graphql-scalars";
+import { commonTypeDefs } from "./common.schema";
+import { customerTypeDefs } from "./customer.schema";
+import { authTypeDefs } from "./auth.schema";
+import { companyTypeDefs } from "./company.schema";
+import { travelTypeDefs } from "./travel.schema";
+import { categoryTypeDefs } from "./category.schema";
+import { destinationTypeDefs } from "./destination.schema";
+import { agendaTypeDefs } from "./agenda.schema";
 
 export const typeDefs = mergeTypeDefs([
   // Custom Scalars
@@ -19,5 +21,7 @@ export const typeDefs = mergeTypeDefs([
   customerTypeDefs,
   companyTypeDefs,
   travelTypeDefs,
-  categoryTypeDefs
+  categoryTypeDefs,
+  destinationTypeDefs,
+  agendaTypeDefs,
 ]);

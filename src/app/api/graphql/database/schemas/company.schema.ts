@@ -1,10 +1,5 @@
 import { relations } from "drizzle-orm";
-import {
-  pgTable,
-  serial,
-  varchar,
-  timestamp,
-} from "drizzle-orm/pg-core";
+import { pgTable, serial, varchar, timestamp } from "drizzle-orm/pg-core";
 import { travelTable } from "./travel.schema";
 
 export const companyTable = pgTable("company", {

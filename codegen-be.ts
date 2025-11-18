@@ -5,7 +5,9 @@ const config: CodegenConfig = {
   overwrite: true,
   schema: "./src/app/api/graphql/schemas",
   generates: {
-    "./src/app/api/graphql/types/generated": defineConfig(),
+    "./src/app/api/graphql/types/generated": defineConfig({
+      resolverGeneration: "disabled",
+    }),
   },
 };
 

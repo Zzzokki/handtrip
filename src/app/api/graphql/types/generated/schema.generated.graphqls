@@ -1,3 +1,12 @@
+type Agenda {
+  createdAt: Timestamp!
+  description: String!
+  id: Int!
+  name: String!
+  travelId: Int!
+  updatedAt: Timestamp!
+}
+
 type Category {
   createdAt: Timestamp!
   id: Int!
@@ -28,6 +37,25 @@ type Customer {
   username: String!
 }
 
+type Destination {
+  createdAt: Timestamp!
+  id: Int!
+  location: String!
+  name: String!
+  updatedAt: Timestamp!
+}
+
+type Guide {
+  companyId: Int!
+  createdAt: Timestamp!
+  email: String!
+  id: Int!
+  name: String!
+  phoneNumber: String!
+  profileImage: String!
+  updatedAt: Timestamp!
+}
+
 type LoginAsCompanyResponse {
   company: Company!
   token: String!
@@ -39,6 +67,7 @@ type LoginAsCustomerResponse {
 }
 
 type Mutation {
+  createDestination(location: String!, name: String!): Destination!
   loginAsCompany(password: String!, username: String!): LoginAsCompanyResponse!
   loginAsCustomer(password: String!, username: String!): LoginAsCustomerResponse!
   registerAsCustomer(input: RegisterAsCustomerInput!): LoginAsCustomerResponse!
@@ -48,6 +77,7 @@ type Query {
   getCategories: [Category!]!
   getCompany(id: ID!): Company!
   getCustomer(id: ID!): Customer!
+  getDestinations: [Destination!]!
   getSubCategories: [SubCategory!]!
   getTravel(id: Int!): Travel!
   getTravels: [Travel!]!
@@ -74,16 +104,32 @@ type SubCategory {
 scalar Timestamp
 
 type Travel {
+  agenda: Agenda!
+  agendaId: Int!
   categories: [Category!]!
   company: Company!
   companyId: Int!
   coverImage: String
   createdAt: Timestamp!
   description: String!
+  destination: Destination!
+  destinationId: Int!
   duration: Int!
   id: Int!
-  maxGuests: Int!
   name: String!
   subCategories: [SubCategory!]!
+  totalSeatNumber: Int!
+  travelSessions: [TravelSession!]!
+  updatedAt: Timestamp!
+}
+
+type TravelSession {
+  createdAt: Timestamp!
+  endDate: Timestamp!
+  guide: Guide!
+  guideId: Int!
+  id: Int!
+  startDate: Timestamp!
+  travelId: Int!
   updatedAt: Timestamp!
 }

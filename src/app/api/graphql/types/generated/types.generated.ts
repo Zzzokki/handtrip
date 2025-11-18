@@ -17,6 +17,16 @@ export type Scalars = {
   Timestamp: { input: Date | string | number; output: Date | string | number; }
 };
 
+export type Agenda = {
+  __typename?: 'Agenda';
+  createdAt: Scalars['Timestamp']['output'];
+  description: Scalars['String']['output'];
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  travelId: Scalars['Int']['output'];
+  updatedAt: Scalars['Timestamp']['output'];
+};
+
 export type Category = {
   __typename?: 'Category';
   createdAt: Scalars['Timestamp']['output'];
@@ -50,6 +60,27 @@ export type Customer = {
   username: Scalars['String']['output'];
 };
 
+export type Destination = {
+  __typename?: 'Destination';
+  createdAt: Scalars['Timestamp']['output'];
+  id: Scalars['Int']['output'];
+  location: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['Timestamp']['output'];
+};
+
+export type Guide = {
+  __typename?: 'Guide';
+  companyId: Scalars['Int']['output'];
+  createdAt: Scalars['Timestamp']['output'];
+  email: Scalars['String']['output'];
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  phoneNumber: Scalars['String']['output'];
+  profileImage: Scalars['String']['output'];
+  updatedAt: Scalars['Timestamp']['output'];
+};
+
 export type LoginAsCompanyResponse = {
   __typename?: 'LoginAsCompanyResponse';
   company: Company;
@@ -64,9 +95,16 @@ export type LoginAsCustomerResponse = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createDestination: Destination;
   loginAsCompany: LoginAsCompanyResponse;
   loginAsCustomer: LoginAsCustomerResponse;
   registerAsCustomer: LoginAsCustomerResponse;
+};
+
+
+export type MutationcreateDestinationArgs = {
+  location: Scalars['String']['input'];
+  name: Scalars['String']['input'];
 };
 
 
@@ -91,6 +129,7 @@ export type Query = {
   getCategories: Array<Category>;
   getCompany: Company;
   getCustomer: Customer;
+  getDestinations: Array<Destination>;
   getSubCategories: Array<SubCategory>;
   getTravel: Travel;
   getTravels: Array<Travel>;
@@ -137,17 +176,34 @@ export type SubCategory = {
 
 export type Travel = {
   __typename?: 'Travel';
+  agenda: Agenda;
+  agendaId: Scalars['Int']['output'];
   categories: Array<Category>;
   company: Company;
   companyId: Scalars['Int']['output'];
   coverImage?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['Timestamp']['output'];
   description: Scalars['String']['output'];
+  destination: Destination;
+  destinationId: Scalars['Int']['output'];
   duration: Scalars['Int']['output'];
   id: Scalars['Int']['output'];
-  maxGuests: Scalars['Int']['output'];
   name: Scalars['String']['output'];
   subCategories: Array<SubCategory>;
+  totalSeatNumber: Scalars['Int']['output'];
+  travelSessions: Array<TravelSession>;
+  updatedAt: Scalars['Timestamp']['output'];
+};
+
+export type TravelSession = {
+  __typename?: 'TravelSession';
+  createdAt: Scalars['Timestamp']['output'];
+  endDate: Scalars['Timestamp']['output'];
+  guide: Guide;
+  guideId: Scalars['Int']['output'];
+  id: Scalars['Int']['output'];
+  startDate: Scalars['Timestamp']['output'];
+  travelId: Scalars['Int']['output'];
   updatedAt: Scalars['Timestamp']['output'];
 };
 
@@ -224,11 +280,14 @@ export type DirectiveResolverFn<TResult = Record<PropertyKey, never>, TParent = 
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Category: ResolverTypeWrapper<Category>;
-  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  Agenda: ResolverTypeWrapper<Agenda>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  Category: ResolverTypeWrapper<Category>;
   Company: ResolverTypeWrapper<Company>;
   Customer: ResolverTypeWrapper<Customer>;
+  Destination: ResolverTypeWrapper<Destination>;
+  Guide: ResolverTypeWrapper<Guide>;
   LoginAsCompanyResponse: ResolverTypeWrapper<LoginAsCompanyResponse>;
   LoginAsCustomerResponse: ResolverTypeWrapper<LoginAsCustomerResponse>;
   Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
@@ -238,16 +297,20 @@ export type ResolversTypes = {
   SubCategory: ResolverTypeWrapper<SubCategory>;
   Timestamp: ResolverTypeWrapper<Scalars['Timestamp']['output']>;
   Travel: ResolverTypeWrapper<Travel>;
+  TravelSession: ResolverTypeWrapper<TravelSession>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Category: Category;
-  Int: Scalars['Int']['output'];
+  Agenda: Agenda;
   String: Scalars['String']['output'];
+  Int: Scalars['Int']['output'];
+  Category: Category;
   Company: Company;
   Customer: Customer;
+  Destination: Destination;
+  Guide: Guide;
   LoginAsCompanyResponse: LoginAsCompanyResponse;
   LoginAsCustomerResponse: LoginAsCustomerResponse;
   Mutation: Record<PropertyKey, never>;
@@ -257,7 +320,17 @@ export type ResolversParentTypes = {
   SubCategory: SubCategory;
   Timestamp: Scalars['Timestamp']['output'];
   Travel: Travel;
+  TravelSession: TravelSession;
   Boolean: Scalars['Boolean']['output'];
+};
+
+export type AgendaResolvers<ContextType = any, ParentType extends ResolversParentTypes['Agenda'] = ResolversParentTypes['Agenda']> = {
+  createdAt?: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  travelId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
 };
 
 export type CategoryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Category'] = ResolversParentTypes['Category']> = {
@@ -290,6 +363,25 @@ export type CustomerResolvers<ContextType = any, ParentType extends ResolversPar
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 };
 
+export type DestinationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Destination'] = ResolversParentTypes['Destination']> = {
+  createdAt?: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  location?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
+};
+
+export type GuideResolvers<ContextType = any, ParentType extends ResolversParentTypes['Guide'] = ResolversParentTypes['Guide']> = {
+  companyId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  phoneNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  profileImage?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
+};
+
 export type LoginAsCompanyResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['LoginAsCompanyResponse'] = ResolversParentTypes['LoginAsCompanyResponse']> = {
   company?: Resolver<ResolversTypes['Company'], ParentType, ContextType>;
   token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -301,6 +393,7 @@ export type LoginAsCustomerResponseResolvers<ContextType = any, ParentType exten
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createDestination?: Resolver<ResolversTypes['Destination'], ParentType, ContextType, RequireFields<MutationcreateDestinationArgs, 'location' | 'name'>>;
   loginAsCompany?: Resolver<ResolversTypes['LoginAsCompanyResponse'], ParentType, ContextType, RequireFields<MutationloginAsCompanyArgs, 'password' | 'username'>>;
   loginAsCustomer?: Resolver<ResolversTypes['LoginAsCustomerResponse'], ParentType, ContextType, RequireFields<MutationloginAsCustomerArgs, 'password' | 'username'>>;
   registerAsCustomer?: Resolver<ResolversTypes['LoginAsCustomerResponse'], ParentType, ContextType, RequireFields<MutationregisterAsCustomerArgs, 'input'>>;
@@ -310,6 +403,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getCategories?: Resolver<Array<ResolversTypes['Category']>, ParentType, ContextType>;
   getCompany?: Resolver<ResolversTypes['Company'], ParentType, ContextType, RequireFields<QuerygetCompanyArgs, 'id'>>;
   getCustomer?: Resolver<ResolversTypes['Customer'], ParentType, ContextType, RequireFields<QuerygetCustomerArgs, 'id'>>;
+  getDestinations?: Resolver<Array<ResolversTypes['Destination']>, ParentType, ContextType>;
   getSubCategories?: Resolver<Array<ResolversTypes['SubCategory']>, ParentType, ContextType>;
   getTravel?: Resolver<ResolversTypes['Travel'], ParentType, ContextType, RequireFields<QuerygetTravelArgs, 'id'>>;
   getTravels?: Resolver<Array<ResolversTypes['Travel']>, ParentType, ContextType>;
@@ -329,24 +423,43 @@ export interface TimestampScalarConfig extends GraphQLScalarTypeConfig<Resolvers
 }
 
 export type TravelResolvers<ContextType = any, ParentType extends ResolversParentTypes['Travel'] = ResolversParentTypes['Travel']> = {
+  agenda?: Resolver<ResolversTypes['Agenda'], ParentType, ContextType>;
+  agendaId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   categories?: Resolver<Array<ResolversTypes['Category']>, ParentType, ContextType>;
   company?: Resolver<ResolversTypes['Company'], ParentType, ContextType>;
   companyId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   coverImage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  destination?: Resolver<ResolversTypes['Destination'], ParentType, ContextType>;
+  destinationId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   duration?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  maxGuests?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   subCategories?: Resolver<Array<ResolversTypes['SubCategory']>, ParentType, ContextType>;
+  totalSeatNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  travelSessions?: Resolver<Array<ResolversTypes['TravelSession']>, ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
+};
+
+export type TravelSessionResolvers<ContextType = any, ParentType extends ResolversParentTypes['TravelSession'] = ResolversParentTypes['TravelSession']> = {
+  createdAt?: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
+  endDate?: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
+  guide?: Resolver<ResolversTypes['Guide'], ParentType, ContextType>;
+  guideId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  startDate?: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
+  travelId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
+  Agenda?: AgendaResolvers<ContextType>;
   Category?: CategoryResolvers<ContextType>;
   Company?: CompanyResolvers<ContextType>;
   Customer?: CustomerResolvers<ContextType>;
+  Destination?: DestinationResolvers<ContextType>;
+  Guide?: GuideResolvers<ContextType>;
   LoginAsCompanyResponse?: LoginAsCompanyResponseResolvers<ContextType>;
   LoginAsCustomerResponse?: LoginAsCustomerResponseResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
@@ -354,5 +467,6 @@ export type Resolvers<ContextType = any> = {
   SubCategory?: SubCategoryResolvers<ContextType>;
   Timestamp?: GraphQLScalarType;
   Travel?: TravelResolvers<ContextType>;
+  TravelSession?: TravelSessionResolvers<ContextType>;
 };
 

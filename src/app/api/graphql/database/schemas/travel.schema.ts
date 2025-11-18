@@ -1,41 +1,27 @@
 import { relations } from "drizzle-orm";
-import {
-  pgTable,
-  serial,
-  varchar,
-  integer,
-  timestamp,
-  text,
-  numeric,
-} from "drizzle-orm/pg-core";
+import { pgTable, serial, varchar, integer, timestamp } from "drizzle-orm/pg-core";
 import { companyTable } from "./company.schema";
 import { subCategoryToTravelTable } from "./sub-category.schema";
 import { categoryToTravelTable } from "./category.schema";
+import { agendaTable } from "./agenda.schema";
+import { travelSessionTable } from "./travel-session.schema";
+import { destinationTable } from "./destination.schema";
 
 export const travelTable = pgTable("travel", {
   id: serial("id").primaryKey(),
 
   // Basic Information
-  name: varchar("name", { length: 255 }).notNull(),
-  description: text("description").notNull(),
-  coverImage: varchar("cover_image", { length: 500 }),
-  duration: integer("duration").notNull(), // in days
-  maxGuests: integer("max_guests").notNull(),
-  minAge: integer("min_age"),
-  price: numeric("price", { precision: 10, scale: 2 }).notNull(),
+  name: varchar("name").notNull(),
+  description: varchar("description").notNull(),
+  coverImage: varchar("cover_image"),
+  duration: integer("duration").notNull(),
+  totalSeatNumber: integer("total_seat_number").notNull(),
 
   // Foreign Key to Company
   companyId: integer("company_id").notNull(),
 
-  // Foreign Key to Agenda
-  agendaId: integer("agenda_id").notNull(),
-
   // Foreign Key to Destination
   destinationId: integer("destination_id").notNull(),
-
-  // Foreign Key to category and subcategory
-  categoryId: integer("category_id").notNull(),
-  subcategoryId: integer("subcategory_id").notNull(),
 
   // Timestamps
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -43,11 +29,19 @@ export const travelTable = pgTable("travel", {
 });
 
 export const travelTableRelations = relations(travelTable, ({ one, many }) => ({
+  travelSessions: many(travelSessionTable),
+  subCategories: many(subCategoryToTravelTable),
+  categories: many(categoryToTravelTable),
   company: one(companyTable, {
     fields: [travelTable.companyId],
     references: [companyTable.id],
   }),
-  subCategories: many(subCategoryToTravelTable),
-  categories: many(categoryToTravelTable),
+  agenda: one(agendaTable, {
+    fields: [travelTable.id],
+    references: [agendaTable.travelId],
+  }),
+  destination: one(destinationTable, {
+    fields: [travelTable.destinationId],
+    references: [destinationTable.id],
+  }),
 }));
-

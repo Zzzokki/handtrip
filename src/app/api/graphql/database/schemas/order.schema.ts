@@ -1,14 +1,27 @@
+import { relations } from "drizzle-orm";
 import { pgTable, serial, integer, timestamp } from "drizzle-orm/pg-core";
+import { customerTable } from "./customer.schema";
+import { travelSessionTable } from "./travel-session.schema";
+import { paymentTable } from "./payment.schema";
+import { travelerTable } from "./traveler.schema";
 
 export const orderTable = pgTable("order", {
   id: serial("id").primaryKey(),
 
-  // Order details
-  paymentTotal: integer("payment_total").notNull(),
-  timetableId: integer("timetable_id").notNull(),
-  travelerId: integer("traveler_id").notNull(),
+  // Order Details
+  totalSeats: integer("total_seats").notNull(),
+  totalPrice: integer("total_price").notNull(),
+
+  // Status
+  orderStatus: integer("order_status").notNull(),
+
+  // Customer
   customerId: integer("customer_id").notNull(),
-  tuluvId: integer("tuluv_id").notNull(),
+
+  // Travel Session
+  travelSessionId: integer("travel_session_id").notNull(),
+
+  // Payment Info
   paymentId: integer("payment_id").notNull(),
 
   // Timestamps
@@ -16,26 +29,18 @@ export const orderTable = pgTable("order", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
-// export const orderRelations = relations(order, ({ one }) => ({
-//   timeTable: one(timeTable, {
-//     fields: [order.timetableId],
-//     references: [timeTable.id],
-//   }),
-//   traveler: one(order, {
-//     fields: [order.travelerId],
-//     references: [order.id],
-//   }),
-//   customer: one(customer, {
-//     fields: [order.customerId],
-//     references: [customer.id],
-//   }),
-
-//   orderTuluv: one(orderTuluv, {
-//     fields: [order.tuluvId],
-//     references: [orderTuluv.id],
-//   }),
-//   payment: one(order, {
-//     fields: [order.paymentId],
-//     references: [order.id],
-//   }),
-// }));
+export const orderTableRelations = relations(orderTable, ({ one, many }) => ({
+  customer: one(customerTable, {
+    fields: [orderTable.customerId],
+    references: [customerTable.id],
+  }),
+  travelSession: one(travelSessionTable, {
+    fields: [orderTable.travelSessionId],
+    references: [travelSessionTable.id],
+  }),
+  payment: one(paymentTable, {
+    fields: [orderTable.paymentId],
+    references: [paymentTable.id],
+  }),
+  travelers: many(travelerTable),
+}));
