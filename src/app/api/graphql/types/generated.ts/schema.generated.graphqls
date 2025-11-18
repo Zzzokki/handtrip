@@ -1,0 +1,89 @@
+type AuthResponse {
+  token: String!
+  user: Customer!
+}
+
+type Category {
+  createdAt: Timestamp!
+  id: Int!
+  name: String!
+  updatedAt: Timestamp!
+}
+
+type Company {
+  coverImage: String!
+  createdAt: Timestamp!
+  description: String!
+  email: String!
+  id: Int!
+  logo: String!
+  name: String!
+  phoneNumber: String!
+  updatedAt: Timestamp!
+}
+
+type CompanyAuthResponse {
+  token: String!
+  user: Company!
+}
+
+type Customer {
+  createdAt: Timestamp!
+  email: String!
+  firstName: String!
+  id: Int!
+  lastName: String!
+  phoneNumber: String!
+  updatedAt: Timestamp!
+  username: String!
+}
+
+type Mutation {
+  loginAsCompany(password: String!, username: String!): CompanyAuthResponse!
+  loginAsCustomer(password: String!, username: String!): AuthResponse!
+  registerAsCustomer(input: RegisterAsCustomerInput): AuthResponse!
+}
+
+type Query {
+  getCategories: [Category!]!
+  getCompany(id: ID!): Company!
+  getCustomer(id: ID!): Customer!
+  getSubCategories: [SubCategory!]!
+  getTravel(id: Int!): Travel!
+  getTravels: [Travel!]!
+  getTravelsBySubCategory(subCategoryId: Int!): [Travel!]!
+}
+
+input RegisterAsCustomerInput {
+  email: String!
+  firstName: String!
+  lastName: String!
+  password: String!
+  phoneNumber: String!
+  username: String!
+}
+
+type SubCategory {
+  categoryId: Int!
+  createdAt: Timestamp!
+  id: ID!
+  name: String!
+  updatedAt: Timestamp!
+}
+
+scalar Timestamp
+
+type Travel {
+  categories: [Category!]!
+  company: Company!
+  companyId: Int!
+  coverImage: String
+  createdAt: Timestamp!
+  description: String!
+  duration: Int!
+  id: Int!
+  maxGuests: Int!
+  name: String!
+  subCategories: [SubCategory!]!
+  updatedAt: Timestamp!
+}

@@ -1,0 +1,41 @@
+query GetTravels {
+  travels {
+    id
+    title
+    description
+    price
+    duration
+    maxGuests
+    coverImage
+    rating
+    reviewCount
+    createdAt
+    company {
+      id
+      name
+      logo
+    }
+  }
+}
+
+query GetTravel($id: ID!) {
+  travel(id: $id) {
+    id
+    title
+    description
+    price
+    duration
+    maxGuests
+    coverImage
+    rating
+    reviewCount
+    createdAt
+    company {
+      id
+      name
+      logo
+      email
+      phoneNumber
+    }
+  }
+}
