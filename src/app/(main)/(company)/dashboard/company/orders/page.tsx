@@ -7,6 +7,7 @@ import { useGetOrdersByCompanyQuery } from "@/types/generated";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, User, DollarSign, MapPin, CheckCircle, Clock, XCircle } from "lucide-react";
+import { CompanyDashboardHeader } from "../_components/CompanyDashboardHeader";
 
 const ORDER_STATUS = {
   0: { label: "Pending", color: "bg-yellow-100 text-yellow-800", icon: Clock },
@@ -51,7 +52,8 @@ export default function CompanyOrdersPage() {
   const orders = data?.getOrdersByCompany || [];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50">
+      <CompanyDashboardHeader />
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mb-8">

@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Mail, Phone, Plus, Search, Trash2, Edit } from "lucide-react";
+import { CompanyDashboardHeader } from "../_components/CompanyDashboardHeader";
 
 export default function CompanyGuidesPage() {
   const router = useRouter();
@@ -67,8 +68,9 @@ export default function CompanyGuidesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="container mx-auto px-4 max-w-7xl">
+    <div className="min-h-screen bg-gray-50">
+      <CompanyDashboardHeader />
+      <div className="container mx-auto px-4 max-w-7xl py-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">

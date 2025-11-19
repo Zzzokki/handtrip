@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { CompanyDashboardHeader } from "../../../_components/CompanyDashboardHeader";
 
 type Params = {
   id: string;
@@ -118,8 +119,9 @@ export default function EditGuidePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="container mx-auto px-4 max-w-2xl">
+    <div className="min-h-screen bg-gray-50">
+      <CompanyDashboardHeader />
+      <div className="container mx-auto px-4 max-w-2xl py-8">
         <Link href="/dashboard/company/guides">
           <Button variant="ghost" className="mb-6">
             <ArrowLeft className="w-4 h-4 mr-2" />

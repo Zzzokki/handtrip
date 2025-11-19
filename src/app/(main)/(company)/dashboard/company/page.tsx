@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGetTravelsByCompanyQuery, useGetOrdersByCompanyQuery } from "@/types/generated";
 import { Plane, ShoppingBag, Users, DollarSign, ArrowRight, Plus } from "lucide-react";
+import { CompanyDashboardHeader } from "./_components/CompanyDashboardHeader";
 
 export default function CompanyDashboard() {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -48,8 +49,9 @@ export default function CompanyDashboard() {
   const totalBookings = orders.reduce((sum, order) => sum + order.totalSeats, 0);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-gray-50">
+      <CompanyDashboardHeader />
+      <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Company Dashboard</h1>

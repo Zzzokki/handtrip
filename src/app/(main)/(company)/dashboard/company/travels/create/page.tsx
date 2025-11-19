@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Plus, Trash2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { CompanyDashboardHeader } from "../../_components/CompanyDashboardHeader";
 
 export default function CreateTravelPage() {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -132,8 +133,9 @@ export default function CreateTravelPage() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="container mx-auto px-4 max-w-4xl">
+    <div className="min-h-screen bg-gray-50">
+      <CompanyDashboardHeader />
+      <div className="container mx-auto px-4 max-w-4xl py-8">
         {/* Header */}
         <div className="mb-8">
           <Link href="/dashboard/company/travels">

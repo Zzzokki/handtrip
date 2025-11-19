@@ -8,6 +8,7 @@ import { useGetTravelsByCompanyQuery, useDeleteTravelMutation } from "@/types/ge
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, MapPin, Clock, Edit, Trash2, Plus, Users } from "lucide-react";
+import { CompanyDashboardHeader } from "../_components/CompanyDashboardHeader";
 
 export default function CompanyTravelsPage() {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -57,8 +58,9 @@ export default function CompanyTravelsPage() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-gray-50">
+      <CompanyDashboardHeader />
+      <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
