@@ -1,0 +1,21 @@
+query GetGuidesByCompany($companyId: Int!) {
+  getGuidesByCompany(companyId: $companyId) {
+    ...GuideFields
+  }
+}
+
+mutation CreateGuide($input: CreateGuideInput!) {
+  createGuide(input: $input) {
+    ...GuideFields
+  }
+}
+
+mutation UpdateGuide($updateGuideId: Int!, $input: UpdateGuideInput!) {
+  updateGuide(id: $updateGuideId, input: $input) {
+    ...GuideFields
+  }
+}
+
+mutation DeleteGuide($deleteGuideId: Int!) {
+  deleteGuide(id: $deleteGuideId)
+}

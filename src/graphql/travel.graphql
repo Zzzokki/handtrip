@@ -1,41 +1,36 @@
 query GetTravels {
-  travels {
-    id
-    title
-    description
-    price
-    duration
-    maxGuests
-    coverImage
-    rating
-    reviewCount
-    createdAt
-    company {
-      id
-      name
-      logo
-    }
+  getTravels {
+    ...TravelWithRelations
   }
 }
 
-query GetTravel($id: ID!) {
-  travel(id: $id) {
+query GetTravel($getTravelId: Int!) {
+  getTravel(id: $getTravelId) {
+    ...TravelWithRelations
+  }
+}
+
+query GetTravelsByCompany($companyId: Int!) {
+  getTravelsByCompany(companyId: $companyId) {
+    ...TravelWithRelations
+  }
+}
+
+mutation CreateTravel($input: CreateTravelInput!) {
+  createTravel(input: $input) {
+    ...TravelWithRelations
+  }
+}
+
+mutation UpdateTravel($id: Int!, $input: CreateTravelInput!) {
+  updateTravel(id: $id, input: $input) {
+    ...TravelWithRelations
+  }
+}
+
+mutation DeleteTravel($id: Int!) {
+  deleteTravel(id: $id) {
     id
-    title
-    description
-    price
-    duration
-    maxGuests
-    coverImage
-    rating
-    reviewCount
-    createdAt
-    company {
-      id
-      name
-      logo
-      email
-      phoneNumber
-    }
+    name
   }
 }

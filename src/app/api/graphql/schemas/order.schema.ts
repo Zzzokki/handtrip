@@ -1,12 +1,28 @@
 import { gql } from "graphql-tag";
 
 export const orderTypeDefs = gql`
-  type Destination {
+  type Order {
     id: Int!
 
-    # Destination details
-    name: String!
-    location: String!
+    # Order details
+    totalSeats: Int!
+    totalPrice: Int!
+    orderStatus: Int!
+
+    # Customer
+    customerId: Int!
+    customer: Customer!
+
+    # Travel Session
+    travelSessionId: Int!
+    travelSession: TravelSession!
+
+    # Payment
+    paymentId: Int!
+    payment: Payment!
+
+    # Travelers
+    travelers: [Traveler!]!
 
     # Timestamps
     createdAt: Timestamp!
@@ -14,10 +30,10 @@ export const orderTypeDefs = gql`
   }
 
   type Query {
-    getDestinations: [Destination!]!
-  }
-
-  type Mutation {
-    createDestination(name: String!, location: String!): Destination!
+    getOrders: [Order!]!
+    getOrder(id: Int!): Order!
+    getOrdersByCustomer(customerId: Int!): [Order!]!
+    getOrdersByCompany(companyId: Int!): [Order!]!
+    getOrdersByTravelSession(travelSessionId: Int!): [Order!]!
   }
 `;

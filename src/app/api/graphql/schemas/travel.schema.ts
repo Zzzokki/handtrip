@@ -16,7 +16,6 @@ export const travelTypeDefs = gql`
     company: Company!
 
     # Agenda
-    agendaId: Int!
     agenda: Agenda!
 
     # Destination
@@ -35,9 +34,50 @@ export const travelTypeDefs = gql`
     updatedAt: Timestamp!
   }
 
+  input AgendaItemInput {
+    day: Int!
+    title: String!
+    description: String!
+  }
+
+  input CreateAgendaInput {
+    items: [AgendaItemInput!]!
+  }
+
+  input SeatCostInput {
+    cost: Int!
+  }
+
+  input CreateTravelSessionInput {
+    startDate: Timestamp!
+    endDate: Timestamp!
+    guideId: Int!
+    seatCost: SeatCostInput!
+  }
+
+  input CreateTravelInput {
+    name: String!
+    description: String!
+    coverImage: String
+    duration: Int!
+    totalSeatNumber: Int!
+    companyId: Int!
+    destinationId: Int!
+    agenda: CreateAgendaInput!
+    travelSessions: [CreateTravelSessionInput!]!
+    categoryIds: [Int!]!
+    subCategoryIds: [Int!]!
+  }
+
   type Query {
     getTravels: [Travel!]!
     getTravel(id: Int!): Travel!
-    getTravelsBySubCategory(subCategoryId: Int!): [Travel!]!
+    getTravelsByCompany(companyId: Int!): [Travel!]!
+  }
+
+  type Mutation {
+    createTravel(input: CreateTravelInput!): Travel!
+    updateTravel(id: Int!, input: CreateTravelInput!): Travel!
+    deleteTravel(id: Int!): Travel!
   }
 `;

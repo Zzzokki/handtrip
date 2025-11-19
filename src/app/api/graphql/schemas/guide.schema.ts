@@ -17,4 +17,28 @@ export const guideTypeDefs = gql`
     createdAt: Timestamp!
     updatedAt: Timestamp!
   }
+
+  input CreateGuideInput {
+    name: String!
+    email: String!
+    phoneNumber: String!
+    profileImage: String!
+  }
+
+  input UpdateGuideInput {
+    name: String
+    email: String
+    phoneNumber: String
+    profileImage: String
+  }
+
+  type Query {
+    getGuidesByCompany(companyId: Int!): [Guide!]!
+  }
+
+  type Mutation {
+    createGuide(input: CreateGuideInput!): Guide!
+    updateGuide(id: Int!, input: UpdateGuideInput!): Guide!
+    deleteGuide(id: Int!): Boolean!
+  }
 `;

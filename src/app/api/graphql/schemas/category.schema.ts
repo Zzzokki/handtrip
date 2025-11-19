@@ -12,21 +12,7 @@ export const categoryTypeDefs = gql`
     updatedAt: Timestamp!
   }
 
-  type SubCategory {
-    id: ID!
-
-    # SubCategory details
-    name: String!
-
-    categoryId: Int!
-
-    # Timestamps
-    createdAt: Timestamp!
-    updatedAt: Timestamp!
-  }
-
   type Query {
     getCategories: [Category!]!
-    getSubCategories: [SubCategory!]!
   }
 `;

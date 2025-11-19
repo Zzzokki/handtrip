@@ -1,0 +1,29 @@
+query GetOrders {
+  getOrders {
+    ...OrderWithRelations
+  }
+}
+
+query GetOrder($getOrderId: Int!) {
+  getOrder(id: $getOrderId) {
+    ...OrderWithRelations
+  }
+}
+
+query GetOrdersByCompany($companyId: Int!) {
+  getOrdersByCompany(companyId: $companyId) {
+    ...OrderWithRelations
+  }
+}
+
+query GetOrdersByCustomer($customerId: Int!) {
+  getOrdersByCustomer(customerId: $customerId) {
+    ...OrderWithRelations
+  }
+}
+
+query GetOrdersByTravelSession($travelSessionId: Int!) {
+  getOrdersByTravelSession(travelSessionId: $travelSessionId) {
+    ...OrderWithRelations
+  }
+}

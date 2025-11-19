@@ -1,0 +1,11 @@
+query GetDestinations {
+  getDestinations {
+    ...DestinationFields
+  }
+}
+
+mutation CreateDestination($name: String!, $location: String!) {
+  createDestination(name: $name, location: $location) {
+    ...DestinationFields
+  }
+}

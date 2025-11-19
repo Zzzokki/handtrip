@@ -8,6 +8,14 @@ import { travelTypeDefs } from "./travel.schema";
 import { categoryTypeDefs } from "./category.schema";
 import { destinationTypeDefs } from "./destination.schema";
 import { agendaTypeDefs } from "./agenda.schema";
+import { guideTypeDefs } from "./guide.schema";
+import { travelSessionTypeDefs } from "./travel-session.schema";
+import { orderTypeDefs } from "./order.schema";
+import { subCategoryTypeDefs } from "./sub-category.schema";
+import { paymentTypeDefs } from "./payment.schema";
+import { travelerTypeDefs } from "./traveler.schema";
+import { seatTypeDefs } from "./seat.schema";
+import { seatCostTypeDefs } from "./seat-cost.schema";
 
 export const typeDefs = mergeTypeDefs([
   // Custom Scalars
@@ -22,6 +30,14 @@ export const typeDefs = mergeTypeDefs([
   companyTypeDefs,
   travelTypeDefs,
   categoryTypeDefs,
+  subCategoryTypeDefs,
   destinationTypeDefs,
   agendaTypeDefs,
+  guideTypeDefs,
+  travelSessionTypeDefs,
+  orderTypeDefs,
+  paymentTypeDefs,
+  travelerTypeDefs,
+  seatTypeDefs,
+  seatCostTypeDefs,
 ]);

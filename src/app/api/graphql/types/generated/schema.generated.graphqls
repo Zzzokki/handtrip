@@ -7,6 +7,12 @@ type Agenda {
   updatedAt: Timestamp!
 }
 
+input AgendaItemInput {
+  day: Int!
+  description: String!
+  title: String!
+}
+
 type Category {
   createdAt: Timestamp!
   id: Int!
@@ -27,6 +33,10 @@ type Company {
   username: String!
 }
 
+input CreateAgendaInput {
+  items: [AgendaItemInput!]!
+}
+
 input CreateCompanyInput {
   coverImage: String!
   description: String!
@@ -45,6 +55,34 @@ input CreateCustomerInput {
   password: String!
   phoneNumber: String!
   username: String!
+}
+
+input CreateGuideInput {
+  email: String!
+  name: String!
+  phoneNumber: String!
+  profileImage: String!
+}
+
+input CreateTravelInput {
+  agenda: CreateAgendaInput!
+  categoryIds: [Int!]!
+  companyId: Int!
+  coverImage: String
+  description: String!
+  destinationId: Int!
+  duration: Int!
+  name: String!
+  subCategoryIds: [Int!]!
+  totalSeatNumber: Int!
+  travelSessions: [CreateTravelSessionInput!]!
+}
+
+input CreateTravelSessionInput {
+  endDate: Timestamp!
+  guideId: Int!
+  seatCost: SeatCostInput!
+  startDate: Timestamp!
 }
 
 type Customer {
@@ -91,24 +129,73 @@ type Mutation {
   createCompany(input: CreateCompanyInput!): Company!
   createCustomer(input: CreateCustomerInput!): Customer!
   createDestination(location: String!, name: String!): Destination!
+  createGuide(input: CreateGuideInput!): Guide!
+  createTravel(input: CreateTravelInput!): Travel!
   deleteCompany(id: Int!): Company!
   deleteCustomer(id: Int!): Customer!
+  deleteGuide(id: Int!): Boolean!
+  deleteTravel(id: Int!): Travel!
   loginAsCompany(password: String!, username: String!): LoginAsCompanyResponse!
   loginAsCustomer(password: String!, username: String!): LoginAsCustomerResponse!
   registerAsCustomer(input: RegisterAsCustomerInput!): LoginAsCustomerResponse!
   updateCompany(input: UpdateCompanyInput!): Company!
   updateCustomer(input: UpdateCustomerInput!): Customer!
+  updateGuide(id: Int!, input: UpdateGuideInput!): Guide!
+  updateTravel(id: Int!, input: CreateTravelInput!): Travel!
+}
+
+type Order {
+  createdAt: Timestamp!
+  customer: Customer!
+  customerId: Int!
+  id: Int!
+  orderStatus: Int!
+  payment: Payment!
+  paymentId: Int!
+  totalPrice: Int!
+  totalSeats: Int!
+  travelSession: TravelSession!
+  travelSessionId: Int!
+  travelers: [Traveler!]!
+  updatedAt: Timestamp!
+}
+
+type Payment {
+  createdAt: Timestamp!
+  id: Int!
+  isPaid: Boolean!
+  paidAt: Timestamp
+  total: Int!
+  updatedAt: Timestamp!
 }
 
 type Query {
   getCategories: [Category!]!
+  getCompanies: [Company!]!
   getCompany(id: Int!): Company!
   getCustomer(id: Int!): Customer!
   getDestinations: [Destination!]!
+  getGuidesByCompany(companyId: Int!): [Guide!]!
+  getMeAsCompany: Company!
+  getMeAsCustomer: Customer!
+  getOrder(id: Int!): Order!
+  getOrders: [Order!]!
+  getOrdersByCompany(companyId: Int!): [Order!]!
+  getOrdersByCustomer(customerId: Int!): [Order!]!
+  getOrdersByTravelSession(travelSessionId: Int!): [Order!]!
+  getPayment(id: Int!): Payment!
+  getSeat(id: Int!): Seat!
+  getSeatCost(id: Int!): SeatCost!
+  getSeatCosts: [SeatCost!]!
+  getSeatsByTravelSession(travelSessionId: Int!): [Seat!]!
   getSubCategories: [SubCategory!]!
+  getSubCategoriesByCategory(categoryId: Int!): [SubCategory!]!
+  getSubCategory(id: Int!): SubCategory!
   getTravel(id: Int!): Travel!
+  getTraveler(id: Int!): Traveler!
+  getTravelersByOrder(orderId: Int!): [Traveler!]!
   getTravels: [Travel!]!
-  getTravelsBySubCategory(subCategoryId: Int!): [Travel!]!
+  getTravelsByCompany(companyId: Int!): [Travel!]!
 }
 
 input RegisterAsCustomerInput {
@@ -118,6 +205,27 @@ input RegisterAsCustomerInput {
   password: String!
   phoneNumber: String!
   username: String!
+}
+
+type Seat {
+  createdAt: Timestamp!
+  id: Int!
+  seatCost: SeatCost!
+  seatCostId: Int!
+  status: String!
+  travelSessionId: Int!
+  updatedAt: Timestamp!
+}
+
+type SeatCost {
+  cost: Int!
+  createdAt: Timestamp!
+  id: Int!
+  updatedAt: Timestamp!
+}
+
+input SeatCostInput {
+  cost: Int!
 }
 
 type SubCategory {
@@ -132,7 +240,6 @@ scalar Timestamp
 
 type Travel {
   agenda: Agenda!
-  agendaId: Int!
   categories: [Category!]!
   company: Company!
   companyId: Int!
@@ -157,7 +264,21 @@ type TravelSession {
   guideId: Int!
   id: Int!
   startDate: Timestamp!
+  travel: Travel!
   travelId: Int!
+  updatedAt: Timestamp!
+}
+
+type Traveler {
+  createdAt: Timestamp!
+  dateOfBirth: Timestamp!
+  email: String!
+  id: Int!
+  name: String!
+  orderId: Int!
+  phoneNumber: String!
+  seat: Seat!
+  seatId: Int!
   updatedAt: Timestamp!
 }
 
@@ -179,4 +300,11 @@ input UpdateCustomerInput {
   lastName: String
   phoneNumber: String
   username: String
+}
+
+input UpdateGuideInput {
+  email: String
+  name: String
+  phoneNumber: String
+  profileImage: String
 }

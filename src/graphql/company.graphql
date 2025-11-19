@@ -1,0 +1,11 @@
+query GetCompanies {
+  getCompanies {
+    ...CompanyFields
+  }
+}
+
+query GetCompany($getCompanyId: Int!) {
+  getCompany(id: $getCompanyId) {
+    ...CompanyFields
+  }
+}

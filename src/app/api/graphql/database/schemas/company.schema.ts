@@ -1,6 +1,7 @@
 import { relations } from "drizzle-orm";
 import { pgTable, serial, varchar, timestamp } from "drizzle-orm/pg-core";
 import { travelTable } from "./travel.schema";
+import { guideTable } from "./guide.schema";
 
 export const companyTable = pgTable("company", {
   id: serial("id").primaryKey(),
@@ -24,4 +25,5 @@ export const companyTable = pgTable("company", {
 
 export const companyRelations = relations(companyTable, ({ many }) => ({
   travels: many(travelTable),
+  guides: many(guideTable),
 }));

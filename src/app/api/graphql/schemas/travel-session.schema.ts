@@ -10,6 +10,7 @@ export const travelSessionTypeDefs = gql`
 
     # Travel
     travelId: Int!
+    travel: Travel!
 
     # Guide
     guideId: Int!

@@ -7,6 +7,9 @@ export const getTravels: QueryResolvers["getTravels"] = async () => {
       company: true,
       subCategories: { with: { subCategory: true } },
       categories: { with: { category: true } },
+      travelSessions: { with: { guide: true } },
+      agenda: true,
+      destination: true,
     },
     limit: 50,
   });

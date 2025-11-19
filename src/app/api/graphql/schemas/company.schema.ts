@@ -40,6 +40,7 @@ export const companyTypeDefs = gql`
 
   type Query {
     getCompany(id: Int!): Company!
+    getCompanies: [Company!]!
   }
   type Mutation {
     createCompany(input: CreateCompanyInput!): Company!

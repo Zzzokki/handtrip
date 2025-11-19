@@ -1,0 +1,227 @@
+# Customer Fragment
+fragment CustomerFields on Customer {
+  id
+  firstName
+  lastName
+  phoneNumber
+  email
+  username
+  createdAt
+  updatedAt
+}
+
+# Company Fragment
+fragment CompanyFields on Company {
+  id
+  name
+  logo
+  coverImage
+  phoneNumber
+  email
+  description
+  username
+  createdAt
+  updatedAt
+}
+
+# Category Fragment
+fragment CategoryFields on Category {
+  id
+  name
+  createdAt
+  updatedAt
+}
+
+# SubCategory Fragment
+fragment SubCategoryFields on SubCategory {
+  id
+  name
+  categoryId
+  createdAt
+  updatedAt
+}
+
+# Destination Fragment
+fragment DestinationFields on Destination {
+  id
+  name
+  location
+  createdAt
+  updatedAt
+}
+
+# Agenda Fragment
+fragment AgendaFields on Agenda {
+  id
+  name
+  description
+  travelId
+  createdAt
+  updatedAt
+}
+
+# Guide Fragment
+fragment GuideFields on Guide {
+  id
+  name
+  email
+  phoneNumber
+  profileImage
+  companyId
+  createdAt
+  updatedAt
+}
+
+# TravelSession Fragment
+fragment TravelSessionFields on TravelSession {
+  id
+  startDate
+  endDate
+  travelId
+  guideId
+  createdAt
+  updatedAt
+}
+
+# TravelSession with Guide
+fragment TravelSessionWithGuide on TravelSession {
+  ...TravelSessionFields
+  guide {
+    ...GuideFields
+  }
+}
+
+# TravelSession with Full Relations
+fragment TravelSessionWithRelations on TravelSession {
+  ...TravelSessionFields
+  guide {
+    ...GuideFields
+  }
+  travel {
+    ...TravelWithRelations
+  }
+}
+
+# SeatCost Fragment
+fragment SeatCostFields on SeatCost {
+  id
+  cost
+  createdAt
+  updatedAt
+}
+
+# Seat Fragment
+fragment SeatFields on Seat {
+  id
+  status
+  travelSessionId
+  seatCostId
+  createdAt
+  updatedAt
+}
+
+# Seat with SeatCost
+fragment SeatWithCost on Seat {
+  ...SeatFields
+  seatCost {
+    ...SeatCostFields
+  }
+}
+
+# Payment Fragment
+fragment PaymentFields on Payment {
+  id
+  total
+  isPaid
+  paidAt
+  createdAt
+  updatedAt
+}
+
+# Traveler Fragment
+fragment TravelerFields on Traveler {
+  id
+  name
+  email
+  phoneNumber
+  dateOfBirth
+  orderId
+  seatId
+  createdAt
+  updatedAt
+}
+
+# Traveler with Seat
+fragment TravelerWithSeat on Traveler {
+  ...TravelerFields
+  seat {
+    ...SeatFields
+  }
+}
+
+# Order Fragment
+fragment OrderFields on Order {
+  id
+  totalSeats
+  totalPrice
+  orderStatus
+  customerId
+  travelSessionId
+  paymentId
+  createdAt
+  updatedAt
+}
+
+# Order with Relations
+fragment OrderWithRelations on Order {
+  ...OrderFields
+  customer {
+    ...CustomerFields
+  }
+  travelSession {
+    ...TravelSessionWithRelations
+  }
+  payment {
+    ...PaymentFields
+  }
+  travelers {
+    ...TravelerFields
+  }
+}
+
+# Travel Fragment (Basic)
+fragment TravelFields on Travel {
+  id
+  name
+  description
+  coverImage
+  duration
+  totalSeatNumber
+  companyId
+  destinationId
+  createdAt
+  updatedAt
+}
+
+# Travel with Full Relations
+fragment TravelWithRelations on Travel {
+  ...TravelFields
+  company {
+    ...CompanyFields
+  }
+  agenda {
+    ...AgendaFields
+  }
+  destination {
+    ...DestinationFields
+  }
+  categories {
+    ...CategoryFields
+  }
+  subCategories {
+    ...SubCategoryFields
+  }
+  travelSessions {
+    ...TravelSessionWithGuide
+  }
+}
