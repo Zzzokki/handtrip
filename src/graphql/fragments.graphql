@@ -64,6 +64,7 @@ fragment AgendaFields on Agenda {
 fragment GuideFields on Guide {
   id
   name
+  description
   email
   phoneNumber
   profileImage

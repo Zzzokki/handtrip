@@ -69,8 +69,23 @@ export const travelTypeDefs = gql`
     subCategoryIds: [Int!]!
   }
 
+  input GetTravelsFilterInput {
+    destinationIds: [Int!]
+    subCategoryIds: [Int!]
+    minDuration: Int
+    maxDuration: Int
+    minPrice: Int
+    maxPrice: Int
+  }
+
+  type TravelsResult {
+    travels: [Travel!]!
+    total: Int!
+    hasMore: Boolean!
+  }
+
   type Query {
-    getTravels: [Travel!]!
+    getTravels(page: Int = 1, limit: Int = 10, filters: GetTravelsFilterInput): TravelsResult!
     getTravel(id: Int!): Travel!
     getTravelsByCompany(companyId: Int!): [Travel!]!
   }

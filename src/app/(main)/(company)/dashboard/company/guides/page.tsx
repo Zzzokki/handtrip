@@ -57,12 +57,12 @@ export default function CompanyGuidesPage() {
   const filteredGuides = guides.filter((guide) => guide.name.toLowerCase().includes(searchTerm.toLowerCase()) || guide.email.toLowerCase().includes(searchTerm.toLowerCase()));
 
   const handleDelete = async (id: number, name: string) => {
-    if (confirm(`Are you sure you want to delete guide "${name}"?`)) {
+    if (confirm(`"${name}" хөтчийг устгахдаа итгэлтэй байна уу?`)) {
       try {
         await deleteGuide({ variables: { deleteGuideId: id } });
       } catch (error) {
         console.error("Error deleting guide:", error);
-        alert("Failed to delete guide. Please try again.");
+        alert("Хөтөч устгахад алдаа гарлаа. Дахин оролдоно уу.");
       }
     }
   };
@@ -75,13 +75,13 @@ export default function CompanyGuidesPage() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-4xl font-bold mb-2">Manage Guides</h1>
-              <p className="text-gray-600">Add and manage your travel guides</p>
+              <h1 className="text-4xl font-bold mb-2">Хөтчүүд удирдах</h1>
+              <p className="text-gray-600">Аялалын хөтчүүдээ нэмэх, удирдах</p>
             </div>
             <Link href="/dashboard/company/guides/create">
               <Button>
                 <Plus className="w-4 h-4 mr-2" />
-                Add New Guide
+                Шинэ хөтөч нэмэх
               </Button>
             </Link>
           </div>
@@ -89,7 +89,7 @@ export default function CompanyGuidesPage() {
           {/* Search */}
           <div className="relative max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <Input type="text" placeholder="Search guides by name or email..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10" />
+            <Input type="text" placeholder="Хөтчийн нэр эсвэл имэйлээр хайх..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10" />
           </div>
         </div>
 
@@ -97,19 +97,19 @@ export default function CompanyGuidesPage() {
         <div className="grid md:grid-cols-3 gap-6 mb-8">
           <Card>
             <CardHeader className="pb-3">
-              <CardDescription>Total Guides</CardDescription>
+              <CardDescription>Нийт хөтчүүд</CardDescription>
               <CardTitle className="text-3xl">{guides.length}</CardTitle>
             </CardHeader>
           </Card>
           <Card>
             <CardHeader className="pb-3">
-              <CardDescription>Active Assignments</CardDescription>
+              <CardDescription>Идэвхтэй томилолт</CardDescription>
               <CardTitle className="text-3xl">-</CardTitle>
             </CardHeader>
           </Card>
           <Card>
             <CardHeader className="pb-3">
-              <CardDescription>This Month</CardDescription>
+              <CardDescription>Энэ сар</CardDescription>
               <CardTitle className="text-3xl">-</CardTitle>
             </CardHeader>
           </Card>
@@ -119,11 +119,11 @@ export default function CompanyGuidesPage() {
         {filteredGuides.length === 0 ? (
           <Card className="text-center py-12">
             <CardContent>
-              <p className="text-gray-500 mb-4">{searchTerm ? "No guides found matching your search." : "You haven't added any guides yet."}</p>
+              <p className="text-gray-500 mb-4">{searchTerm ? "Хайлтад тохирох хөтөч олдсонгүй." : "Та одоогоор хөтөч нэмээгүй байна."}</p>
               <Link href="/dashboard/company/guides/create">
                 <Button>
                   <Plus className="w-4 h-4 mr-2" />
-                  Add Your First Guide
+                  Анхны хөтчөө нэмэх
                 </Button>
               </Link>
             </CardContent>
@@ -153,12 +153,12 @@ export default function CompanyGuidesPage() {
                     <Link href={`/dashboard/company/guides/${guide.id}/edit`} className="flex-1">
                       <Button variant="outline" className="w-full">
                         <Edit className="w-4 h-4 mr-2" />
-                        Edit
+                        Засах
                       </Button>
                     </Link>
                     <Button variant="destructive" onClick={() => handleDelete(guide.id, guide.name)} className="flex-1">
                       <Trash2 className="w-4 h-4 mr-2" />
-                      Delete
+                      Устгах
                     </Button>
                   </div>
                 </CardContent>

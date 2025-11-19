@@ -10,9 +10,9 @@ import { Calendar, User, DollarSign, MapPin, CheckCircle, Clock, XCircle } from 
 import { CompanyDashboardHeader } from "../_components/CompanyDashboardHeader";
 
 const ORDER_STATUS = {
-  0: { label: "Pending", color: "bg-yellow-100 text-yellow-800", icon: Clock },
-  1: { label: "Confirmed", color: "bg-green-100 text-green-800", icon: CheckCircle },
-  2: { label: "Cancelled", color: "bg-red-100 text-red-800", icon: XCircle },
+  0: { label: "Хүлээгдэж буй", color: "bg-yellow-100 text-yellow-800", icon: Clock },
+  1: { label: "Баталгаажсан", color: "bg-green-100 text-green-800", icon: CheckCircle },
+  2: { label: "Цуцлагдсан", color: "bg-red-100 text-red-800", icon: XCircle },
 };
 
 export default function CompanyOrdersPage() {
@@ -57,33 +57,33 @@ export default function CompanyOrdersPage() {
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Orders</h1>
-          <p className="text-gray-600">View and manage all bookings for your travel packages</p>
+          <h1 className="text-3xl font-bold mb-2">Захиалгууд</h1>
+          <p className="text-gray-600">Аяллын багцуудын бүх захиалгыг харах, удирдах</p>
         </div>
 
         {/* Stats */}
         <div className="grid md:grid-cols-4 gap-4 mb-8">
           <Card>
             <CardHeader className="pb-3">
-              <CardDescription>Total Orders</CardDescription>
+              <CardDescription>Нийт захиалга</CardDescription>
               <CardTitle className="text-3xl">{orders.length}</CardTitle>
             </CardHeader>
           </Card>
           <Card>
             <CardHeader className="pb-3">
-              <CardDescription>Confirmed</CardDescription>
+              <CardDescription>Баталгаажсан</CardDescription>
               <CardTitle className="text-3xl">{orders.filter((o) => o.orderStatus === 1).length}</CardTitle>
             </CardHeader>
           </Card>
           <Card>
             <CardHeader className="pb-3">
-              <CardDescription>Pending</CardDescription>
+              <CardDescription>Хүлээгдэж буй</CardDescription>
               <CardTitle className="text-3xl">{orders.filter((o) => o.orderStatus === 0).length}</CardTitle>
             </CardHeader>
           </Card>
           <Card>
             <CardHeader className="pb-3">
-              <CardDescription>Total Revenue</CardDescription>
+              <CardDescription>Нийт орлого</CardDescription>
               <CardTitle className="text-3xl">${orders.reduce((sum, o) => sum + o.totalPrice, 0).toLocaleString()}</CardTitle>
             </CardHeader>
           </Card>
@@ -102,12 +102,12 @@ export default function CompanyOrdersPage() {
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                       <div className="flex-1 space-y-3">
                         <div className="flex items-center gap-3">
-                          <h3 className="text-lg font-semibold">Order #{order.id}</h3>
+                          <h3 className="text-lg font-semibold">Захиалга #{order.id}</h3>
                           <Badge className={status.color}>
                             <StatusIcon className="w-3 h-3 mr-1" />
                             {status.label}
                           </Badge>
-                          {order.payment.isPaid && <Badge className="bg-blue-100 text-blue-800">Paid</Badge>}
+                          {order.payment.isPaid && <Badge className="bg-blue-100 text-blue-800">Төлсөн</Badge>}
                         </div>
 
                         <div className="grid md:grid-cols-2 gap-3 text-sm">
@@ -126,16 +126,16 @@ export default function CompanyOrdersPage() {
                           <div className="flex items-center gap-2 text-gray-600">
                             <DollarSign className="w-4 h-4" />
                             <span>
-                              ${order.totalPrice.toLocaleString()} ({order.totalSeats} {order.totalSeats === 1 ? "seat" : "seats"})
+                              ${order.totalPrice.toLocaleString()} ({order.totalSeats} суудал)
                             </span>
                           </div>
                           <div className="flex items-center gap-2 text-gray-600">
                             <User className="w-4 h-4" />
-                            <span>{order.travelers.length} travelers</span>
+                            <span>{order.travelers.length} аялагч</span>
                           </div>
                         </div>
 
-                        <div className="text-xs text-gray-500">Booked on {new Date(order.createdAt).toLocaleDateString()}</div>
+                        <div className="text-xs text-gray-500">Захиалсан огноо: {new Date(order.createdAt).toLocaleDateString()}</div>
                       </div>
                     </div>
                   </CardContent>
@@ -146,8 +146,8 @@ export default function CompanyOrdersPage() {
         ) : (
           <Card className="max-w-md mx-auto">
             <CardHeader>
-              <CardTitle>No Orders Yet</CardTitle>
-              <CardDescription>Orders will appear here when customers book your travel packages</CardDescription>
+              <CardTitle>Захиалга байхгүй байна</CardTitle>
+              <CardDescription>Үйлчлүүлэгчид таны аяллын багцуудыг захиалах үед энд харагдана</CardDescription>
             </CardHeader>
           </Card>
         )}

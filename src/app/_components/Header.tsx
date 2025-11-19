@@ -15,7 +15,7 @@ export const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-lg border-b border-gray-200">
+    <header className="fixed top-0 left-0 w-full z-[99999] bg-white/80 backdrop-blur-lg border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
@@ -36,21 +36,18 @@ export const Header = () => {
 
           <nav className="hidden md:flex items-center gap-8">
             <Link href="/travels" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
-              Explore Travels
+              Аяллууд
             </Link>
             <Link href="/companies" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
-              Companies
-            </Link>
-            <Link href="/#features" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
-              How It Works
+              Компаниуд
             </Link>
             {isAuthenticated && (
               <>
                 <Link href="/profile" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
-                  My Profile
+                  Миний профайл
                 </Link>
-                <Link href="/dashboard/traveler" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
-                  Dashboard
+                <Link href="/dashboard/company" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
+                  Хянах самбар
                 </Link>
               </>
             )}
@@ -66,19 +63,19 @@ export const Header = () => {
                   <span className="text-sm font-medium text-gray-700">{user?.name || "User"}</span>
                 </div>
                 <Button onClick={handleLogout} variant="outline" size="sm">
-                  Logout
+                  Гарах
                 </Button>
               </>
             ) : (
               <>
                 <Link href="/login" className="hidden sm:block">
                   <Button variant="ghost" size="sm">
-                    Sign In
+                    Нэвтрэх
                   </Button>
                 </Link>
                 <Link href="/signup">
                   <Button size="sm" className="font-semibold">
-                    Get Started
+                    Эхлэх
                   </Button>
                 </Link>
               </>

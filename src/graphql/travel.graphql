@@ -1,6 +1,10 @@
-query GetTravels {
-  getTravels {
-    ...TravelWithRelations
+query GetTravels($page: Int = 1, $limit: Int = 10, $filters: GetTravelsFilterInput) {
+  getTravels(page: $page, limit: $limit, filters: $filters) {
+    travels {
+      ...TravelWithRelations
+    }
+    total
+    hasMore
   }
 }
 

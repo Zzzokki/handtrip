@@ -1,0 +1,17 @@
+query GetCategories {
+  getCategories {
+    ...CategoryFields
+  }
+}
+
+query GetSubCategories {
+  getSubCategories {
+    ...SubCategoryFields
+  }
+}
+
+query GetSubCategoriesByCategory($categoryId: Int!) {
+  getSubCategoriesByCategory(categoryId: $categoryId) {
+    ...SubCategoryFields
+  }
+}

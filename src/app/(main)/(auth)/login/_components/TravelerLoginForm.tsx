@@ -12,8 +12,8 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 
 const loginFormSchema = z.object({
-  username: z.string().min(1, "Username is required"),
-  password: z.string().min(6, "Password must be at least 6 characters").max(100, "Password must be less than 100 characters"),
+  username: z.string().min(1, "Хэрэглэгчийн нэр шаардлагатай"),
+  password: z.string().min(6, "Нууц үг доровь 6 тэмдэгт байх ёстой").max(100, "Нууц үг 100 тэмдэгтээс бага байх ёстой"),
 });
 
 type LoginFormValues = z.infer<typeof loginFormSchema>;
@@ -67,9 +67,9 @@ export const TravelerLoginForm = () => {
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Хэрэглэгчийн нэр</FormLabel>
               <FormControl>
-                <Input placeholder="your_username" type="text" disabled={loading} {...field} />
+                <Input placeholder="Хэрэглэгчийн нэр" type="text" disabled={loading} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -80,9 +80,9 @@ export const TravelerLoginForm = () => {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Нууц үг</FormLabel>
               <FormControl>
-                <Input placeholder="Enter your password" type="password" disabled={loading} {...field} />
+                <Input placeholder="Нууц үгээ оруулна уу" type="password" disabled={loading} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -91,12 +91,12 @@ export const TravelerLoginForm = () => {
 
         <div className="flex items-center justify-between">
           <Link href="/forgot-password" className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors">
-            Forgot password?
+            Нууц үгээ мартсан?
           </Link>
         </div>
 
         <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" size="lg" disabled={loading}>
-          {loading ? "Signing in..." : `Sign in as Traveler`}
+          {loading ? "Нэвтэрч байна..." : `Жуулчин нэвтрэх`}
         </Button>
       </form>
     </Form>

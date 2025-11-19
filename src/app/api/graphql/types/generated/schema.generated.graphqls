@@ -58,6 +58,7 @@ input CreateCustomerInput {
 }
 
 input CreateGuideInput {
+  description: String!
   email: String!
   name: String!
   phoneNumber: String!
@@ -104,9 +105,19 @@ type Destination {
   updatedAt: Timestamp!
 }
 
+input GetTravelsFilterInput {
+  destinationIds: [Int!]
+  maxDuration: Int
+  maxPrice: Int
+  minDuration: Int
+  minPrice: Int
+  subCategoryIds: [Int!]
+}
+
 type Guide {
   companyId: Int!
   createdAt: Timestamp!
+  description: String!
   email: String!
   id: Int!
   name: String!
@@ -194,7 +205,7 @@ type Query {
   getTravel(id: Int!): Travel!
   getTraveler(id: Int!): Traveler!
   getTravelersByOrder(orderId: Int!): [Traveler!]!
-  getTravels: [Travel!]!
+  getTravels(filters: GetTravelsFilterInput, limit: Int = 10, page: Int = 1): TravelsResult!
   getTravelsByCompany(companyId: Int!): [Travel!]!
 }
 
@@ -264,7 +275,6 @@ type TravelSession {
   guideId: Int!
   id: Int!
   startDate: Timestamp!
-  travel: Travel!
   travelId: Int!
   updatedAt: Timestamp!
 }
@@ -280,6 +290,12 @@ type Traveler {
   seat: Seat!
   seatId: Int!
   updatedAt: Timestamp!
+}
+
+type TravelsResult {
+  hasMore: Boolean!
+  total: Int!
+  travels: [Travel!]!
 }
 
 input UpdateCompanyInput {
@@ -303,6 +319,7 @@ input UpdateCustomerInput {
 }
 
 input UpdateGuideInput {
+  description: String
   email: String
   name: String
   phoneNumber: String

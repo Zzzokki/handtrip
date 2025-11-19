@@ -6,6 +6,7 @@ export const guideTypeDefs = gql`
 
     # Guide details
     name: String!
+    description: String!
     email: String!
     phoneNumber: String!
     profileImage: String!
@@ -20,6 +21,7 @@ export const guideTypeDefs = gql`
 
   input CreateGuideInput {
     name: String!
+    description: String!
     email: String!
     phoneNumber: String!
     profileImage: String!
@@ -27,6 +29,7 @@ export const guideTypeDefs = gql`
 
   input UpdateGuideInput {
     name: String
+    description: String
     email: String
     phoneNumber: String
     profileImage: String

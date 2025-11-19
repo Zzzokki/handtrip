@@ -8,6 +8,9 @@ export const getTravel: QueryResolvers["getTravel"] = async (_, { id }) => {
       company: true,
       subCategories: { with: { subCategory: true } },
       categories: { with: { category: true } },
+      travelSessions: { with: { guide: true } },
+      agenda: true,
+      destination: true,
     },
   });
 

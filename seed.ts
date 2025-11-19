@@ -23,14 +23,36 @@ const sql = neon(process.env.DATABASE_URL!);
 const db = drizzle(sql);
 
 async function seed() {
-  console.log("🌱 Starting database seeding...");
+  console.log("🌱 Starting database seeding with Mongolian data...");
 
   try {
+    // First, clear all existing data
+    console.log("🗑️ Clearing existing data...");
+    await db.delete(seatTable);
+    await db.delete(seatCostTable);
+    await db.delete(travelSessionTable);
+    await db.delete(agendaTable);
+    await db.delete(travelTable);
+    await db.delete(guideTable);
+    await db.delete(customerTable);
+    await db.delete(companyTable);
+    await db.delete(destinationTable);
+    await db.delete(subCategoryTable);
+    await db.delete(categoryTable);
+    console.log("✅ Database cleared successfully");
+
     // 1. Create Categories
     console.log("📁 Creating categories...");
     const categories = await db
       .insert(categoryTable)
-      .values([{ name: "Adventure" }, { name: "Cultural" }, { name: "Relaxation" }, { name: "Nature" }, { name: "Urban" }, { name: "Beach" }])
+      .values([
+        { name: "Адал явдалт аялал" }, // Adventure
+        { name: "Соёлын аялал" }, // Cultural
+        { name: "Амрах чиглэлийн" }, // Relaxation
+        { name: "Байгалийн аялал" }, // Nature
+        { name: "Хотын аялал" }, // Urban
+        { name: "Зусланы аялал" }, // Resort
+      ])
       .returning();
     console.log(`✅ Created ${categories.length} categories`);
 
@@ -39,20 +61,20 @@ async function seed() {
     const subCategories = await db
       .insert(subCategoryTable)
       .values([
-        { name: "Hiking", categoryId: categories[0].id },
-        { name: "Climbing", categoryId: categories[0].id },
-        { name: "Water Sports", categoryId: categories[0].id },
-        { name: "Museums", categoryId: categories[1].id },
-        { name: "Historical Sites", categoryId: categories[1].id },
-        { name: "Local Cuisine", categoryId: categories[1].id },
-        { name: "Spa & Wellness", categoryId: categories[2].id },
-        { name: "Resort", categoryId: categories[2].id },
-        { name: "Wildlife", categoryId: categories[3].id },
-        { name: "National Parks", categoryId: categories[3].id },
-        { name: "City Tours", categoryId: categories[4].id },
-        { name: "Shopping", categoryId: categories[4].id },
-        { name: "Tropical", categoryId: categories[5].id },
-        { name: "Island Hopping", categoryId: categories[5].id },
+        { name: "Явган аялал", categoryId: categories[0].id },
+        { name: "Морь унах", categoryId: categories[0].id },
+        { name: "Тэмээн унах", categoryId: categories[0].id },
+        { name: "Музей үзэх", categoryId: categories[1].id },
+        { name: "Түүхэн дурсгалт газар", categoryId: categories[1].id },
+        { name: "Монгол хоол", categoryId: categories[1].id },
+        { name: "Рашаан сувилал", categoryId: categories[2].id },
+        { name: "Зочид буудал", categoryId: categories[2].id },
+        { name: "Зэрлэг амьтан ажиглах", categoryId: categories[3].id },
+        { name: "Байгалийн цогцолборт газар", categoryId: categories[3].id },
+        { name: "Хотын аялал", categoryId: categories[4].id },
+        { name: "Дэлгүүр хэсэх", categoryId: categories[4].id },
+        { name: "Нуур орчим", categoryId: categories[5].id },
+        { name: "Нуурын эрэг", categoryId: categories[5].id },
       ])
       .returning();
     console.log(`✅ Created ${subCategories.length} subcategories`);
@@ -62,18 +84,18 @@ async function seed() {
     const destinations = await db
       .insert(destinationTable)
       .values([
-        { name: "Swiss Alps", location: "Switzerland" },
-        { name: "Paris", location: "France" },
-        { name: "Tokyo", location: "Japan" },
-        { name: "Bali", location: "Indonesia" },
-        { name: "Dubai", location: "United Arab Emirates" },
-        { name: "Iceland", location: "Iceland" },
-        { name: "New York", location: "United States" },
-        { name: "Barcelona", location: "Spain" },
-        { name: "Maldives", location: "Maldives" },
-        { name: "Machu Picchu", location: "Peru" },
-        { name: "Santorini", location: "Greece" },
-        { name: "Safari Kenya", location: "Kenya" },
+        { name: "Хөвсгөл нуур", location: "Хөвсгөл аймаг" },
+        { name: "Говь", location: "Өмнөговь аймаг" },
+        { name: "Хархорин", location: "Өвөрхангай аймаг" },
+        { name: "Тэрэлж", location: "Төв аймаг" },
+        { name: "Алтай нуруу", location: "Баян-Өлгий аймаг" },
+        { name: "Улаанбаатар", location: "Нийслэл хот" },
+        { name: "Хустай нуруу", location: "Төв аймаг" },
+        { name: "Орхон хөндий", location: "Өвөрхангай аймаг" },
+        { name: "Цагаан нуур", location: "Архангай аймаг" },
+        { name: "Хөгнө хан", location: "Булган аймаг" },
+        { name: "Завхан нуур", location: "Завхан аймаг" },
+        { name: "Дархадын хотгор", location: "Хөвсгөл аймаг" },
       ])
       .returning();
     console.log(`✅ Created ${destinations.length} destinations`);
@@ -85,43 +107,53 @@ async function seed() {
       .insert(companyTable)
       .values([
         {
-          name: "Alpine Adventures",
+          name: "Номад Экспедишн",
+          logo: "https://images.unsplash.com/photo-1580407196238-dac33f57c410",
+          coverImage: "https://images.unsplash.com/photo-1559827260-dc66d52bef19",
+          phoneNumber: "+976 7011 5678",
+          email: "info@nomadexpedition.mn",
+          description: "Монгол орны адал явдалт аяллын тэргүүлэгч байгууллага. Морь, тэмээний аялал болон байгалийн аяллын мэргэжилтэн.",
+          username: "nomad_expedition",
+          passwordHash,
+        },
+        {
+          name: "Гоёо Травел",
+          logo: "https://images.unsplash.com/photo-1568605114967-8130f3a36994",
+          coverImage: "https://images.unsplash.com/photo-1512100356356-de1b84283e18",
+          phoneNumber: "+976 7022 9999",
+          email: "contact@goyotravel.mn",
+          description: "Монголын соёл, түүхийг танин мэдүүлэх соёлын аяллын шилдэг байгууллага. Ердийн хоригийн хотын аялал, музейн аялал зэрэг чиглэлээр.",
+          username: "goyo_travel",
+          passwordHash,
+        },
+        {
+          name: "Монгол Дискавери",
+          logo: "https://images.unsplash.com/photo-1542144582-1ba00456b5e3",
+          coverImage: "https://images.unsplash.com/photo-1523805009345-7448845a9e53",
+          phoneNumber: "+976 7033 1234",
+          email: "hello@mongoldiscovery.mn",
+          description: "Говь, Алтай, Хөвсгөл зэрэг байгалийн үзэсгэлэнт газруудаар аялах программууд. Зэрлэг амьтан ажиглах, байгалийн цогцолборт газруудаар аялах.",
+          username: "mongol_discovery",
+          passwordHash,
+        },
+        {
+          name: "Хаан Турс",
+          logo: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000",
+          coverImage: "https://images.unsplash.com/photo-1526495124232-a04e1849168c",
+          phoneNumber: "+976 7044 5555",
+          email: "info@khaantours.mn",
+          description: "Дээд зэргийн үйлчилгээ үзүүлэгч аялал жуулчлалын компани. VIP аялал, бизнес аялал, тансаг зэрэглэлийн аялал зохион байгуулдаг.",
+          username: "khaan_tours",
+          passwordHash,
+        },
+        {
+          name: "Алтан Нуруу",
           logo: "https://images.unsplash.com/photo-1519681393784-d120267933ba",
           coverImage: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4",
-          phoneNumber: "+41 44 123 4567",
-          email: "info@alpineadventures.com",
-          description: "Specialist in mountain and adventure travel experiences",
-          username: "alpine_adventures",
-          passwordHash,
-        },
-        {
-          name: "Global Explorers",
-          logo: "https://images.unsplash.com/photo-1488646953014-85cb44e25828",
-          coverImage: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1",
-          phoneNumber: "+33 1 45 67 89 00",
-          email: "contact@globalexplorers.com",
-          description: "Premium worldwide travel and cultural experiences",
-          username: "global_explorers",
-          passwordHash,
-        },
-        {
-          name: "Tropical Paradise Tours",
-          logo: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
-          coverImage: "https://images.unsplash.com/photo-1559827260-dc66d52bef19",
-          phoneNumber: "+62 361 123 456",
-          email: "hello@tropicalparadise.com",
-          description: "Beach and island getaway specialists",
-          username: "tropical_paradise",
-          passwordHash,
-        },
-        {
-          name: "Urban Discoveries",
-          logo: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000",
-          coverImage: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b",
-          phoneNumber: "+1 212 555 0100",
-          email: "info@urbandiscoveries.com",
-          description: "City tours and urban exploration experts",
-          username: "urban_discoveries",
+          phoneNumber: "+976 7055 7777",
+          email: "info@altannuruu.mn",
+          description: "Баян-Өлгий, Алтайн нурууны адал явдалт аялал. Нисдэг шувуу агнуур, уулын аялал, казак соёлтой танилцах аялал.",
+          username: "altan_nuruu",
           passwordHash,
         },
       ])
@@ -134,27 +166,43 @@ async function seed() {
       .insert(customerTable)
       .values([
         {
-          firstName: "John",
-          lastName: "Doe",
-          phoneNumber: "+1 555 123 4567",
-          email: "john.doe@example.com",
-          username: "johndoe",
+          firstName: "Бат",
+          lastName: "Өлзий",
+          phoneNumber: "+976 9911 1234",
+          email: "bat.ulzii@gmail.com",
+          username: "bat_ulzii",
           passwordHash,
         },
         {
-          firstName: "Jane",
-          lastName: "Smith",
-          phoneNumber: "+1 555 987 6543",
-          email: "jane.smith@example.com",
-          username: "janesmith",
+          firstName: "Сарнай",
+          lastName: "Доржийн",
+          phoneNumber: "+976 9922 5678",
+          email: "sarnai.dorj@gmail.com",
+          username: "sarnai_dorj",
           passwordHash,
         },
         {
-          firstName: "Michael",
-          lastName: "Johnson",
-          phoneNumber: "+1 555 246 8135",
-          email: "michael.j@example.com",
-          username: "michaelj",
+          firstName: "Болд",
+          lastName: "Ганболд",
+          phoneNumber: "+976 9933 9876",
+          email: "bold.ganbold@gmail.com",
+          username: "bold_ganbold",
+          passwordHash,
+        },
+        {
+          firstName: "Цэцэг",
+          lastName: "Мөнх",
+          phoneNumber: "+976 9944 4321",
+          email: "tsetseg.munkh@gmail.com",
+          username: "tsetseg_munkh",
+          passwordHash,
+        },
+        {
+          firstName: "Эрдэнэ",
+          lastName: "Баатар",
+          phoneNumber: "+976 9955 8765",
+          email: "erdene.baatar@gmail.com",
+          username: "erdene_baatar",
           passwordHash,
         },
       ])
@@ -167,44 +215,60 @@ async function seed() {
       .insert(guideTable)
       .values([
         {
-          name: "Hans Mueller",
-          description: "Expert mountain guide with 15 years experience",
-          email: "hans@alpineadventures.com",
-          phoneNumber: "+41 79 123 4567",
+          name: "Баясгалан Төмөр",
+          description: "15 жилийн туршлагатай Хөвсгөл, Алтайн аяллын мэргэжилтэн хөтөч. Англи, Герман хэл сайн мэддэг.",
+          email: "bayasgalan@nomadexpedition.mn",
+          phoneNumber: "+976 9911 2345",
           profileImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
           companyId: companies[0].id,
         },
         {
-          name: "Marie Dubois",
-          description: "Passionate cultural guide specializing in European history",
-          email: "marie@globalexplorers.com",
-          phoneNumber: "+33 6 12 34 56 78",
+          name: "Энхтуяа Бат",
+          description: "Монголын түүх, соёлын мэргэжилтэн. Төв бүсийн түүхэн дурсгалт газрын гүйцэтгэгч хөтөч.",
+          email: "enkhtuya@goyotravel.mn",
+          phoneNumber: "+976 9922 3456",
           profileImage: "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
           companyId: companies[1].id,
         },
         {
-          name: "Kenji Tanaka",
-          description: "Tokyo local expert and cultural ambassador",
-          email: "kenji@globalexplorers.com",
-          phoneNumber: "+81 90 1234 5678",
-          profileImage: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d",
-          companyId: companies[1].id,
-        },
-        {
-          name: "Made Wirawan",
-          description: "Bali island guide and surf instructor",
-          email: "made@tropicalparadise.com",
-          phoneNumber: "+62 812 3456 7890",
+          name: "Ганзориг Цэнд",
+          description: "Говийн аяллын мэргэжилтэн. Зэрлэг амьтан, байгалийн онцлог газруудын талаар гүнзгий мэдлэгтэй.",
+          email: "ganzorig@mongoldiscovery.mn",
+          phoneNumber: "+976 9933 4567",
           profileImage: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e",
           companyId: companies[2].id,
         },
         {
-          name: "Sarah Thompson",
-          description: "New York City expert and food tour specialist",
-          email: "sarah@urbandiscoveries.com",
-          phoneNumber: "+1 917 555 0123",
+          name: "Номин Эрдэнэ",
+          description: "VIP аяллын мэргэжилтэн хөтөч. 10 жилийн туршлага, 5 хэл мэддэг. Тансаг зэрэглэлийн үйлчилгээ.",
+          email: "nomin@khaantours.mn",
+          phoneNumber: "+976 9944 5678",
           profileImage: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80",
           companyId: companies[3].id,
+        },
+        {
+          name: "Алтангэрэл Батбаяр",
+          description: "Баян-Өлгий, Алтайн нурууны адал явдалт аяллын мэргэжилтэн. Казак хэл мэддэг. Нисдэг шувуу агнуурын уламжлалын мэргэжилтэн.",
+          email: "altangerel@altannuruu.mn",
+          phoneNumber: "+976 9955 6789",
+          profileImage: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d",
+          companyId: companies[4].id,
+        },
+        {
+          name: "Сэргэлэн Доржийн",
+          description: "Орхон хөндий, Хархорин түүхэн газрын мэргэжилтэн. Археологи, түүхийн мэдлэгтэй.",
+          email: "sergelen@goyotravel.mn",
+          phoneNumber: "+976 9966 7890",
+          profileImage: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e",
+          companyId: companies[1].id,
+        },
+        {
+          name: "Болормаа Төмөрбаатар",
+          description: "Тэрэлж, Хустай нурууны байгалийн аяллын хөтөч. Хүүхдийн аяллын мэргэжилтэн.",
+          email: "bolormaa@nomadexpedition.mn",
+          phoneNumber: "+976 9977 8901",
+          profileImage: "https://images.unsplash.com/photo-1544005313-94ddf0286df2",
+          companyId: companies[0].id,
         },
       ])
       .returning();
@@ -216,182 +280,183 @@ async function seed() {
     const travelsData = [
       {
         travel: {
-          name: "Swiss Alps Mountain Adventure",
-          description: "Experience the majestic Swiss Alps with guided hiking, mountain climbing, and breathtaking views. Perfect for adventure seekers.",
-          coverImage: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4",
-          duration: 7,
-          totalSeatNumber: 12,
+          name: "Хөвсгөл нуурын адал явдалт аялал",
+          description: "Монголын Швейцарь гэгдэх Хөвсгөл нуураар морь унах, явган аялах, нуурт завиар аялах. Цагаан хот, Жанхай давааны үзэсгэлэнт байгаль.",
+          coverImage: "https://images.unsplash.com/photo-1559827260-dc66d52bef19",
+          duration: 10,
+          totalSeatNumber: 15,
           companyId: companies[0].id,
           destinationId: destinations[0].id,
         },
         agenda: {
-          name: "7-Day Alpine Experience",
-          description: "Day 1: Arrival in Zurich\nDay 2-3: Hiking in Interlaken\nDay 4-5: Mountain climbing workshops\nDay 6: Jungfraujoch excursion\nDay 7: Departure",
+          name: "10 хоногийн Хөвсгөл аялал",
+          description:
+            "1-р өдөр: УБ-Мөрөн хөдөлгөөн\n2-3-р өдөр: Нуур орчим морин аялал\n4-5-р өдөр: Цагаан хот, Дархадын хотгор\n6-7-р өдөр: Нуураар завиар аялах\n8-9-р өдөр: Явган аялал, загас агнуур\n10-р өдөр: УБ буцах",
         },
       },
       {
         travel: {
-          name: "Romantic Paris Getaway",
-          description: "Discover the City of Light with exclusive access to museums, wine tasting, and gourmet dining experiences.",
-          coverImage: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34",
-          duration: 5,
-          totalSeatNumber: 20,
-          companyId: companies[1].id,
+          name: "Говь - Элсэн манхан аялал",
+          description: "Өмнөговийн элсэн манхан, Хонгорын элс, Баянзаг, Үүлэн хадны үзэсгэлэнт байгаль. Тэмээн унах, үлзүүр нэрвэгдэх, одны орой үзэх.",
+          coverImage: "https://images.unsplash.com/photo-1512100356356-de1b84283e18",
+          duration: 7,
+          totalSeatNumber: 12,
+          companyId: companies[2].id,
           destinationId: destinations[1].id,
         },
         agenda: {
-          name: "5-Day Parisian Romance",
-          description: "Day 1: Eiffel Tower and Seine cruise\nDay 2: Louvre and Latin Quarter\nDay 3: Versailles Palace\nDay 4: Wine tasting in Champagne\nDay 5: Shopping and departure",
+          name: "7 хоногийн Говийн аялал",
+          description: "1-р өдөр: УБ-Баянзаг\n2-3-р өдөр: Хонгорын элс, тэмээн унах\n4-р өдөр: Үүлэн хад\n5-6-р өдөр: Говийн зэрлэг амьтан ажиглах\n7-р өдөр: УБ буцах",
         },
       },
       {
         travel: {
-          name: "Tokyo Culture Immersion",
-          description: "Immerse yourself in Japanese culture with temple visits, tea ceremonies, sushi making classes, and traditional experiences.",
-          coverImage: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf",
-          duration: 8,
-          totalSeatNumber: 15,
+          name: "Хархорин - Ердийн хорих аялал",
+          description: "Монголын түүхэн нийслэл Хархорин, Эрдэнэ Зуу хийд, Орхоны хүрхрээ, Цэнхэрийн булаг зэрэг газруудаар соёлын аялал.",
+          coverImage: "https://images.unsplash.com/photo-1526495124232-a04e1849168c",
+          duration: 5,
+          totalSeatNumber: 20,
           companyId: companies[1].id,
           destinationId: destinations[2].id,
         },
         agenda: {
-          name: "8-Day Japanese Experience",
-          description: "Day 1: Arrival Tokyo\nDay 2-3: Tokyo city tours\nDay 4: Day trip to Mount Fuji\nDay 5-6: Kyoto temples\nDay 7: Osaka food tour\nDay 8: Departure",
+          name: "5 хоногийн түүхэн аялал",
+          description: "1-р өдөр: УБ-Хархорин\n2-р өдөр: Эрдэнэ Зуу хийд, музей\n3-р өдөр: Орхоны хүрхрээ\n4-р өдөр: Цэнхэрийн булаг\n5-р өдөр: УБ буцах",
         },
       },
       {
         travel: {
-          name: "Bali Tropical Paradise",
-          description: "Relax on pristine beaches, explore ancient temples, learn to surf, and enjoy world-class spa treatments in beautiful Bali.",
-          coverImage: "https://images.unsplash.com/photo-1537996194471-e657df975ab4",
-          duration: 10,
-          totalSeatNumber: 18,
-          companyId: companies[2].id,
+          name: "Тэрэлж - Хустай нуруу аялал",
+          description: "Тэрэлжийн байгалийн цогцолборт газар, Хустайн тахь ажиглах, мэлхийн хөшөө, Чингис хааны морин хөшөө үзэх. Нийслэлээс ойрын баярын аялал.",
+          coverImage: "https://images.unsplash.com/photo-1523805009345-7448845a9e53",
+          duration: 3,
+          totalSeatNumber: 25,
+          companyId: companies[0].id,
           destinationId: destinations[3].id,
         },
         agenda: {
-          name: "10-Day Bali Bliss",
-          description: "Day 1-2: Seminyak beach relaxation\nDay 3-4: Ubud culture and temples\nDay 5-6: Surf lessons in Canggu\nDay 7-8: Nusa Penida island\nDay 9: Spa day\nDay 10: Departure",
+          name: "3 хоногийн амралтын аялал",
+          description: "1-р өдөр: Чингис хааны морин хөшөө, Тэрэлж\n2-р өдөр: Явган аялал, морь унах\n3-р өдөр: Хустайн тахь ажиглах, УБ буцах",
         },
       },
       {
         travel: {
-          name: "Dubai Luxury Experience",
-          description: "Experience the height of luxury in Dubai with desert safaris, luxury shopping, world-class dining, and iconic attractions.",
-          coverImage: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c",
-          duration: 6,
-          totalSeatNumber: 16,
-          companyId: companies[1].id,
+          name: "Алтай - Нисдэг шувуу агнуурын аялал",
+          description: "Баян-Өлгий, Алтайн нуруу, Казак соёл танилцах, нисдэг шувуу агнуурын уламжлал үзэх. Алтай таван богдын үзэсгэлэнт уулс.",
+          coverImage: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4",
+          duration: 9,
+          totalSeatNumber: 10,
+          companyId: companies[4].id,
           destinationId: destinations[4].id,
         },
         agenda: {
-          name: "6-Day Dubai Luxury",
-          description: "Day 1: Burj Khalifa and Dubai Mall\nDay 2: Desert safari\nDay 3: Palm Jumeirah and Atlantis\nDay 4: Abu Dhabi day trip\nDay 5: Shopping and spa\nDay 6: Departure",
+          name: "9 хоногийн Алтайн аялал",
+          description: "1-2-р өдөр: УБ-Өлгий хөдөлгөөн\n3-4-р өдөр: Нисдэг шувуу агнуур үзэх\n5-6-р өдөр: Алтай таван богд\n7-8-р өдөр: Казак соёл танилцах\n9-р өдөр: Буцах",
         },
       },
       {
         travel: {
-          name: "Iceland Northern Lights Safari",
-          description: "Chase the Northern Lights while exploring Iceland's stunning landscapes, geothermal pools, and dramatic waterfalls.",
-          coverImage: "https://images.unsplash.com/photo-1483347756197-71ef80e95f73",
-          duration: 7,
-          totalSeatNumber: 10,
-          companyId: companies[0].id,
+          name: "Улаанбаатар хотын аялал",
+          description: "Нийслэл хотын үзэсгэлэнт газрууд: Сүхбаатарын талбай, Гандантэгчинлэн хийд, Богд хааны ордон музей, Зайсан толгой, Чойжин ламын музей.",
+          coverImage: "https://images.unsplash.com/photo-1580407196238-dac33f57c410",
+          duration: 2,
+          totalSeatNumber: 30,
+          companyId: companies[1].id,
           destinationId: destinations[5].id,
         },
         agenda: {
-          name: "7-Day Iceland Adventure",
-          description: "Day 1: Reykjavik arrival\nDay 2-3: Golden Circle tour\nDay 4: South Coast waterfalls\nDay 5-6: Northern Lights hunt\nDay 7: Blue Lagoon and departure",
+          name: "2 хоногийн хотын аялал",
+          description: "1-р өдөр: Музейнүүд, Гандан хийд\n2-р өдөр: Зайсан толгой, Чингисийн талбай, шоппинг",
         },
       },
       {
         travel: {
-          name: "New York City Explorer",
-          description: "Explore the Big Apple with Broadway shows, iconic landmarks, world-class museums, and authentic NYC food tours.",
-          coverImage: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9",
-          duration: 5,
-          totalSeatNumber: 25,
-          companyId: companies[3].id,
+          name: "Хустай нуруу - Тахь ажиглах аялал",
+          description: "Пржевальскийн морь буюу тахь ажиглах, байгалийн цогцолборт газраар явган аялах, зэрлэг амьтан ажиглах.",
+          coverImage: "https://images.unsplash.com/photo-1516426122078-c23e76319801",
+          duration: 2,
+          totalSeatNumber: 18,
+          companyId: companies[2].id,
           destinationId: destinations[6].id,
         },
         agenda: {
-          name: "5-Day NYC Discovery",
-          description: "Day 1: Manhattan highlights\nDay 2: Museums and Central Park\nDay 3: Brooklyn and food tour\nDay 4: Broadway show\nDay 5: Shopping and departure",
+          name: "2 хоногийн байгалийн аялал",
+          description: "1-р өдөр: УБ-Хустай, тахь ажиглах\n2-р өдөр: Явган аялал, УБ буцах",
         },
       },
       {
         travel: {
-          name: "Barcelona Art & Architecture",
-          description: "Discover Gaudí's masterpieces, enjoy tapas tours, explore Gothic Quarter, and relax on Mediterranean beaches.",
-          coverImage: "https://images.unsplash.com/photo-1583422409516-2895a77efded",
-          duration: 6,
-          totalSeatNumber: 20,
+          name: "Орхон хөндийн аялал",
+          description: "ЮНЕСКО-гийн дэлхийн өвд бүртгэгдсэн Орхон хөндий, Орхоны хүрхрээ, Товхон хийд, нүүдэлчин айл танилцах.",
+          coverImage: "https://images.unsplash.com/photo-1559827260-dc66d52bef19",
+          duration: 4,
+          totalSeatNumber: 16,
           companyId: companies[1].id,
           destinationId: destinations[7].id,
         },
         agenda: {
-          name: "6-Day Barcelona Experience",
-          description: "Day 1: Sagrada Familia\nDay 2: Park Güell and Gothic Quarter\nDay 3: Beach and Barceloneta\nDay 4: Montjuïc and museums\nDay 5: Day trip to Montserrat\nDay 6: Departure",
+          name: "4 хоногийн Орхон аялал",
+          description: "1-р өдөр: УБ-Хархорин\n2-3-р өдөр: Орхоны хүрхрээ, явган аялал\n4-р өдөр: Товхон хийд, УБ буцах",
         },
       },
       {
         travel: {
-          name: "Maldives Island Paradise",
-          description: "Ultimate luxury resort experience with overwater bungalows, snorkeling, diving, and pristine white sand beaches.",
-          coverImage: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8",
-          duration: 9,
-          totalSeatNumber: 12,
-          companyId: companies[2].id,
+          name: "Цагаан нуур - Архангай аялал",
+          description: "Архангайн Цагаан нуур, рашаан сувилал, Хөгнө хан, Эрдэнэ хамт хийд. Амрах чиглэлийн аялал.",
+          coverImage: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4",
+          duration: 6,
+          totalSeatNumber: 14,
+          companyId: companies[0].id,
           destinationId: destinations[8].id,
         },
         agenda: {
-          name: "9-Day Maldives Luxury",
-          description: "Day 1: Arrival and resort check-in\nDay 2-4: Beach relaxation and spa\nDay 5-6: Snorkeling and diving\nDay 7-8: Water sports and island hopping\nDay 9: Departure",
+          name: "6 хоногийн амралтын аялал",
+          description: "1-2-р өдөр: УБ-Цагаан нуур\n3-4-р өдөр: Рашаан сувилал, нуур орчим\n5-р өдөр: Хөгнө хан\n6-р өдөр: УБ буцах",
         },
       },
       {
         travel: {
-          name: "Machu Picchu Adventure",
-          description: "Trek the Inca Trail to the ancient citadel of Machu Picchu, explore Cusco, and experience Peruvian culture.",
-          coverImage: "https://images.unsplash.com/photo-1587595431973-160d0d94add1",
-          duration: 8,
-          totalSeatNumber: 14,
-          companyId: companies[0].id,
+          name: "Хөгнө хан - Элсэн тасархайн аялал",
+          description: "Хөгнө хан уул, Элсэн тасархай, Угийн нуур, Эрдэнэ хамт хийд. Баярын 3 хоногийн аялал.",
+          coverImage: "https://images.unsplash.com/photo-1523805009345-7448845a9e53",
+          duration: 3,
+          totalSeatNumber: 20,
+          companyId: companies[2].id,
           destinationId: destinations[9].id,
         },
         agenda: {
-          name: "8-Day Inca Trail Experience",
-          description: "Day 1-2: Cusco acclimatization\nDay 3-6: Inca Trail trek\nDay 7: Machu Picchu tour\nDay 8: Return to Lima",
+          name: "3 хоногийн Хөгнө хан аялал",
+          description: "1-р өдөр: УБ-Хөгнө хан, элсэн тасархай\n2-р өдөр: Угийн нуур, Эрдэнэ хамт хийд\n3-р өдөр: УБ буцах",
         },
       },
       {
         travel: {
-          name: "Santorini Sunset Romance",
-          description: "Experience romantic sunsets, white-washed villages, wine tasting, and Greek cuisine in stunning Santorini.",
-          coverImage: "https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e",
-          duration: 5,
-          totalSeatNumber: 16,
-          companyId: companies[1].id,
+          name: "Завхан - Отгон тэнгэрийн аялал",
+          description: "Завханы Отгон тэнгэр уул, Тосон хулстай, Тэлмэн нуур. Баруун бүсийн уулс, нууруудын аялал.",
+          coverImage: "https://images.unsplash.com/photo-1512100356356-de1b84283e18",
+          duration: 8,
+          totalSeatNumber: 12,
+          companyId: companies[0].id,
           destinationId: destinations[10].id,
         },
         agenda: {
-          name: "5-Day Santorini Romance",
-          description: "Day 1: Arrival in Fira\nDay 2: Oia sunset and wine tour\nDay 3: Boat tour and hot springs\nDay 4: Beach day and dining\nDay 5: Departure",
+          name: "8 хоногийн Завхан аялал",
+          description: "1-2-р өдөр: УБ-Завхан хөдөлгөөн\n3-5-р өдөр: Отгон тэнгэр, явган аялал\n6-7-р өдөр: Тэлмэн нуур\n8-р өдөр: Буцах",
         },
       },
       {
         travel: {
-          name: "Kenya Wildlife Safari",
-          description: "Witness the Great Migration, see the Big Five, and experience authentic African safari in Kenya's national parks.",
-          coverImage: "https://images.unsplash.com/photo-1516426122078-c23e76319801",
-          duration: 10,
-          totalSeatNumber: 12,
-          companyId: companies[0].id,
+          name: "Дархадын хотгор аялал",
+          description: "Хөвсгөл аймгийн хойд хэсгийн Дархадын хотгор, Цагаан нуур, Дархад соёл танилцах. Цаачид нуур, үзэсгэлэнт байгаль.",
+          coverImage: "https://images.unsplash.com/photo-1559827260-dc66d52bef19",
+          duration: 12,
+          totalSeatNumber: 10,
+          companyId: companies[2].id,
           destinationId: destinations[11].id,
         },
         agenda: {
-          name: "10-Day Safari Adventure",
-          description: "Day 1-2: Nairobi and Amboseli\nDay 3-5: Masai Mara safari\nDay 6-8: Lake Nakuru and Samburu\nDay 9: Nairobi National Park\nDay 10: Departure",
+          name: "12 хоногийн Дархад аялал",
+          description: "1-3-р өдөр: УБ-Дархадын хотгор\n4-8-р өдөр: Хотгороор аялах, соёл танилцах\n9-11-р өдөр: Буцах зам\n12-р өдөр: УБ ирэх",
         },
       },
     ];
@@ -445,10 +510,10 @@ async function seed() {
     const seatCosts = await db
       .insert(seatCostTable)
       .values([
-        { cost: 1200 }, // Budget
-        { cost: 2500 }, // Standard
-        { cost: 4500 }, // Premium
-        { cost: 7500 }, // Luxury
+        { cost: 450000 }, // Хямд (450,000₮)
+        { cost: 850000 }, // Дундаж (850,000₮)
+        { cost: 1500000 }, // Сайн (1,500,000₮)
+        { cost: 2500000 }, // Тансаг (2,500,000₮)
       ])
       .returning();
     console.log(`✅ Created ${seatCosts.length} seat cost tiers`);
@@ -484,8 +549,8 @@ async function seed() {
     console.log(`   Seat Costs: ${seatCosts.length}`);
     console.log(`   Seats: ${totalSeats}`);
     console.log("\n🔐 Test Credentials:");
-    console.log("   Customer: johndoe / password123");
-    console.log("   Company: alpine_adventures / password123");
+    console.log("   Customer: bat_ulzii / password123");
+    console.log("   Company: nomad_expedition / password123");
 
     process.exit(0);
   } catch (error) {

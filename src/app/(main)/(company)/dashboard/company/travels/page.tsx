@@ -28,13 +28,13 @@ export default function CompanyTravelsPage() {
   }, [isAuthenticated, isLoading, user, router]);
 
   const handleDelete = async (id: number, name: string) => {
-    if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
+    if (!confirm(`"${name}" аяллыг устгахдаа итгэлтэй байна уу?`)) return;
 
     try {
       await deleteTravel({ variables: { id } });
       refetch();
     } catch (error: any) {
-      alert(error.message || "Failed to delete travel");
+      alert(error.message || "Аялал устгахад алдаа гарлаа");
     }
   };
 
@@ -64,13 +64,13 @@ export default function CompanyTravelsPage() {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold mb-2">My Travel Packages</h1>
-            <p className="text-gray-600">Manage your travel packages and sessions</p>
+            <h1 className="text-3xl font-bold mb-2">Миний аяллын багцууд</h1>
+            <p className="text-gray-600">Аяллын багцууд болон сессүүдээ удирдах</p>
           </div>
           <Link href="/dashboard/company/travels/create">
             <Button size="lg">
               <Plus className="w-5 h-5 mr-2" />
-              Create Travel
+              Аялал үүсгэх
             </Button>
           </Link>
         </div>
@@ -86,7 +86,7 @@ export default function CompanyTravelsPage() {
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600" />
                   )}
-                  <div className="absolute top-2 right-2 bg-white px-3 py-1 rounded-full text-sm font-medium">{travel.duration} days</div>
+                  <div className="absolute top-2 right-2 bg-white px-3 py-1 rounded-full text-sm font-medium">{travel.duration} өдөр</div>
                 </div>
 
                 <CardHeader>
@@ -102,11 +102,11 @@ export default function CompanyTravelsPage() {
                     </div>
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <Users className="w-4 h-4" />
-                      <span>{travel.totalSeatNumber} seats</span>
+                      <span>{travel.totalSeatNumber} суудал</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <Calendar className="w-4 h-4" />
-                      <span>{travel.travelSessions.length} sessions</span>
+                      <span>{travel.travelSessions.length} сесс</span>
                     </div>
                   </div>
 
@@ -114,7 +114,7 @@ export default function CompanyTravelsPage() {
                     <Link href={`/dashboard/company/travels/${travel.id}/edit`} className="flex-1">
                       <Button variant="outline" className="w-full" size="sm">
                         <Edit className="w-4 h-4 mr-2" />
-                        Edit
+                        Засах
                       </Button>
                     </Link>
                     <Button variant="destructive" size="sm" onClick={() => handleDelete(travel.id, travel.name)}>
@@ -128,14 +128,14 @@ export default function CompanyTravelsPage() {
         ) : (
           <Card className="max-w-md mx-auto">
             <CardHeader>
-              <CardTitle>No Travel Packages Yet</CardTitle>
-              <CardDescription>Start by creating your first travel package</CardDescription>
+              <CardTitle>Аяллын багц байхгүй байна</CardTitle>
+              <CardDescription>Анхны аяллын багцаа үүсгэж эхлээрэй</CardDescription>
             </CardHeader>
             <CardContent>
               <Link href="/dashboard/company/travels/create">
                 <Button className="w-full">
                   <Plus className="w-5 h-5 mr-2" />
-                  Create Your First Travel
+                  Анхны аяллаа үүсгэх
                 </Button>
               </Link>
             </CardContent>
