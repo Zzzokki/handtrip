@@ -6,6 +6,7 @@ export const agendaTable = pgTable("agenda", {
   id: serial("id").primaryKey(),
 
   // Agenda details
+  day: integer("day").notNull(),
   name: varchar("name").notNull(),
   description: varchar("description").notNull(),
 

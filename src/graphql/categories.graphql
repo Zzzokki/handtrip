@@ -1,6 +1,9 @@
 query GetCategories {
   getCategories {
     ...CategoryFields
+    subCategories {
+      ...SubCategoryFields
+    }
   }
 }
 

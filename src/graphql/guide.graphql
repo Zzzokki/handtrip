@@ -1,5 +1,11 @@
-query GetGuidesByCompany($companyId: Int!) {
-  getGuidesByCompany(companyId: $companyId) {
+query GetGuidesByCompany {
+  getGuidesByCompany {
+    ...GuideFields
+  }
+}
+
+query GetGuideByCompany($getGuideId: Int!) {
+  getGuideByCompany(id: $getGuideId) {
     ...GuideFields
   }
 }

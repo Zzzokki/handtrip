@@ -7,6 +7,9 @@ export const categoryTypeDefs = gql`
     # Category details
     name: String!
 
+    # Relations
+    subCategories: [SubCategory!]
+
     # Timestamps
     createdAt: Timestamp!
     updatedAt: Timestamp!

@@ -4,3 +4,4 @@ export * from "./travel";
 export * from "./category";
 export * from "./destination";
 export * from "./order";
+export * from "./guide";

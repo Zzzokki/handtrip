@@ -31,7 +31,7 @@ export type Agenda = {
 export type AgendaItemInput = {
   day: Scalars['Int']['input'];
   description: Scalars['String']['input'];
-  title: Scalars['String']['input'];
+  name: Scalars['String']['input'];
 };
 
 export type Category = {
@@ -39,6 +39,7 @@ export type Category = {
   createdAt: Scalars['Timestamp']['output'];
   id: Scalars['Int']['output'];
   name: Scalars['String']['output'];
+  subCategories?: Maybe<Array<SubCategory>>;
   updatedAt: Scalars['Timestamp']['output'];
 };
 
@@ -54,10 +55,6 @@ export type Company = {
   phoneNumber: Scalars['String']['output'];
   updatedAt: Scalars['Timestamp']['output'];
   username: Scalars['String']['output'];
-};
-
-export type CreateAgendaInput = {
-  items: Array<AgendaItemInput>;
 };
 
 export type CreateCompanyInput = {
@@ -89,13 +86,12 @@ export type CreateGuideInput = {
 };
 
 export type CreateTravelInput = {
-  agenda: CreateAgendaInput;
-  categoryIds: Array<Scalars['Int']['input']>;
-  companyId: Scalars['Int']['input'];
-  coverImage?: InputMaybe<Scalars['String']['input']>;
+  agendas: Array<AgendaItemInput>;
+  coverImage: Scalars['String']['input'];
   description: Scalars['String']['input'];
   destinationId: Scalars['Int']['input'];
   duration: Scalars['Int']['input'];
+  gallery: Array<Scalars['String']['input']>;
   name: Scalars['String']['input'];
   subCategoryIds: Array<Scalars['Int']['input']>;
   totalSeatNumber: Scalars['Int']['input'];
@@ -105,7 +101,7 @@ export type CreateTravelInput = {
 export type CreateTravelSessionInput = {
   endDate: Scalars['Timestamp']['input'];
   guideId: Scalars['Int']['input'];
-  seatCost: SeatCostInput;
+  seatCost: Scalars['Int']['input'];
   startDate: Scalars['Timestamp']['input'];
 };
 
@@ -130,13 +126,42 @@ export type Destination = {
   updatedAt: Scalars['Timestamp']['output'];
 };
 
+export type GetTravelsByCompanyInput = {
+  filters?: InputMaybe<GetTravelsFilterInput>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type GetTravelsByCompanyResult = {
+  __typename?: 'GetTravelsByCompanyResult';
+  currentPage: Scalars['Int']['output'];
+  totalPages: Scalars['Int']['output'];
+  totalTravels: Scalars['Int']['output'];
+  travels: Array<Travel>;
+};
+
 export type GetTravelsFilterInput = {
   destinationIds?: InputMaybe<Array<Scalars['Int']['input']>>;
   maxDuration?: InputMaybe<Scalars['Int']['input']>;
   maxPrice?: InputMaybe<Scalars['Int']['input']>;
   minDuration?: InputMaybe<Scalars['Int']['input']>;
   minPrice?: InputMaybe<Scalars['Int']['input']>;
+  query?: InputMaybe<Scalars['String']['input']>;
   subCategoryIds?: InputMaybe<Array<Scalars['Int']['input']>>;
+};
+
+export type GetTravelsInput = {
+  filters?: InputMaybe<GetTravelsFilterInput>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type GetTravelsResult = {
+  __typename?: 'GetTravelsResult';
+  currentPage: Scalars['Int']['output'];
+  totalPages: Scalars['Int']['output'];
+  totalTravels: Scalars['Int']['output'];
+  travels: Array<Travel>;
 };
 
 export type Guide = {
@@ -170,7 +195,7 @@ export type Mutation = {
   createCustomer: Customer;
   createDestination: Destination;
   createGuide: Guide;
-  createTravel: Travel;
+  createTravelByCompany: Travel;
   deleteCompany: Company;
   deleteCustomer: Customer;
   deleteGuide: Scalars['Boolean']['output'];
@@ -206,7 +231,7 @@ export type MutationCreateGuideArgs = {
 };
 
 
-export type MutationCreateTravelArgs = {
+export type MutationCreateTravelByCompanyArgs = {
   input: CreateTravelInput;
 };
 
@@ -303,6 +328,7 @@ export type Query = {
   getCompany: Company;
   getCustomer: Customer;
   getDestinations: Array<Destination>;
+  getGuideByCompany: Guide;
   getGuidesByCompany: Array<Guide>;
   getMeAsCompany: Company;
   getMeAsCustomer: Customer;
@@ -322,8 +348,8 @@ export type Query = {
   getTravel: Travel;
   getTraveler: Traveler;
   getTravelersByOrder: Array<Traveler>;
-  getTravels: TravelsResult;
-  getTravelsByCompany: Array<Travel>;
+  getTravels: GetTravelsResult;
+  getTravelsByCompany: GetTravelsByCompanyResult;
 };
 
 
@@ -337,8 +363,8 @@ export type QueryGetCustomerArgs = {
 };
 
 
-export type QueryGetGuidesByCompanyArgs = {
-  companyId: Scalars['Int']['input'];
+export type QueryGetGuideByCompanyArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -408,14 +434,12 @@ export type QueryGetTravelersByOrderArgs = {
 
 
 export type QueryGetTravelsArgs = {
-  filters?: InputMaybe<GetTravelsFilterInput>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  page?: InputMaybe<Scalars['Int']['input']>;
+  input: GetTravelsInput;
 };
 
 
 export type QueryGetTravelsByCompanyArgs = {
-  companyId: Scalars['Int']['input'];
+  input: GetTravelsByCompanyInput;
 };
 
 export type RegisterAsCustomerInput = {
@@ -433,7 +457,7 @@ export type Seat = {
   id: Scalars['Int']['output'];
   seatCost: SeatCost;
   seatCostId: Scalars['Int']['output'];
-  status: Scalars['String']['output'];
+  status: SeatStatus;
   travelSessionId: Scalars['Int']['output'];
   updatedAt: Scalars['Timestamp']['output'];
 };
@@ -446,9 +470,11 @@ export type SeatCost = {
   updatedAt: Scalars['Timestamp']['output'];
 };
 
-export type SeatCostInput = {
-  cost: Scalars['Int']['input'];
-};
+export enum SeatStatus {
+  Available = 'AVAILABLE',
+  Occupied = 'OCCUPIED',
+  Reserved = 'RESERVED'
+}
 
 export type SubCategory = {
   __typename?: 'SubCategory';
@@ -487,7 +513,6 @@ export type TravelSession = {
   guideId: Scalars['Int']['output'];
   id: Scalars['Int']['output'];
   startDate: Scalars['Timestamp']['output'];
-  travel: Travel;
   travelId: Scalars['Int']['output'];
   updatedAt: Scalars['Timestamp']['output'];
 };
@@ -504,13 +529,6 @@ export type Traveler = {
   seat: Seat;
   seatId: Scalars['Int']['output'];
   updatedAt: Scalars['Timestamp']['output'];
-};
-
-export type TravelsResult = {
-  __typename?: 'TravelsResult';
-  hasMore: Scalars['Boolean']['output'];
-  total: Scalars['Int']['output'];
-  travels: Array<Travel>;
 };
 
 export type UpdateCompanyInput = {
@@ -567,7 +585,7 @@ export type RegisterAsCustomerMutation = { __typename?: 'Mutation', registerAsCu
 export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCategoriesQuery = { __typename?: 'Query', getCategories: Array<{ __typename?: 'Category', id: number, name: string, createdAt: any, updatedAt: any }> };
+export type GetCategoriesQuery = { __typename?: 'Query', getCategories: Array<{ __typename?: 'Category', id: number, name: string, createdAt: any, updatedAt: any, subCategories?: Array<{ __typename?: 'SubCategory', id: string, name: string, categoryId: number, createdAt: any, updatedAt: any }> | null }> };
 
 export type GetSubCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -624,34 +642,39 @@ export type TravelSessionFieldsFragment = { __typename?: 'TravelSession', id: nu
 
 export type TravelSessionWithGuideFragment = { __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } };
 
-export type TravelSessionWithRelationsFragment = { __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any }, travel: { __typename?: 'Travel', id: number, name: string, description: string, coverImage?: string | null, duration: number, totalSeatNumber: number, companyId: number, destinationId: number, createdAt: any, updatedAt: any, company: { __typename?: 'Company', id: number, name: string, logo: string, coverImage: string, phoneNumber: string, email: string, description: string, username: string, createdAt: any, updatedAt: any }, agenda: { __typename?: 'Agenda', id: number, name: string, description: string, travelId: number, createdAt: any, updatedAt: any }, destination: { __typename?: 'Destination', id: number, name: string, location: string, createdAt: any, updatedAt: any }, categories: Array<{ __typename?: 'Category', id: number, name: string, createdAt: any, updatedAt: any }>, subCategories: Array<{ __typename?: 'SubCategory', id: string, name: string, categoryId: number, createdAt: any, updatedAt: any }>, travelSessions: Array<{ __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } }> } };
+export type TravelSessionWithRelationsFragment = { __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } };
 
 export type SeatCostFieldsFragment = { __typename?: 'SeatCost', id: number, cost: number, createdAt: any, updatedAt: any };
 
-export type SeatFieldsFragment = { __typename?: 'Seat', id: number, status: string, travelSessionId: number, seatCostId: number, createdAt: any, updatedAt: any };
+export type SeatFieldsFragment = { __typename?: 'Seat', id: number, status: SeatStatus, travelSessionId: number, seatCostId: number, createdAt: any, updatedAt: any };
 
-export type SeatWithCostFragment = { __typename?: 'Seat', id: number, status: string, travelSessionId: number, seatCostId: number, createdAt: any, updatedAt: any, seatCost: { __typename?: 'SeatCost', id: number, cost: number, createdAt: any, updatedAt: any } };
+export type SeatWithCostFragment = { __typename?: 'Seat', id: number, status: SeatStatus, travelSessionId: number, seatCostId: number, createdAt: any, updatedAt: any, seatCost: { __typename?: 'SeatCost', id: number, cost: number, createdAt: any, updatedAt: any } };
 
 export type PaymentFieldsFragment = { __typename?: 'Payment', id: number, total: number, isPaid: boolean, paidAt?: any | null, createdAt: any, updatedAt: any };
 
 export type TravelerFieldsFragment = { __typename?: 'Traveler', id: number, name: string, email: string, phoneNumber: string, dateOfBirth: any, orderId: number, seatId: number, createdAt: any, updatedAt: any };
 
-export type TravelerWithSeatFragment = { __typename?: 'Traveler', id: number, name: string, email: string, phoneNumber: string, dateOfBirth: any, orderId: number, seatId: number, createdAt: any, updatedAt: any, seat: { __typename?: 'Seat', id: number, status: string, travelSessionId: number, seatCostId: number, createdAt: any, updatedAt: any } };
+export type TravelerWithSeatFragment = { __typename?: 'Traveler', id: number, name: string, email: string, phoneNumber: string, dateOfBirth: any, orderId: number, seatId: number, createdAt: any, updatedAt: any, seat: { __typename?: 'Seat', id: number, status: SeatStatus, travelSessionId: number, seatCostId: number, createdAt: any, updatedAt: any } };
 
 export type OrderFieldsFragment = { __typename?: 'Order', id: number, totalSeats: number, totalPrice: number, orderStatus: number, customerId: number, travelSessionId: number, paymentId: number, createdAt: any, updatedAt: any };
 
-export type OrderWithRelationsFragment = { __typename?: 'Order', id: number, totalSeats: number, totalPrice: number, orderStatus: number, customerId: number, travelSessionId: number, paymentId: number, createdAt: any, updatedAt: any, customer: { __typename?: 'Customer', id: number, firstName: string, lastName: string, phoneNumber: string, email: string, username: string, createdAt: any, updatedAt: any }, travelSession: { __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any }, travel: { __typename?: 'Travel', id: number, name: string, description: string, coverImage?: string | null, duration: number, totalSeatNumber: number, companyId: number, destinationId: number, createdAt: any, updatedAt: any, company: { __typename?: 'Company', id: number, name: string, logo: string, coverImage: string, phoneNumber: string, email: string, description: string, username: string, createdAt: any, updatedAt: any }, agenda: { __typename?: 'Agenda', id: number, name: string, description: string, travelId: number, createdAt: any, updatedAt: any }, destination: { __typename?: 'Destination', id: number, name: string, location: string, createdAt: any, updatedAt: any }, categories: Array<{ __typename?: 'Category', id: number, name: string, createdAt: any, updatedAt: any }>, subCategories: Array<{ __typename?: 'SubCategory', id: string, name: string, categoryId: number, createdAt: any, updatedAt: any }>, travelSessions: Array<{ __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } }> } }, payment: { __typename?: 'Payment', id: number, total: number, isPaid: boolean, paidAt?: any | null, createdAt: any, updatedAt: any }, travelers: Array<{ __typename?: 'Traveler', id: number, name: string, email: string, phoneNumber: string, dateOfBirth: any, orderId: number, seatId: number, createdAt: any, updatedAt: any }> };
+export type OrderWithRelationsFragment = { __typename?: 'Order', id: number, totalSeats: number, totalPrice: number, orderStatus: number, customerId: number, travelSessionId: number, paymentId: number, createdAt: any, updatedAt: any, customer: { __typename?: 'Customer', id: number, firstName: string, lastName: string, phoneNumber: string, email: string, username: string, createdAt: any, updatedAt: any }, travelSession: { __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } }, payment: { __typename?: 'Payment', id: number, total: number, isPaid: boolean, paidAt?: any | null, createdAt: any, updatedAt: any }, travelers: Array<{ __typename?: 'Traveler', id: number, name: string, email: string, phoneNumber: string, dateOfBirth: any, orderId: number, seatId: number, createdAt: any, updatedAt: any }> };
 
 export type TravelFieldsFragment = { __typename?: 'Travel', id: number, name: string, description: string, coverImage?: string | null, duration: number, totalSeatNumber: number, companyId: number, destinationId: number, createdAt: any, updatedAt: any };
 
 export type TravelWithRelationsFragment = { __typename?: 'Travel', id: number, name: string, description: string, coverImage?: string | null, duration: number, totalSeatNumber: number, companyId: number, destinationId: number, createdAt: any, updatedAt: any, company: { __typename?: 'Company', id: number, name: string, logo: string, coverImage: string, phoneNumber: string, email: string, description: string, username: string, createdAt: any, updatedAt: any }, agenda: { __typename?: 'Agenda', id: number, name: string, description: string, travelId: number, createdAt: any, updatedAt: any }, destination: { __typename?: 'Destination', id: number, name: string, location: string, createdAt: any, updatedAt: any }, categories: Array<{ __typename?: 'Category', id: number, name: string, createdAt: any, updatedAt: any }>, subCategories: Array<{ __typename?: 'SubCategory', id: string, name: string, categoryId: number, createdAt: any, updatedAt: any }>, travelSessions: Array<{ __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } }> };
 
-export type GetGuidesByCompanyQueryVariables = Exact<{
-  companyId: Scalars['Int']['input'];
-}>;
+export type GetGuidesByCompanyQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetGuidesByCompanyQuery = { __typename?: 'Query', getGuidesByCompany: Array<{ __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any }> };
+
+export type GetGuideByCompanyQueryVariables = Exact<{
+  getGuideId: Scalars['Int']['input'];
+}>;
+
+
+export type GetGuideByCompanyQuery = { __typename?: 'Query', getGuideByCompany: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } };
 
 export type CreateGuideMutationVariables = Exact<{
   input: CreateGuideInput;
@@ -678,44 +701,42 @@ export type DeleteGuideMutation = { __typename?: 'Mutation', deleteGuide: boolea
 export type GetOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetOrdersQuery = { __typename?: 'Query', getOrders: Array<{ __typename?: 'Order', id: number, totalSeats: number, totalPrice: number, orderStatus: number, customerId: number, travelSessionId: number, paymentId: number, createdAt: any, updatedAt: any, customer: { __typename?: 'Customer', id: number, firstName: string, lastName: string, phoneNumber: string, email: string, username: string, createdAt: any, updatedAt: any }, travelSession: { __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any }, travel: { __typename?: 'Travel', id: number, name: string, description: string, coverImage?: string | null, duration: number, totalSeatNumber: number, companyId: number, destinationId: number, createdAt: any, updatedAt: any, company: { __typename?: 'Company', id: number, name: string, logo: string, coverImage: string, phoneNumber: string, email: string, description: string, username: string, createdAt: any, updatedAt: any }, agenda: { __typename?: 'Agenda', id: number, name: string, description: string, travelId: number, createdAt: any, updatedAt: any }, destination: { __typename?: 'Destination', id: number, name: string, location: string, createdAt: any, updatedAt: any }, categories: Array<{ __typename?: 'Category', id: number, name: string, createdAt: any, updatedAt: any }>, subCategories: Array<{ __typename?: 'SubCategory', id: string, name: string, categoryId: number, createdAt: any, updatedAt: any }>, travelSessions: Array<{ __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } }> } }, payment: { __typename?: 'Payment', id: number, total: number, isPaid: boolean, paidAt?: any | null, createdAt: any, updatedAt: any }, travelers: Array<{ __typename?: 'Traveler', id: number, name: string, email: string, phoneNumber: string, dateOfBirth: any, orderId: number, seatId: number, createdAt: any, updatedAt: any }> }> };
+export type GetOrdersQuery = { __typename?: 'Query', getOrders: Array<{ __typename?: 'Order', id: number, totalSeats: number, totalPrice: number, orderStatus: number, customerId: number, travelSessionId: number, paymentId: number, createdAt: any, updatedAt: any, customer: { __typename?: 'Customer', id: number, firstName: string, lastName: string, phoneNumber: string, email: string, username: string, createdAt: any, updatedAt: any }, travelSession: { __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } }, payment: { __typename?: 'Payment', id: number, total: number, isPaid: boolean, paidAt?: any | null, createdAt: any, updatedAt: any }, travelers: Array<{ __typename?: 'Traveler', id: number, name: string, email: string, phoneNumber: string, dateOfBirth: any, orderId: number, seatId: number, createdAt: any, updatedAt: any }> }> };
 
 export type GetOrderQueryVariables = Exact<{
   getOrderId: Scalars['Int']['input'];
 }>;
 
 
-export type GetOrderQuery = { __typename?: 'Query', getOrder: { __typename?: 'Order', id: number, totalSeats: number, totalPrice: number, orderStatus: number, customerId: number, travelSessionId: number, paymentId: number, createdAt: any, updatedAt: any, customer: { __typename?: 'Customer', id: number, firstName: string, lastName: string, phoneNumber: string, email: string, username: string, createdAt: any, updatedAt: any }, travelSession: { __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any }, travel: { __typename?: 'Travel', id: number, name: string, description: string, coverImage?: string | null, duration: number, totalSeatNumber: number, companyId: number, destinationId: number, createdAt: any, updatedAt: any, company: { __typename?: 'Company', id: number, name: string, logo: string, coverImage: string, phoneNumber: string, email: string, description: string, username: string, createdAt: any, updatedAt: any }, agenda: { __typename?: 'Agenda', id: number, name: string, description: string, travelId: number, createdAt: any, updatedAt: any }, destination: { __typename?: 'Destination', id: number, name: string, location: string, createdAt: any, updatedAt: any }, categories: Array<{ __typename?: 'Category', id: number, name: string, createdAt: any, updatedAt: any }>, subCategories: Array<{ __typename?: 'SubCategory', id: string, name: string, categoryId: number, createdAt: any, updatedAt: any }>, travelSessions: Array<{ __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } }> } }, payment: { __typename?: 'Payment', id: number, total: number, isPaid: boolean, paidAt?: any | null, createdAt: any, updatedAt: any }, travelers: Array<{ __typename?: 'Traveler', id: number, name: string, email: string, phoneNumber: string, dateOfBirth: any, orderId: number, seatId: number, createdAt: any, updatedAt: any }> } };
+export type GetOrderQuery = { __typename?: 'Query', getOrder: { __typename?: 'Order', id: number, totalSeats: number, totalPrice: number, orderStatus: number, customerId: number, travelSessionId: number, paymentId: number, createdAt: any, updatedAt: any, customer: { __typename?: 'Customer', id: number, firstName: string, lastName: string, phoneNumber: string, email: string, username: string, createdAt: any, updatedAt: any }, travelSession: { __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } }, payment: { __typename?: 'Payment', id: number, total: number, isPaid: boolean, paidAt?: any | null, createdAt: any, updatedAt: any }, travelers: Array<{ __typename?: 'Traveler', id: number, name: string, email: string, phoneNumber: string, dateOfBirth: any, orderId: number, seatId: number, createdAt: any, updatedAt: any }> } };
 
 export type GetOrdersByCompanyQueryVariables = Exact<{
   companyId: Scalars['Int']['input'];
 }>;
 
 
-export type GetOrdersByCompanyQuery = { __typename?: 'Query', getOrdersByCompany: Array<{ __typename?: 'Order', id: number, totalSeats: number, totalPrice: number, orderStatus: number, customerId: number, travelSessionId: number, paymentId: number, createdAt: any, updatedAt: any, customer: { __typename?: 'Customer', id: number, firstName: string, lastName: string, phoneNumber: string, email: string, username: string, createdAt: any, updatedAt: any }, travelSession: { __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any }, travel: { __typename?: 'Travel', id: number, name: string, description: string, coverImage?: string | null, duration: number, totalSeatNumber: number, companyId: number, destinationId: number, createdAt: any, updatedAt: any, company: { __typename?: 'Company', id: number, name: string, logo: string, coverImage: string, phoneNumber: string, email: string, description: string, username: string, createdAt: any, updatedAt: any }, agenda: { __typename?: 'Agenda', id: number, name: string, description: string, travelId: number, createdAt: any, updatedAt: any }, destination: { __typename?: 'Destination', id: number, name: string, location: string, createdAt: any, updatedAt: any }, categories: Array<{ __typename?: 'Category', id: number, name: string, createdAt: any, updatedAt: any }>, subCategories: Array<{ __typename?: 'SubCategory', id: string, name: string, categoryId: number, createdAt: any, updatedAt: any }>, travelSessions: Array<{ __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } }> } }, payment: { __typename?: 'Payment', id: number, total: number, isPaid: boolean, paidAt?: any | null, createdAt: any, updatedAt: any }, travelers: Array<{ __typename?: 'Traveler', id: number, name: string, email: string, phoneNumber: string, dateOfBirth: any, orderId: number, seatId: number, createdAt: any, updatedAt: any }> }> };
+export type GetOrdersByCompanyQuery = { __typename?: 'Query', getOrdersByCompany: Array<{ __typename?: 'Order', id: number, totalSeats: number, totalPrice: number, orderStatus: number, customerId: number, travelSessionId: number, paymentId: number, createdAt: any, updatedAt: any, customer: { __typename?: 'Customer', id: number, firstName: string, lastName: string, phoneNumber: string, email: string, username: string, createdAt: any, updatedAt: any }, travelSession: { __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } }, payment: { __typename?: 'Payment', id: number, total: number, isPaid: boolean, paidAt?: any | null, createdAt: any, updatedAt: any }, travelers: Array<{ __typename?: 'Traveler', id: number, name: string, email: string, phoneNumber: string, dateOfBirth: any, orderId: number, seatId: number, createdAt: any, updatedAt: any }> }> };
 
 export type GetOrdersByCustomerQueryVariables = Exact<{
   customerId: Scalars['Int']['input'];
 }>;
 
 
-export type GetOrdersByCustomerQuery = { __typename?: 'Query', getOrdersByCustomer: Array<{ __typename?: 'Order', id: number, totalSeats: number, totalPrice: number, orderStatus: number, customerId: number, travelSessionId: number, paymentId: number, createdAt: any, updatedAt: any, customer: { __typename?: 'Customer', id: number, firstName: string, lastName: string, phoneNumber: string, email: string, username: string, createdAt: any, updatedAt: any }, travelSession: { __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any }, travel: { __typename?: 'Travel', id: number, name: string, description: string, coverImage?: string | null, duration: number, totalSeatNumber: number, companyId: number, destinationId: number, createdAt: any, updatedAt: any, company: { __typename?: 'Company', id: number, name: string, logo: string, coverImage: string, phoneNumber: string, email: string, description: string, username: string, createdAt: any, updatedAt: any }, agenda: { __typename?: 'Agenda', id: number, name: string, description: string, travelId: number, createdAt: any, updatedAt: any }, destination: { __typename?: 'Destination', id: number, name: string, location: string, createdAt: any, updatedAt: any }, categories: Array<{ __typename?: 'Category', id: number, name: string, createdAt: any, updatedAt: any }>, subCategories: Array<{ __typename?: 'SubCategory', id: string, name: string, categoryId: number, createdAt: any, updatedAt: any }>, travelSessions: Array<{ __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } }> } }, payment: { __typename?: 'Payment', id: number, total: number, isPaid: boolean, paidAt?: any | null, createdAt: any, updatedAt: any }, travelers: Array<{ __typename?: 'Traveler', id: number, name: string, email: string, phoneNumber: string, dateOfBirth: any, orderId: number, seatId: number, createdAt: any, updatedAt: any }> }> };
+export type GetOrdersByCustomerQuery = { __typename?: 'Query', getOrdersByCustomer: Array<{ __typename?: 'Order', id: number, totalSeats: number, totalPrice: number, orderStatus: number, customerId: number, travelSessionId: number, paymentId: number, createdAt: any, updatedAt: any, customer: { __typename?: 'Customer', id: number, firstName: string, lastName: string, phoneNumber: string, email: string, username: string, createdAt: any, updatedAt: any }, travelSession: { __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } }, payment: { __typename?: 'Payment', id: number, total: number, isPaid: boolean, paidAt?: any | null, createdAt: any, updatedAt: any }, travelers: Array<{ __typename?: 'Traveler', id: number, name: string, email: string, phoneNumber: string, dateOfBirth: any, orderId: number, seatId: number, createdAt: any, updatedAt: any }> }> };
 
 export type GetOrdersByTravelSessionQueryVariables = Exact<{
   travelSessionId: Scalars['Int']['input'];
 }>;
 
 
-export type GetOrdersByTravelSessionQuery = { __typename?: 'Query', getOrdersByTravelSession: Array<{ __typename?: 'Order', id: number, totalSeats: number, totalPrice: number, orderStatus: number, customerId: number, travelSessionId: number, paymentId: number, createdAt: any, updatedAt: any, customer: { __typename?: 'Customer', id: number, firstName: string, lastName: string, phoneNumber: string, email: string, username: string, createdAt: any, updatedAt: any }, travelSession: { __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any }, travel: { __typename?: 'Travel', id: number, name: string, description: string, coverImage?: string | null, duration: number, totalSeatNumber: number, companyId: number, destinationId: number, createdAt: any, updatedAt: any, company: { __typename?: 'Company', id: number, name: string, logo: string, coverImage: string, phoneNumber: string, email: string, description: string, username: string, createdAt: any, updatedAt: any }, agenda: { __typename?: 'Agenda', id: number, name: string, description: string, travelId: number, createdAt: any, updatedAt: any }, destination: { __typename?: 'Destination', id: number, name: string, location: string, createdAt: any, updatedAt: any }, categories: Array<{ __typename?: 'Category', id: number, name: string, createdAt: any, updatedAt: any }>, subCategories: Array<{ __typename?: 'SubCategory', id: string, name: string, categoryId: number, createdAt: any, updatedAt: any }>, travelSessions: Array<{ __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } }> } }, payment: { __typename?: 'Payment', id: number, total: number, isPaid: boolean, paidAt?: any | null, createdAt: any, updatedAt: any }, travelers: Array<{ __typename?: 'Traveler', id: number, name: string, email: string, phoneNumber: string, dateOfBirth: any, orderId: number, seatId: number, createdAt: any, updatedAt: any }> }> };
+export type GetOrdersByTravelSessionQuery = { __typename?: 'Query', getOrdersByTravelSession: Array<{ __typename?: 'Order', id: number, totalSeats: number, totalPrice: number, orderStatus: number, customerId: number, travelSessionId: number, paymentId: number, createdAt: any, updatedAt: any, customer: { __typename?: 'Customer', id: number, firstName: string, lastName: string, phoneNumber: string, email: string, username: string, createdAt: any, updatedAt: any }, travelSession: { __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } }, payment: { __typename?: 'Payment', id: number, total: number, isPaid: boolean, paidAt?: any | null, createdAt: any, updatedAt: any }, travelers: Array<{ __typename?: 'Traveler', id: number, name: string, email: string, phoneNumber: string, dateOfBirth: any, orderId: number, seatId: number, createdAt: any, updatedAt: any }> }> };
 
 export type GetTravelsQueryVariables = Exact<{
-  page?: InputMaybe<Scalars['Int']['input']>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  filters?: InputMaybe<GetTravelsFilterInput>;
+  input: GetTravelsInput;
 }>;
 
 
-export type GetTravelsQuery = { __typename?: 'Query', getTravels: { __typename?: 'TravelsResult', total: number, hasMore: boolean, travels: Array<{ __typename?: 'Travel', id: number, name: string, description: string, coverImage?: string | null, duration: number, totalSeatNumber: number, companyId: number, destinationId: number, createdAt: any, updatedAt: any, company: { __typename?: 'Company', id: number, name: string, logo: string, coverImage: string, phoneNumber: string, email: string, description: string, username: string, createdAt: any, updatedAt: any }, agenda: { __typename?: 'Agenda', id: number, name: string, description: string, travelId: number, createdAt: any, updatedAt: any }, destination: { __typename?: 'Destination', id: number, name: string, location: string, createdAt: any, updatedAt: any }, categories: Array<{ __typename?: 'Category', id: number, name: string, createdAt: any, updatedAt: any }>, subCategories: Array<{ __typename?: 'SubCategory', id: string, name: string, categoryId: number, createdAt: any, updatedAt: any }>, travelSessions: Array<{ __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } }> }> } };
+export type GetTravelsQuery = { __typename?: 'Query', getTravels: { __typename?: 'GetTravelsResult', totalPages: number, totalTravels: number, currentPage: number, travels: Array<{ __typename?: 'Travel', id: number, name: string, description: string, coverImage?: string | null, duration: number, totalSeatNumber: number, companyId: number, destinationId: number, createdAt: any, updatedAt: any, company: { __typename?: 'Company', id: number, name: string, logo: string, coverImage: string, phoneNumber: string, email: string, description: string, username: string, createdAt: any, updatedAt: any }, agenda: { __typename?: 'Agenda', id: number, name: string, description: string, travelId: number, createdAt: any, updatedAt: any }, destination: { __typename?: 'Destination', id: number, name: string, location: string, createdAt: any, updatedAt: any }, categories: Array<{ __typename?: 'Category', id: number, name: string, createdAt: any, updatedAt: any }>, subCategories: Array<{ __typename?: 'SubCategory', id: string, name: string, categoryId: number, createdAt: any, updatedAt: any }>, travelSessions: Array<{ __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } }> }> } };
 
 export type GetTravelQueryVariables = Exact<{
   getTravelId: Scalars['Int']['input'];
@@ -725,33 +746,18 @@ export type GetTravelQueryVariables = Exact<{
 export type GetTravelQuery = { __typename?: 'Query', getTravel: { __typename?: 'Travel', id: number, name: string, description: string, coverImage?: string | null, duration: number, totalSeatNumber: number, companyId: number, destinationId: number, createdAt: any, updatedAt: any, company: { __typename?: 'Company', id: number, name: string, logo: string, coverImage: string, phoneNumber: string, email: string, description: string, username: string, createdAt: any, updatedAt: any }, agenda: { __typename?: 'Agenda', id: number, name: string, description: string, travelId: number, createdAt: any, updatedAt: any }, destination: { __typename?: 'Destination', id: number, name: string, location: string, createdAt: any, updatedAt: any }, categories: Array<{ __typename?: 'Category', id: number, name: string, createdAt: any, updatedAt: any }>, subCategories: Array<{ __typename?: 'SubCategory', id: string, name: string, categoryId: number, createdAt: any, updatedAt: any }>, travelSessions: Array<{ __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } }> } };
 
 export type GetTravelsByCompanyQueryVariables = Exact<{
-  companyId: Scalars['Int']['input'];
+  input: GetTravelsByCompanyInput;
 }>;
 
 
-export type GetTravelsByCompanyQuery = { __typename?: 'Query', getTravelsByCompany: Array<{ __typename?: 'Travel', id: number, name: string, description: string, coverImage?: string | null, duration: number, totalSeatNumber: number, companyId: number, destinationId: number, createdAt: any, updatedAt: any, company: { __typename?: 'Company', id: number, name: string, logo: string, coverImage: string, phoneNumber: string, email: string, description: string, username: string, createdAt: any, updatedAt: any }, agenda: { __typename?: 'Agenda', id: number, name: string, description: string, travelId: number, createdAt: any, updatedAt: any }, destination: { __typename?: 'Destination', id: number, name: string, location: string, createdAt: any, updatedAt: any }, categories: Array<{ __typename?: 'Category', id: number, name: string, createdAt: any, updatedAt: any }>, subCategories: Array<{ __typename?: 'SubCategory', id: string, name: string, categoryId: number, createdAt: any, updatedAt: any }>, travelSessions: Array<{ __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } }> }> };
+export type GetTravelsByCompanyQuery = { __typename?: 'Query', getTravelsByCompany: { __typename?: 'GetTravelsByCompanyResult', totalPages: number, totalTravels: number, currentPage: number, travels: Array<{ __typename?: 'Travel', id: number, name: string, description: string, coverImage?: string | null, duration: number, totalSeatNumber: number, companyId: number, destinationId: number, createdAt: any, updatedAt: any, company: { __typename?: 'Company', id: number, name: string, logo: string, coverImage: string, phoneNumber: string, email: string, description: string, username: string, createdAt: any, updatedAt: any }, agenda: { __typename?: 'Agenda', id: number, name: string, description: string, travelId: number, createdAt: any, updatedAt: any }, destination: { __typename?: 'Destination', id: number, name: string, location: string, createdAt: any, updatedAt: any }, categories: Array<{ __typename?: 'Category', id: number, name: string, createdAt: any, updatedAt: any }>, subCategories: Array<{ __typename?: 'SubCategory', id: string, name: string, categoryId: number, createdAt: any, updatedAt: any }>, travelSessions: Array<{ __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } }> }> } };
 
-export type CreateTravelMutationVariables = Exact<{
+export type CreateTravelByCompanyMutationVariables = Exact<{
   input: CreateTravelInput;
 }>;
 
 
-export type CreateTravelMutation = { __typename?: 'Mutation', createTravel: { __typename?: 'Travel', id: number, name: string, description: string, coverImage?: string | null, duration: number, totalSeatNumber: number, companyId: number, destinationId: number, createdAt: any, updatedAt: any, company: { __typename?: 'Company', id: number, name: string, logo: string, coverImage: string, phoneNumber: string, email: string, description: string, username: string, createdAt: any, updatedAt: any }, agenda: { __typename?: 'Agenda', id: number, name: string, description: string, travelId: number, createdAt: any, updatedAt: any }, destination: { __typename?: 'Destination', id: number, name: string, location: string, createdAt: any, updatedAt: any }, categories: Array<{ __typename?: 'Category', id: number, name: string, createdAt: any, updatedAt: any }>, subCategories: Array<{ __typename?: 'SubCategory', id: string, name: string, categoryId: number, createdAt: any, updatedAt: any }>, travelSessions: Array<{ __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } }> } };
-
-export type UpdateTravelMutationVariables = Exact<{
-  id: Scalars['Int']['input'];
-  input: CreateTravelInput;
-}>;
-
-
-export type UpdateTravelMutation = { __typename?: 'Mutation', updateTravel: { __typename?: 'Travel', id: number, name: string, description: string, coverImage?: string | null, duration: number, totalSeatNumber: number, companyId: number, destinationId: number, createdAt: any, updatedAt: any, company: { __typename?: 'Company', id: number, name: string, logo: string, coverImage: string, phoneNumber: string, email: string, description: string, username: string, createdAt: any, updatedAt: any }, agenda: { __typename?: 'Agenda', id: number, name: string, description: string, travelId: number, createdAt: any, updatedAt: any }, destination: { __typename?: 'Destination', id: number, name: string, location: string, createdAt: any, updatedAt: any }, categories: Array<{ __typename?: 'Category', id: number, name: string, createdAt: any, updatedAt: any }>, subCategories: Array<{ __typename?: 'SubCategory', id: string, name: string, categoryId: number, createdAt: any, updatedAt: any }>, travelSessions: Array<{ __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } }> } };
-
-export type DeleteTravelMutationVariables = Exact<{
-  id: Scalars['Int']['input'];
-}>;
-
-
-export type DeleteTravelMutation = { __typename?: 'Mutation', deleteTravel: { __typename?: 'Travel', id: number, name: string } };
+export type CreateTravelByCompanyMutation = { __typename?: 'Mutation', createTravelByCompany: { __typename?: 'Travel', id: number, name: string, description: string, coverImage?: string | null, duration: number, totalSeatNumber: number, companyId: number, destinationId: number, createdAt: any, updatedAt: any, company: { __typename?: 'Company', id: number, name: string, logo: string, coverImage: string, phoneNumber: string, email: string, description: string, username: string, createdAt: any, updatedAt: any }, agenda: { __typename?: 'Agenda', id: number, name: string, description: string, travelId: number, createdAt: any, updatedAt: any }, destination: { __typename?: 'Destination', id: number, name: string, location: string, createdAt: any, updatedAt: any }, categories: Array<{ __typename?: 'Category', id: number, name: string, createdAt: any, updatedAt: any }>, subCategories: Array<{ __typename?: 'SubCategory', id: string, name: string, categoryId: number, createdAt: any, updatedAt: any }>, travelSessions: Array<{ __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any } }> } };
 
 export const SeatFieldsFragmentDoc = gql`
     fragment SeatFields on Seat {
@@ -851,6 +857,46 @@ export const GuideFieldsFragmentDoc = gql`
   updatedAt
 }
     `;
+export const TravelSessionWithRelationsFragmentDoc = gql`
+    fragment TravelSessionWithRelations on TravelSession {
+  ...TravelSessionFields
+  guide {
+    ...GuideFields
+  }
+}
+    ${TravelSessionFieldsFragmentDoc}
+${GuideFieldsFragmentDoc}`;
+export const PaymentFieldsFragmentDoc = gql`
+    fragment PaymentFields on Payment {
+  id
+  total
+  isPaid
+  paidAt
+  createdAt
+  updatedAt
+}
+    `;
+export const OrderWithRelationsFragmentDoc = gql`
+    fragment OrderWithRelations on Order {
+  ...OrderFields
+  customer {
+    ...CustomerFields
+  }
+  travelSession {
+    ...TravelSessionWithRelations
+  }
+  payment {
+    ...PaymentFields
+  }
+  travelers {
+    ...TravelerFields
+  }
+}
+    ${OrderFieldsFragmentDoc}
+${CustomerFieldsFragmentDoc}
+${TravelSessionWithRelationsFragmentDoc}
+${PaymentFieldsFragmentDoc}
+${TravelerFieldsFragmentDoc}`;
 export const TravelFieldsFragmentDoc = gql`
     fragment TravelFields on Travel {
   id
@@ -953,50 +999,6 @@ ${DestinationFieldsFragmentDoc}
 ${CategoryFieldsFragmentDoc}
 ${SubCategoryFieldsFragmentDoc}
 ${TravelSessionWithGuideFragmentDoc}`;
-export const TravelSessionWithRelationsFragmentDoc = gql`
-    fragment TravelSessionWithRelations on TravelSession {
-  ...TravelSessionFields
-  guide {
-    ...GuideFields
-  }
-  travel {
-    ...TravelWithRelations
-  }
-}
-    ${TravelSessionFieldsFragmentDoc}
-${GuideFieldsFragmentDoc}
-${TravelWithRelationsFragmentDoc}`;
-export const PaymentFieldsFragmentDoc = gql`
-    fragment PaymentFields on Payment {
-  id
-  total
-  isPaid
-  paidAt
-  createdAt
-  updatedAt
-}
-    `;
-export const OrderWithRelationsFragmentDoc = gql`
-    fragment OrderWithRelations on Order {
-  ...OrderFields
-  customer {
-    ...CustomerFields
-  }
-  travelSession {
-    ...TravelSessionWithRelations
-  }
-  payment {
-    ...PaymentFields
-  }
-  travelers {
-    ...TravelerFields
-  }
-}
-    ${OrderFieldsFragmentDoc}
-${CustomerFieldsFragmentDoc}
-${TravelSessionWithRelationsFragmentDoc}
-${PaymentFieldsFragmentDoc}
-${TravelerFieldsFragmentDoc}`;
 export const LoginAsCompanyDocument = gql`
     mutation LoginAsCompany($username: String!, $password: String!) {
   loginAsCompany(username: $username, password: $password) {
@@ -1133,9 +1135,13 @@ export const GetCategoriesDocument = gql`
     query GetCategories {
   getCategories {
     ...CategoryFields
+    subCategories {
+      ...SubCategoryFields
+    }
   }
 }
-    ${CategoryFieldsFragmentDoc}`;
+    ${CategoryFieldsFragmentDoc}
+${SubCategoryFieldsFragmentDoc}`;
 
 /**
  * __useGetCategoriesQuery__
@@ -1400,8 +1406,8 @@ export type CreateDestinationMutationHookResult = ReturnType<typeof useCreateDes
 export type CreateDestinationMutationResult = Apollo.MutationResult<CreateDestinationMutation>;
 export type CreateDestinationMutationOptions = Apollo.BaseMutationOptions<CreateDestinationMutation, CreateDestinationMutationVariables>;
 export const GetGuidesByCompanyDocument = gql`
-    query GetGuidesByCompany($companyId: Int!) {
-  getGuidesByCompany(companyId: $companyId) {
+    query GetGuidesByCompany {
+  getGuidesByCompany {
     ...GuideFields
   }
 }
@@ -1419,11 +1425,10 @@ export const GetGuidesByCompanyDocument = gql`
  * @example
  * const { data, loading, error } = useGetGuidesByCompanyQuery({
  *   variables: {
- *      companyId: // value for 'companyId'
  *   },
  * });
  */
-export function useGetGuidesByCompanyQuery(baseOptions: Apollo.QueryHookOptions<GetGuidesByCompanyQuery, GetGuidesByCompanyQueryVariables> & ({ variables: GetGuidesByCompanyQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useGetGuidesByCompanyQuery(baseOptions?: Apollo.QueryHookOptions<GetGuidesByCompanyQuery, GetGuidesByCompanyQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetGuidesByCompanyQuery, GetGuidesByCompanyQueryVariables>(GetGuidesByCompanyDocument, options);
       }
@@ -1439,6 +1444,46 @@ export type GetGuidesByCompanyQueryHookResult = ReturnType<typeof useGetGuidesBy
 export type GetGuidesByCompanyLazyQueryHookResult = ReturnType<typeof useGetGuidesByCompanyLazyQuery>;
 export type GetGuidesByCompanySuspenseQueryHookResult = ReturnType<typeof useGetGuidesByCompanySuspenseQuery>;
 export type GetGuidesByCompanyQueryResult = Apollo.QueryResult<GetGuidesByCompanyQuery, GetGuidesByCompanyQueryVariables>;
+export const GetGuideByCompanyDocument = gql`
+    query GetGuideByCompany($getGuideId: Int!) {
+  getGuideByCompany(id: $getGuideId) {
+    ...GuideFields
+  }
+}
+    ${GuideFieldsFragmentDoc}`;
+
+/**
+ * __useGetGuideByCompanyQuery__
+ *
+ * To run a query within a React component, call `useGetGuideByCompanyQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGuideByCompanyQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGuideByCompanyQuery({
+ *   variables: {
+ *      getGuideId: // value for 'getGuideId'
+ *   },
+ * });
+ */
+export function useGetGuideByCompanyQuery(baseOptions: Apollo.QueryHookOptions<GetGuideByCompanyQuery, GetGuideByCompanyQueryVariables> & ({ variables: GetGuideByCompanyQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGuideByCompanyQuery, GetGuideByCompanyQueryVariables>(GetGuideByCompanyDocument, options);
+      }
+export function useGetGuideByCompanyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGuideByCompanyQuery, GetGuideByCompanyQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGuideByCompanyQuery, GetGuideByCompanyQueryVariables>(GetGuideByCompanyDocument, options);
+        }
+export function useGetGuideByCompanySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetGuideByCompanyQuery, GetGuideByCompanyQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetGuideByCompanyQuery, GetGuideByCompanyQueryVariables>(GetGuideByCompanyDocument, options);
+        }
+export type GetGuideByCompanyQueryHookResult = ReturnType<typeof useGetGuideByCompanyQuery>;
+export type GetGuideByCompanyLazyQueryHookResult = ReturnType<typeof useGetGuideByCompanyLazyQuery>;
+export type GetGuideByCompanySuspenseQueryHookResult = ReturnType<typeof useGetGuideByCompanySuspenseQuery>;
+export type GetGuideByCompanyQueryResult = Apollo.QueryResult<GetGuideByCompanyQuery, GetGuideByCompanyQueryVariables>;
 export const CreateGuideDocument = gql`
     mutation CreateGuide($input: CreateGuideInput!) {
   createGuide(input: $input) {
@@ -1737,13 +1782,14 @@ export type GetOrdersByTravelSessionLazyQueryHookResult = ReturnType<typeof useG
 export type GetOrdersByTravelSessionSuspenseQueryHookResult = ReturnType<typeof useGetOrdersByTravelSessionSuspenseQuery>;
 export type GetOrdersByTravelSessionQueryResult = Apollo.QueryResult<GetOrdersByTravelSessionQuery, GetOrdersByTravelSessionQueryVariables>;
 export const GetTravelsDocument = gql`
-    query GetTravels($page: Int = 1, $limit: Int = 10, $filters: GetTravelsFilterInput) {
-  getTravels(page: $page, limit: $limit, filters: $filters) {
+    query GetTravels($input: GetTravelsInput!) {
+  getTravels(input: $input) {
     travels {
       ...TravelWithRelations
     }
-    total
-    hasMore
+    totalPages
+    totalTravels
+    currentPage
   }
 }
     ${TravelWithRelationsFragmentDoc}`;
@@ -1760,13 +1806,11 @@ export const GetTravelsDocument = gql`
  * @example
  * const { data, loading, error } = useGetTravelsQuery({
  *   variables: {
- *      page: // value for 'page'
- *      limit: // value for 'limit'
- *      filters: // value for 'filters'
+ *      input: // value for 'input'
  *   },
  * });
  */
-export function useGetTravelsQuery(baseOptions?: Apollo.QueryHookOptions<GetTravelsQuery, GetTravelsQueryVariables>) {
+export function useGetTravelsQuery(baseOptions: Apollo.QueryHookOptions<GetTravelsQuery, GetTravelsQueryVariables> & ({ variables: GetTravelsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetTravelsQuery, GetTravelsQueryVariables>(GetTravelsDocument, options);
       }
@@ -1823,9 +1867,14 @@ export type GetTravelLazyQueryHookResult = ReturnType<typeof useGetTravelLazyQue
 export type GetTravelSuspenseQueryHookResult = ReturnType<typeof useGetTravelSuspenseQuery>;
 export type GetTravelQueryResult = Apollo.QueryResult<GetTravelQuery, GetTravelQueryVariables>;
 export const GetTravelsByCompanyDocument = gql`
-    query GetTravelsByCompany($companyId: Int!) {
-  getTravelsByCompany(companyId: $companyId) {
-    ...TravelWithRelations
+    query GetTravelsByCompany($input: GetTravelsByCompanyInput!) {
+  getTravelsByCompany(input: $input) {
+    travels {
+      ...TravelWithRelations
+    }
+    totalPages
+    totalTravels
+    currentPage
   }
 }
     ${TravelWithRelationsFragmentDoc}`;
@@ -1842,7 +1891,7 @@ export const GetTravelsByCompanyDocument = gql`
  * @example
  * const { data, loading, error } = useGetTravelsByCompanyQuery({
  *   variables: {
- *      companyId: // value for 'companyId'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -1862,104 +1911,36 @@ export type GetTravelsByCompanyQueryHookResult = ReturnType<typeof useGetTravels
 export type GetTravelsByCompanyLazyQueryHookResult = ReturnType<typeof useGetTravelsByCompanyLazyQuery>;
 export type GetTravelsByCompanySuspenseQueryHookResult = ReturnType<typeof useGetTravelsByCompanySuspenseQuery>;
 export type GetTravelsByCompanyQueryResult = Apollo.QueryResult<GetTravelsByCompanyQuery, GetTravelsByCompanyQueryVariables>;
-export const CreateTravelDocument = gql`
-    mutation CreateTravel($input: CreateTravelInput!) {
-  createTravel(input: $input) {
+export const CreateTravelByCompanyDocument = gql`
+    mutation CreateTravelByCompany($input: CreateTravelInput!) {
+  createTravelByCompany(input: $input) {
     ...TravelWithRelations
   }
 }
     ${TravelWithRelationsFragmentDoc}`;
-export type CreateTravelMutationFn = Apollo.MutationFunction<CreateTravelMutation, CreateTravelMutationVariables>;
+export type CreateTravelByCompanyMutationFn = Apollo.MutationFunction<CreateTravelByCompanyMutation, CreateTravelByCompanyMutationVariables>;
 
 /**
- * __useCreateTravelMutation__
+ * __useCreateTravelByCompanyMutation__
  *
- * To run a mutation, you first call `useCreateTravelMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateTravelMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateTravelByCompanyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTravelByCompanyMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createTravelMutation, { data, loading, error }] = useCreateTravelMutation({
+ * const [createTravelByCompanyMutation, { data, loading, error }] = useCreateTravelByCompanyMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useCreateTravelMutation(baseOptions?: Apollo.MutationHookOptions<CreateTravelMutation, CreateTravelMutationVariables>) {
+export function useCreateTravelByCompanyMutation(baseOptions?: Apollo.MutationHookOptions<CreateTravelByCompanyMutation, CreateTravelByCompanyMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateTravelMutation, CreateTravelMutationVariables>(CreateTravelDocument, options);
+        return Apollo.useMutation<CreateTravelByCompanyMutation, CreateTravelByCompanyMutationVariables>(CreateTravelByCompanyDocument, options);
       }
-export type CreateTravelMutationHookResult = ReturnType<typeof useCreateTravelMutation>;
-export type CreateTravelMutationResult = Apollo.MutationResult<CreateTravelMutation>;
-export type CreateTravelMutationOptions = Apollo.BaseMutationOptions<CreateTravelMutation, CreateTravelMutationVariables>;
-export const UpdateTravelDocument = gql`
-    mutation UpdateTravel($id: Int!, $input: CreateTravelInput!) {
-  updateTravel(id: $id, input: $input) {
-    ...TravelWithRelations
-  }
-}
-    ${TravelWithRelationsFragmentDoc}`;
-export type UpdateTravelMutationFn = Apollo.MutationFunction<UpdateTravelMutation, UpdateTravelMutationVariables>;
-
-/**
- * __useUpdateTravelMutation__
- *
- * To run a mutation, you first call `useUpdateTravelMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateTravelMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateTravelMutation, { data, loading, error }] = useUpdateTravelMutation({
- *   variables: {
- *      id: // value for 'id'
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useUpdateTravelMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTravelMutation, UpdateTravelMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateTravelMutation, UpdateTravelMutationVariables>(UpdateTravelDocument, options);
-      }
-export type UpdateTravelMutationHookResult = ReturnType<typeof useUpdateTravelMutation>;
-export type UpdateTravelMutationResult = Apollo.MutationResult<UpdateTravelMutation>;
-export type UpdateTravelMutationOptions = Apollo.BaseMutationOptions<UpdateTravelMutation, UpdateTravelMutationVariables>;
-export const DeleteTravelDocument = gql`
-    mutation DeleteTravel($id: Int!) {
-  deleteTravel(id: $id) {
-    id
-    name
-  }
-}
-    `;
-export type DeleteTravelMutationFn = Apollo.MutationFunction<DeleteTravelMutation, DeleteTravelMutationVariables>;
-
-/**
- * __useDeleteTravelMutation__
- *
- * To run a mutation, you first call `useDeleteTravelMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteTravelMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteTravelMutation, { data, loading, error }] = useDeleteTravelMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useDeleteTravelMutation(baseOptions?: Apollo.MutationHookOptions<DeleteTravelMutation, DeleteTravelMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteTravelMutation, DeleteTravelMutationVariables>(DeleteTravelDocument, options);
-      }
-export type DeleteTravelMutationHookResult = ReturnType<typeof useDeleteTravelMutation>;
-export type DeleteTravelMutationResult = Apollo.MutationResult<DeleteTravelMutation>;
-export type DeleteTravelMutationOptions = Apollo.BaseMutationOptions<DeleteTravelMutation, DeleteTravelMutationVariables>;
+export type CreateTravelByCompanyMutationHookResult = ReturnType<typeof useCreateTravelByCompanyMutation>;
+export type CreateTravelByCompanyMutationResult = Apollo.MutationResult<CreateTravelByCompanyMutation>;
+export type CreateTravelByCompanyMutationOptions = Apollo.BaseMutationOptions<CreateTravelByCompanyMutation, CreateTravelByCompanyMutationVariables>;

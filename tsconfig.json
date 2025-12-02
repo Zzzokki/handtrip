@@ -24,6 +24,6 @@
       "@/database": ["./src/app/api/graphql/database/index.ts"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/api/graphql/types/index.d.ts"],
   "exclude": ["node_modules"]
 }

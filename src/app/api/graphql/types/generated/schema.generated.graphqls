@@ -10,13 +10,14 @@ type Agenda {
 input AgendaItemInput {
   day: Int!
   description: String!
-  title: String!
+  name: String!
 }
 
 type Category {
   createdAt: Timestamp!
   id: Int!
   name: String!
+  subCategories: [SubCategory!]
   updatedAt: Timestamp!
 }
 
@@ -31,10 +32,6 @@ type Company {
   phoneNumber: String!
   updatedAt: Timestamp!
   username: String!
-}
-
-input CreateAgendaInput {
-  items: [AgendaItemInput!]!
 }
 
 input CreateCompanyInput {
@@ -66,13 +63,12 @@ input CreateGuideInput {
 }
 
 input CreateTravelInput {
-  agenda: CreateAgendaInput!
-  categoryIds: [Int!]!
-  companyId: Int!
-  coverImage: String
+  agendas: [AgendaItemInput!]!
+  coverImage: String!
   description: String!
   destinationId: Int!
   duration: Int!
+  gallery: [String!]!
   name: String!
   subCategoryIds: [Int!]!
   totalSeatNumber: Int!
@@ -82,7 +78,7 @@ input CreateTravelInput {
 input CreateTravelSessionInput {
   endDate: Timestamp!
   guideId: Int!
-  seatCost: SeatCostInput!
+  seatCost: Int!
   startDate: Timestamp!
 }
 
@@ -105,13 +101,40 @@ type Destination {
   updatedAt: Timestamp!
 }
 
+input GetTravelsByCompanyInput {
+  filters: GetTravelsFilterInput
+  limit: Int
+  page: Int
+}
+
+type GetTravelsByCompanyResult {
+  currentPage: Int!
+  totalPages: Int!
+  totalTravels: Int!
+  travels: [Travel!]!
+}
+
 input GetTravelsFilterInput {
   destinationIds: [Int!]
   maxDuration: Int
   maxPrice: Int
   minDuration: Int
   minPrice: Int
+  query: String
   subCategoryIds: [Int!]
+}
+
+input GetTravelsInput {
+  filters: GetTravelsFilterInput
+  limit: Int
+  page: Int
+}
+
+type GetTravelsResult {
+  currentPage: Int!
+  totalPages: Int!
+  totalTravels: Int!
+  travels: [Travel!]!
 }
 
 type Guide {
@@ -141,7 +164,7 @@ type Mutation {
   createCustomer(input: CreateCustomerInput!): Customer!
   createDestination(location: String!, name: String!): Destination!
   createGuide(input: CreateGuideInput!): Guide!
-  createTravel(input: CreateTravelInput!): Travel!
+  createTravelByCompany(input: CreateTravelInput!): Travel!
   deleteCompany(id: Int!): Company!
   deleteCustomer(id: Int!): Customer!
   deleteGuide(id: Int!): Boolean!
@@ -186,7 +209,8 @@ type Query {
   getCompany(id: Int!): Company!
   getCustomer(id: Int!): Customer!
   getDestinations: [Destination!]!
-  getGuidesByCompany(companyId: Int!): [Guide!]!
+  getGuideByCompany(id: Int!): Guide!
+  getGuidesByCompany: [Guide!]!
   getMeAsCompany: Company!
   getMeAsCustomer: Customer!
   getOrder(id: Int!): Order!
@@ -205,8 +229,8 @@ type Query {
   getTravel(id: Int!): Travel!
   getTraveler(id: Int!): Traveler!
   getTravelersByOrder(orderId: Int!): [Traveler!]!
-  getTravels(filters: GetTravelsFilterInput, limit: Int = 10, page: Int = 1): TravelsResult!
-  getTravelsByCompany(companyId: Int!): [Travel!]!
+  getTravels(input: GetTravelsInput!): GetTravelsResult!
+  getTravelsByCompany(input: GetTravelsByCompanyInput!): GetTravelsByCompanyResult!
 }
 
 input RegisterAsCustomerInput {
@@ -223,7 +247,7 @@ type Seat {
   id: Int!
   seatCost: SeatCost!
   seatCostId: Int!
-  status: String!
+  status: SeatStatus!
   travelSessionId: Int!
   updatedAt: Timestamp!
 }
@@ -235,8 +259,10 @@ type SeatCost {
   updatedAt: Timestamp!
 }
 
-input SeatCostInput {
-  cost: Int!
+enum SeatStatus {
+  AVAILABLE
+  OCCUPIED
+  RESERVED
 }
 
 type SubCategory {
@@ -290,12 +316,6 @@ type Traveler {
   seat: Seat!
   seatId: Int!
   updatedAt: Timestamp!
-}
-
-type TravelsResult {
-  hasMore: Boolean!
-  total: Int!
-  travels: [Travel!]!
 }
 
 input UpdateCompanyInput {

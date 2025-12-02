@@ -16,6 +16,7 @@ export const travelTable = pgTable("travel", {
   coverImage: varchar("cover_image"),
   duration: integer("duration").notNull(),
   totalSeatNumber: integer("total_seat_number").notNull(),
+  gallery: varchar("gallery").array().notNull(),
 
   // Foreign Key to Company
   companyId: integer("company_id").notNull(),

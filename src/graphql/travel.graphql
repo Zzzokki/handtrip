@@ -1,10 +1,11 @@
-query GetTravels($page: Int = 1, $limit: Int = 10, $filters: GetTravelsFilterInput) {
-  getTravels(page: $page, limit: $limit, filters: $filters) {
+query GetTravels($input: GetTravelsInput!) {
+  getTravels(input: $input) {
     travels {
       ...TravelWithRelations
     }
-    total
-    hasMore
+    totalPages
+    totalTravels
+    currentPage
   }
 }
 
@@ -14,27 +15,19 @@ query GetTravel($getTravelId: Int!) {
   }
 }
 
-query GetTravelsByCompany($companyId: Int!) {
-  getTravelsByCompany(companyId: $companyId) {
-    ...TravelWithRelations
+query GetTravelsByCompany($input: GetTravelsByCompanyInput!) {
+  getTravelsByCompany(input: $input) {
+    travels {
+      ...TravelWithRelations
+    }
+    totalPages
+    totalTravels
+    currentPage
   }
 }
 
-mutation CreateTravel($input: CreateTravelInput!) {
-  createTravel(input: $input) {
+mutation CreateTravelByCompany($input: CreateTravelInput!) {
+  createTravelByCompany(input: $input) {
     ...TravelWithRelations
-  }
-}
-
-mutation UpdateTravel($id: Int!, $input: CreateTravelInput!) {
-  updateTravel(id: $id, input: $input) {
-    ...TravelWithRelations
-  }
-}
-
-mutation DeleteTravel($id: Int!) {
-  deleteTravel(id: $id) {
-    id
-    name
   }
 }

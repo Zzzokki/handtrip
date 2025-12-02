@@ -1,6 +1,8 @@
 import { gql } from "graphql-tag";
 
 export const travelTypeDefs = gql`
+  # Types
+
   type Travel {
     id: Int!
 
@@ -34,42 +36,36 @@ export const travelTypeDefs = gql`
     updatedAt: Timestamp!
   }
 
+  # Inputs
+
   input AgendaItemInput {
     day: Int!
-    title: String!
+    name: String!
     description: String!
-  }
-
-  input CreateAgendaInput {
-    items: [AgendaItemInput!]!
-  }
-
-  input SeatCostInput {
-    cost: Int!
   }
 
   input CreateTravelSessionInput {
     startDate: Timestamp!
     endDate: Timestamp!
     guideId: Int!
-    seatCost: SeatCostInput!
+    seatCost: Int!
   }
 
   input CreateTravelInput {
     name: String!
     description: String!
-    coverImage: String
+    coverImage: String!
+    gallery: [String!]!
     duration: Int!
     totalSeatNumber: Int!
-    companyId: Int!
-    destinationId: Int!
-    agenda: CreateAgendaInput!
+    agendas: [AgendaItemInput!]!
     travelSessions: [CreateTravelSessionInput!]!
-    categoryIds: [Int!]!
+    destinationId: Int!
     subCategoryIds: [Int!]!
   }
 
   input GetTravelsFilterInput {
+    query: String
     destinationIds: [Int!]
     subCategoryIds: [Int!]
     minDuration: Int
@@ -78,20 +74,44 @@ export const travelTypeDefs = gql`
     maxPrice: Int
   }
 
-  type TravelsResult {
-    travels: [Travel!]!
-    total: Int!
-    hasMore: Boolean!
+  input GetTravelsByCompanyInput {
+    page: Int
+    limit: Int
+    filters: GetTravelsFilterInput
   }
 
+  input GetTravelsInput {
+    page: Int
+    limit: Int
+    filters: GetTravelsFilterInput
+  }
+
+  # Results
+
+  type GetTravelsByCompanyResult {
+    travels: [Travel!]!
+    totalPages: Int!
+    totalTravels: Int!
+    currentPage: Int!
+  }
+
+  type GetTravelsResult {
+    travels: [Travel!]!
+    totalPages: Int!
+    totalTravels: Int!
+    currentPage: Int!
+  }
+
+  # Queries & Mutations
+
   type Query {
-    getTravels(page: Int = 1, limit: Int = 10, filters: GetTravelsFilterInput): TravelsResult!
+    getTravelsByCompany(input: GetTravelsByCompanyInput!): GetTravelsByCompanyResult!
+    getTravels(input: GetTravelsInput!): GetTravelsResult!
     getTravel(id: Int!): Travel!
-    getTravelsByCompany(companyId: Int!): [Travel!]!
   }
 
   type Mutation {
-    createTravel(input: CreateTravelInput!): Travel!
+    createTravelByCompany(input: CreateTravelInput!): Travel!
     updateTravel(id: Int!, input: CreateTravelInput!): Travel!
     deleteTravel(id: Int!): Travel!
   }

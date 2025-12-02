@@ -9,6 +9,7 @@ const config: CodegenConfig = {
       resolverGeneration: "disabled",
       typesPluginsConfig: {
         inputMaybeValue: "T | undefined",
+        contextType: "Context",
       },
     }),
   },

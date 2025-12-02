@@ -98,9 +98,6 @@ fragment TravelSessionWithRelations on TravelSession {
   guide {
     ...GuideFields
   }
-  travel {
-    ...TravelWithRelations
-  }
 }
 
 # SeatCost Fragment

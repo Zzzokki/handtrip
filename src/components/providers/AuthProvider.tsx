@@ -1,12 +1,7 @@
 "use client";
 
-import {
-  createContext,
-  PropsWithChildren,
-  useContext,
-  useState,
-  useEffect,
-} from "react";
+import { useRouter } from "next/navigation";
+import { createContext, PropsWithChildren, useContext, useState, useEffect } from "react";
 
 type User = {
   id: string;
@@ -29,6 +24,8 @@ const AUTH_TOKEN_KEY = "auth_token";
 const AUTH_USER_KEY = "auth_user";
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
+  const router = useRouter();
+
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -58,6 +55,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     setUser(null);
     localStorage.removeItem(AUTH_TOKEN_KEY);
     localStorage.removeItem(AUTH_USER_KEY);
+    router.push("/");
   };
 
   const value = {

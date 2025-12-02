@@ -2,19 +2,21 @@
 
 import { PropsWithChildren, useMemo } from "react";
 import { setContext } from "@apollo/client/link/context";
-import {
-  ApolloClient,
-  ApolloProvider,
-  createHttpLink,
-  InMemoryCache,
-  NormalizedCacheObject,
-} from "@apollo/client";
+import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache, NormalizedCacheObject } from "@apollo/client";
 
 export const ApolloWrapper = ({ children }: PropsWithChildren) => {
   const client: ApolloClient<NormalizedCacheObject> = useMemo(() => {
     const httpLink = createHttpLink({ uri: "/api/graphql" });
 
-    const authLink = setContext(async (_, { headers }) => ({ headers }));
+    const authLink = setContext(async (_, { headers }) => {
+      const token = localStorage.getItem("auth_token");
+      return {
+        headers: {
+          ...headers,
+          authorization: token ? `Bearer ${token}` : "",
+        },
+      };
+    });
 
     return new ApolloClient({
       cache: new InMemoryCache(),

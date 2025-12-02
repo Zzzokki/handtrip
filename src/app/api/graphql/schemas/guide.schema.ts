@@ -36,7 +36,8 @@ export const guideTypeDefs = gql`
   }
 
   type Query {
-    getGuidesByCompany(companyId: Int!): [Guide!]!
+    getGuidesByCompany: [Guide!]!
+    getGuideByCompany(id: Int!): Guide!
   }
 
   type Mutation {

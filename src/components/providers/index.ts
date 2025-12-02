@@ -1,2 +1,2 @@
-export * from "./ApolloWrapper"
-export { AuthProvider, useAuth, getAuthToken } from "./AuthProvider";
+export * from "./ApolloWrapper";
+export * from "./AuthProvider";

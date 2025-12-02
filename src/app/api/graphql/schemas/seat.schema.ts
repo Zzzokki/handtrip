@@ -1,11 +1,17 @@
 import { gql } from "graphql-tag";
 
 export const seatTypeDefs = gql`
+  enum SeatStatus {
+    AVAILABLE
+    RESERVED
+    OCCUPIED
+  }
+
   type Seat {
     id: Int!
 
     # Seat details
-    status: String!
+    status: SeatStatus!
 
     # Travel Session
     travelSessionId: Int!

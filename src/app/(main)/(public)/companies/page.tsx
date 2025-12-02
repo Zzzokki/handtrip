@@ -52,7 +52,6 @@ export default function CompaniesPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white py-20">
         <div className="container mx-auto px-4 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full mb-6">
@@ -64,18 +63,14 @@ export default function CompaniesPage() {
         </div>
       </div>
 
-      {/* Content */}
       <div className="container mx-auto px-4 -mt-8">
-        {/* Search */}
         <div className="mb-12">
           <CompanySearch searchQuery={searchQuery} onSearchChange={setSearchQuery} />
         </div>
 
-        {/* Companies Grid */}
         {filteredCompanies && <CompanyGrid companies={filteredCompanies} searchQuery={searchQuery} onClearSearch={() => setSearchQuery("")} />}
       </div>
 
-      {/* Bottom Spacing */}
       <div className="py-12" />
     </div>
   );

@@ -41,12 +41,11 @@ const colorConfig = {
   },
 };
 
-export default function StatCard({ title, value, subtitle, icon: Icon, color = "blue", trend }: StatCardProps) {
+export const StatCard = ({ title, value, subtitle, icon: Icon, color = "blue", trend }: StatCardProps) => {
   const colors = colorConfig[color];
 
   return (
     <Card className={`relative overflow-hidden border ${colors.border} bg-white hover:shadow-xl transition-all duration-300 group`}>
-      {/* Background gradient */}
       <div className={`absolute inset-0 bg-gradient-to-br ${colors.bg} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
 
       <CardHeader className="relative flex flex-row items-center justify-between pb-3">
@@ -69,4 +68,4 @@ export default function StatCard({ title, value, subtitle, icon: Icon, color = "
       </CardContent>
     </Card>
   );
-}
+};

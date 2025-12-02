@@ -1,3 +1,3 @@
-export { TravelFilters } from "./TravelFilters";
-export { TravelCard } from "./TravelCard";
+export * from "./TravelCard";
+export * from "./TravelFilter";
 export { TravelGrid } from "./TravelGrid";

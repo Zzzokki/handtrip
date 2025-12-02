@@ -1,6 +1,6 @@
 import { type Metadata } from "next";
 import { type PropsWithChildren } from "react";
-import { AuthProvider } from "@/components/providers/AuthProvider";
+import { AuthProvider } from "@/components";
 
 export const metadata: Metadata = {
   title: "Create Next App",
