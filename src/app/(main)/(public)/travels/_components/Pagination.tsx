@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Pagination as ShadcnPagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 
 type PaginationProps = {
@@ -23,7 +23,7 @@ export const Pagination = ({ page, totalPages, setPage }: PaginationProps) => {
   };
 
   return (
-    <ShadcnPagination>
+    <ShadcnPagination className="m-0 w-fit">
       <PaginationContent>
         <PaginationItem>
           <Button variant="outline" disabled={page === 1} onClick={prev}>
@@ -32,25 +32,58 @@ export const Pagination = ({ page, totalPages, setPage }: PaginationProps) => {
           </Button>
         </PaginationItem>
 
+        {page > 2 && (
+          <PaginationItem>
+            <Button variant="outline" onClick={() => goToPage(1)}>
+              1
+            </Button>
+          </PaginationItem>
+        )}
+
+        {page > 3 && (
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+        )}
+
+        {page > 1 && (
+          <PaginationItem>
+            <Button variant="outline" onClick={() => goToPage(page - 1)}>
+              {page - 1}
+            </Button>
+          </PaginationItem>
+        )}
+
         <PaginationItem>
-          <PaginationLink href="#">1</PaginationLink>
+          <PaginationLink className="bg-blue-600 text-white hover:bg-blue-700">{page}</PaginationLink>
         </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#" isActive>
-            2
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">3</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationEllipsis />
-        </PaginationItem>
+
+        {page < totalPages && (
+          <PaginationItem>
+            <Button variant="outline" onClick={() => goToPage(page + 1)}>
+              {page + 1}
+            </Button>
+          </PaginationItem>
+        )}
+
+        {page < totalPages - 2 && (
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+        )}
+
+        {page < totalPages - 1 && (
+          <PaginationItem>
+            <Button variant="outline" onClick={() => goToPage(totalPages)}>
+              {totalPages}
+            </Button>
+          </PaginationItem>
+        )}
 
         <PaginationItem>
           <Button variant="outline" disabled={page === totalPages} onClick={next}>
-            <ChevronLeft className="w-4 h-4 mr-2" />
             Дараах
+            <ChevronRight className="w-4 h-4 mr-2" />
           </Button>
         </PaginationItem>
       </PaginationContent>

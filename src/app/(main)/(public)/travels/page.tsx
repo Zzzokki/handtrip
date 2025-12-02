@@ -3,14 +3,17 @@
 import { useGetTravelsQuery } from "@/types/generated";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { TravelCard, TravelCardSkeleton, TravelFilter } from "./_components";
+import { Pagination, TravelCard, TravelCardSkeleton, TravelFilter } from "./_components";
 
 export default function TravelsPage() {
+  const [page, setPage] = useState(1);
   const [subCategoryIds, setSubCategoryIds] = useState<number[]>([]);
 
   const { data, loading } = useGetTravelsQuery({
     variables: {
       input: {
+        page,
+        limit: 15,
         filters: {},
       },
     },
@@ -20,10 +23,10 @@ export default function TravelsPage() {
       }),
   });
 
-  const { travels } = useMemo(() => {
-    if (!data) return { travels: [] };
-    const { travels } = data.getTravels;
-    return { travels };
+  const { travels, totalPages } = useMemo(() => {
+    if (!data) return { travels: [], totalPages: 1 };
+    const { travels, totalPages } = data.getTravels;
+    return { travels, totalPages };
   }, [data]);
 
   return (
@@ -34,7 +37,7 @@ export default function TravelsPage() {
         <div className="flex-1">
           {loading && (
             <div className="grid grid-cols-3 gap-4">
-              {[...Array(16)].map((_, index) => (
+              {[...Array(15)].map((_, index) => (
                 <TravelCardSkeleton key={index} />
               ))}
             </div>
@@ -43,10 +46,14 @@ export default function TravelsPage() {
           {!loading && travels.length === 0 && <div>Аялал олдсонгүй.</div>}
 
           {!loading && travels.length > 0 && (
-            <div className="grid grid-cols-3 gap-4">
-              {travels.map((travel) => (
-                <TravelCard key={travel.id} travel={travel} />
-              ))}
+            <div className="flex flex-col gap-8 items-end">
+              <div className="grid grid-cols-3 gap-4">
+                {travels.map((travel) => (
+                  <TravelCard key={travel.id} travel={travel} />
+                ))}
+              </div>
+
+              <Pagination totalPages={totalPages} page={page} setPage={setPage} />
             </div>
           )}
         </div>
