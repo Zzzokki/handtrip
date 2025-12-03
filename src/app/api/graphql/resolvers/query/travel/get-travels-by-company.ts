@@ -30,8 +30,8 @@ export const getTravelsByCompany: QueryResolvers["getTravelsByCompany"] = async 
   return {
     travels: travels.map((travel) => ({
       ...travel,
-      subCategories: travel.subCategories.map((sc) => sc.subCategory),
-      categories: travel.categories.map((c) => c.category),
+      subCategories: travel.subCategories.map((sc) => sc.subCategory).filter((sc) => sc !== null),
+      categories: travel.categories.map((c) => c.category).filter((sc) => sc !== null),
     })),
     totalPages,
     totalTravels,

@@ -166,95 +166,86 @@ export const UploadGallery = ({ onUploadComplete }: UploadGalleryProps) => {
       </CardHeader>
       <CardContent className="pt-6 space-y-5">
         <div className="space-y-4">
-          <Card className="overflow-hidden border-2 border-dashed border-slate-300 bg-slate-50/50 hover:border-blue-400 hover:bg-blue-50/30 transition-all">
-            <CardContent className="p-0">
-              <label htmlFor="gallery-upload" className={`group relative flex h-64 cursor-pointer flex-col items-center justify-center transition-all ${dragActive ? "bg-blue-100/50" : ""}`}>
-                <div className="absolute z-[5] h-full w-full" onDragOver={handleDragOver} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onDrop={handleDrop} />
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {images.map((image, index) => (
+              <Card key={index} className="overflow-hidden border-slate-200 relative group">
+                <CardContent className="p-0">
+                  <div className="relative aspect-square">
+                    <img src={image.preview} alt={`Preview ${index + 1}`} className="h-full w-full object-cover" />
 
-                <div className="relative z-[3] flex flex-col items-center justify-center p-10 text-center">
-                  <div className={`mb-4 rounded-full bg-blue-100 p-4 transition-transform ${dragActive ? "scale-110" : "scale-100"}`}>
-                    <CloudUpload className={`h-10 w-10 text-blue-600 transition-transform group-hover:scale-110`} />
-                  </div>
-                  <h3 className="mb-2 text-lg font-semibold text-slate-900">Зургууд байршуулах</h3>
-                  <p className="mb-1 text-sm text-slate-600">
-                    Энд чирж оруулах эсвэл <span className="font-semibold text-blue-600">энд дарж сонгоно уу</span>
-                  </p>
-                  <p className="text-xs text-slate-500">Олон зураг сонгох боломжтой • PNG, JPG, JPEG • Хамгийн их 50MB</p>
-                  {images.length > 0 && <Badge className="mt-3 bg-blue-500 text-white border-0">{images.length} зураг сонгогдсон</Badge>}
-                </div>
-
-                <input
-                  id="gallery-upload"
-                  name="gallery"
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  className="sr-only"
-                  disabled={isUploading}
-                  onChange={(event) => {
-                    handleFileChange(event.currentTarget.files);
-                    event.currentTarget.value = "";
-                  }}
-                />
-              </label>
-            </CardContent>
-          </Card>
-
-          {images.length > 0 && (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {images.map((image, index) => (
-                <Card key={index} className="overflow-hidden border-slate-200 relative group">
-                  <CardContent className="p-0">
-                    <div className="relative aspect-square">
-                      <img src={image.preview} alt={`Preview ${index + 1}`} className="h-full w-full object-cover" />
-
-                      {/* Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                        <div className="absolute bottom-0 left-0 right-0 p-2">
-                          <p className="text-white text-xs font-medium truncate">{image.file.name}</p>
-                          <p className="text-white/80 text-xs">{formatFileSize(image.file.size)}</p>
-                        </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="absolute bottom-0 left-0 right-0 p-2">
+                        <p className="text-white text-xs font-medium truncate">{image.file.name}</p>
+                        <p className="text-white/80 text-xs">{formatFileSize(image.file.size)}</p>
                       </div>
-
-                      {/* Status Badge */}
-                      <div className="absolute top-2 right-2">
-                        {image.url ? (
-                          <Badge className="bg-green-500 text-white border-0 shadow-lg">
-                            <CheckCircle2 className="w-3 h-3 mr-1" />
-                            Байршуулсан
-                          </Badge>
-                        ) : image.isUploading ? (
-                          <Badge className="bg-blue-500 text-white border-0 shadow-lg">
-                            <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-                            {Math.round(image.progress)}%
-                          </Badge>
-                        ) : null}
-                      </div>
-
-                      {/* Remove Button */}
-                      <Button
-                        type="button"
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => removeImage(index)}
-                        disabled={image.isUploading}
-                        className="absolute top-2 left-2 h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-
-                      {/* Progress Bar */}
-                      {image.isUploading && (
-                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-slate-200">
-                          <div className="h-full bg-blue-500 transition-all duration-300" style={{ width: `${image.progress}%` }} />
-                        </div>
-                      )}
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
+
+                    <div className="absolute top-2 right-2">
+                      {image.url ? (
+                        <Badge className="bg-green-500 text-white border-0 shadow-lg">
+                          <CheckCircle2 className="w-3 h-3 mr-1" />
+                          Байршуулсан
+                        </Badge>
+                      ) : image.isUploading ? (
+                        <Badge className="bg-blue-500 text-white border-0 shadow-lg">
+                          <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                          {Math.round(image.progress)}%
+                        </Badge>
+                      ) : null}
+                    </div>
+
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => removeImage(index)}
+                      disabled={image.isUploading}
+                      className="absolute top-2 left-2 h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+
+                    {image.isUploading && (
+                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-slate-200">
+                        <div className="h-full bg-blue-500 transition-all duration-300" style={{ width: `${image.progress}%` }} />
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+
+            <Card className="overflow-hidden border-slate-200 relative group">
+              <CardContent className="p-0">
+                <div className="relative aspect-square">
+                  <label htmlFor="gallery-upload" className={`group relative flex h-full cursor-pointer flex-col items-center justify-center transition-all ${dragActive ? "bg-blue-100/50" : ""}`}>
+                    <div className="absolute z-[5] h-full w-full" onDragOver={handleDragOver} onDragEnter={handleDragEnter} onDragLeave={handleDragLeave} onDrop={handleDrop} />
+
+                    <div className="relative z-[3] flex flex-col items-center justify-center p-10 text-center">
+                      <div className={`mb-4 rounded-full bg-blue-100 p-4 transition-transform ${dragActive ? "scale-110" : "scale-100"}`}>
+                        <CloudUpload className={`h-10 w-10 text-blue-600 transition-transform group-hover:scale-110`} />
+                      </div>
+                      <h3 className="mb-2 text-lg font-semibold text-slate-900">Зураг байршуулах</h3>
+                    </div>
+
+                    <input
+                      id="gallery-upload"
+                      name="gallery"
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      className="sr-only"
+                      disabled={isUploading}
+                      onChange={(event) => {
+                        handleFileChange(event.currentTarget.files);
+                        event.currentTarget.value = "";
+                      }}
+                    />
+                  </label>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
           {images.length > 0 && (
             <div className="flex gap-3">

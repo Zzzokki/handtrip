@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Save, User, Mail, Phone, FileText, Image as ImageIcon, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
-import { useCreateGuideMutation } from "@/types/generated";
+import { GetGuidesByCompanyDocument, useCreateGuideMutation } from "@/types/generated";
 import { useState } from "react";
 import { upload } from "@vercel/blob/client";
 
@@ -63,6 +63,7 @@ export default function CreateGuidePage() {
         description: error.message,
       });
     },
+    refetchQueries: [GetGuidesByCompanyDocument],
   });
 
   const handleImageChange = async (file: File) => {

@@ -2,7 +2,7 @@ import { gql } from "graphql-tag";
 
 export const subCategoryTypeDefs = gql`
   type SubCategory {
-    id: ID!
+    id: Int!
 
     # SubCategory details
     name: String!

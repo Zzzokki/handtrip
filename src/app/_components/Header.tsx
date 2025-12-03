@@ -16,7 +16,7 @@ export const Header = () => {
 
   return (
     <header className="fixed top-0 left-0 w-full z-[99999] bg-white/80 backdrop-blur-lg border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center gap-2">
@@ -41,11 +41,9 @@ export const Header = () => {
             <Link href="/companies" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
               Компаниуд
             </Link>
+
             {isAuthenticated && (
               <>
-                <Link href="/profile" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
-                  Миний профайл
-                </Link>
                 <Link href="/dashboard/company" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
                   Хянах самбар
                 </Link>

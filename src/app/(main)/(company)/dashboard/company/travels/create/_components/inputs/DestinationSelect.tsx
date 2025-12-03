@@ -17,9 +17,9 @@ export const DestinationSelect = ({ form }: DestinationSelectProps) => {
     onError: (error) => toast.error(`Зориулалтын газар авахад алдаа гарлаа: ${error.message}`),
   });
 
-  const id = form.watch("destinationId");
+  const destinationId = form.watch("destinationId");
 
-  const selectedDestination = data?.getDestinations.find((destination) => destination.id === Number(id));
+  const selectedDestination = data?.getDestinations.find((destination) => destination.id === Number(destinationId));
 
   return (
     <FormField
@@ -32,7 +32,13 @@ export const DestinationSelect = ({ form }: DestinationSelectProps) => {
             <span className="text-red-500">*</span>
           </FormLabel>
           <FormControl>
-            <Select onValueChange={field.onChange} value={String(field.value)} disabled={loading}>
+            <Select
+              disabled={loading}
+              value={String(field.value)}
+              onValueChange={(value) => {
+                field.onChange(Number(value));
+              }}
+            >
               <SelectTrigger>
                 {loading && (
                   <div className="flex gap-4 items-center">

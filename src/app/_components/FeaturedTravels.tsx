@@ -1,7 +1,6 @@
 "use client";
 
-import { useQuery } from "@apollo/client";
-import { GetTravelsDocument } from "@/types/generated";
+import { useGetTravelsQuery } from "@/types/generated";
 import Link from "next/link";
 import { MapPin, Clock, Users, ArrowRight, Sparkles, Calendar, Building2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -9,11 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 export const FeaturedTravels = () => {
-  const { data, loading, error } = useQuery(GetTravelsDocument, {
-    variables: {
-      page: 1,
-      limit: 6,
-    },
+  const { data, loading } = useGetTravelsQuery({
+    variables: { input: { page: 1, limit: 6 } },
   });
 
   if (loading) {
@@ -30,15 +26,7 @@ export const FeaturedTravels = () => {
     );
   }
 
-  if (error || !data?.getTravels?.travels) {
-    return null;
-  }
-
-  const travels = data.getTravels.travels.slice(0, 6);
-
-  if (travels.length === 0) {
-    return null;
-  }
+  const travels = data?.getTravels.travels || [];
 
   return (
     <section className="py-20 bg-gradient-to-b from-white to-gray-50">
@@ -53,7 +41,7 @@ export const FeaturedTravels = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {travels.map((travel: any) => (
+          {travels?.map((travel) => (
             <Link key={travel.id} href={`/travels/${travel.id}`}>
               <Card className="group relative overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-300 h-full bg-white rounded-2xl">
                 <div className="relative h-64 overflow-hidden">
@@ -69,7 +57,6 @@ export const FeaturedTravels = () => {
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
 
-                  {/* Duration Badge */}
                   <div className="absolute bottom-4 left-4">
                     <Badge className="bg-white/95 backdrop-blur-sm text-blue-600 border-0 shadow-lg">
                       <Clock className="w-3 h-3 mr-1" />
@@ -77,17 +64,15 @@ export const FeaturedTravels = () => {
                     </Badge>
                   </div>
 
-                  {/* Sessions Badge */}
                   {travel.travelSessions && travel.travelSessions.length > 0 && (
                     <div className="absolute top-4 left-4">
                       <Badge className="bg-green-500 text-white border-0 shadow-lg">
                         <Calendar className="w-3 h-3 mr-1" />
-                        {travel.travelSessions.length} сесс
+                        {travel.travelSessions.length} хуваарь
                       </Badge>
                     </div>
                   )}
 
-                  {/* Category Badge */}
                   {travel.categories && travel.categories.length > 0 && (
                     <div className="absolute top-4 right-4">
                       <Badge className="bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0 shadow-lg">{travel.categories[0].name}</Badge>
@@ -101,7 +86,6 @@ export const FeaturedTravels = () => {
                   {travel.description && <p className="text-gray-600 text-sm mb-4 line-clamp-2">{travel.description}</p>}
 
                   <div className="space-y-2 mb-4">
-                    {/* Destination */}
                     {travel.destination && (
                       <div className="flex items-center gap-2 text-sm text-gray-600">
                         <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-100 to-emerald-100 flex items-center justify-center">
@@ -111,7 +95,6 @@ export const FeaturedTravels = () => {
                       </div>
                     )}
 
-                    {/* Capacity */}
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                       <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center">
                         <Users className="w-4 h-4 text-blue-600" />
@@ -119,7 +102,6 @@ export const FeaturedTravels = () => {
                       <span>Дээд тал {travel.totalSeatNumber}</span>
                     </div>
 
-                    {/* Company */}
                     {travel.company && (
                       <div className="flex items-center gap-2 text-sm text-gray-600">
                         <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">

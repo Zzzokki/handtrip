@@ -1,21 +1,20 @@
 import { db, guideTable } from "@/database";
 import { MutationResolvers } from "@/api/types";
 
-export const createGuide: MutationResolvers["createGuide"] = async (_, { input }, context) => {
-  const companyId = context.user?.id;
+export const createGuide: MutationResolvers["createGuide"] = async (_, { input }, { user }) => {
+  if (!user) throw new Error("Unauthenticated");
 
-  if (!companyId || context.user?.type !== "company") {
-    throw new Error("Unauthorized: Only companies can create guides");
-  }
+  if (user.role !== "company") throw new Error("Unauthorized");
 
   const [guide] = await db
     .insert(guideTable)
     .values({
+      companyId: user.id,
       name: input.name,
+      description: input.description,
       email: input.email,
       phoneNumber: input.phoneNumber,
       profileImage: input.profileImage,
-      companyId,
     })
     .returning();
 

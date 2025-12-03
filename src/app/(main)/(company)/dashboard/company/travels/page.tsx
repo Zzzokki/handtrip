@@ -7,7 +7,7 @@ import { TravelCard, TravelsHeader, EmptyState, Pagination } from "./_components
 export default function CompanyTravelsPage() {
   const [page, setPage] = useState(1);
 
-  const { data, loading, refetch } = useGetTravelsByCompanyQuery({
+  const { data, loading } = useGetTravelsByCompanyQuery({
     variables: { input: { page } },
   });
 
@@ -31,7 +31,9 @@ export default function CompanyTravelsPage() {
 
       {!loading && travels.length === 0 && <EmptyState />}
 
-      <Pagination page={page} totalPages={totalPages} setPage={setPage} />
+      <div className="w-full flex justify-center pt-8">
+        <Pagination page={page} totalPages={totalPages} setPage={setPage} />
+      </div>
     </div>
   );
 }

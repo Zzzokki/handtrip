@@ -55,7 +55,7 @@ export const Pagination = ({ page, totalPages, setPage }: PaginationProps) => {
         )}
 
         <PaginationItem>
-          <PaginationLink className="bg-blue-600 text-white hover:bg-blue-700">{page}</PaginationLink>
+          <Button variant="default">{page}</Button>
         </PaginationItem>
 
         {page < totalPages && (

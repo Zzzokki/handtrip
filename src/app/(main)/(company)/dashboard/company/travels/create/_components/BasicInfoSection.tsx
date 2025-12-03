@@ -83,7 +83,16 @@ export function BasicInfoSection({ form }: BasicInfoSectionProps) {
                   Хугацаа (өдөр) <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
-                  <Input min={1} placeholder="Жишээ нь: 7" type="number" {...field} />
+                  <Input
+                    min={1}
+                    placeholder="Жишээ нь: 7"
+                    type="number"
+                    {...field}
+                    onChange={(e) => {
+                      const value = Number(e.target.value);
+                      field.onChange(isNaN(value) ? "" : value);
+                    }}
+                  />
                 </FormControl>
                 <FormDescription>Аяллын нийт үргэлжлэх хугацааг өдрөөр оруулна уу.</FormDescription>
                 <FormMessage />
@@ -100,7 +109,16 @@ export function BasicInfoSection({ form }: BasicInfoSectionProps) {
                   Нийт суудал <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
-                  <Input min={1} placeholder="Жишээ нь: 20" type="number" {...field} />
+                  <Input
+                    min={1}
+                    placeholder="Жишээ нь: 20"
+                    type="number"
+                    {...field}
+                    onChange={(e) => {
+                      const value = Number(e.target.value);
+                      field.onChange(isNaN(value) ? "" : value);
+                    }}
+                  />
                 </FormControl>
                 <FormDescription>Аяллын багцад зориулсан нийт суудлын тоог оруулна уу.</FormDescription>
                 <FormMessage />

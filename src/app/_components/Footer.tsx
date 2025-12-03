@@ -130,9 +130,6 @@ export const Footer = () => {
               <Link href="/#" className="hover:text-white transition-colors">
                 Нөхцөл
               </Link>
-              <Link href="/#" className="hover:text-white transition-colors">
-                Күүкиз
-              </Link>
             </div>
           </div>
         </div>

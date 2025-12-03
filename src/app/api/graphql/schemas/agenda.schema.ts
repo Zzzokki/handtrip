@@ -5,6 +5,7 @@ export const agendaTypeDefs = gql`
     id: Int!
 
     # Agenda details
+    day: Int!
     name: String!
     description: String!
 

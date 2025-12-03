@@ -12,6 +12,7 @@ export const travelTypeDefs = gql`
     coverImage: String
     duration: Int!
     totalSeatNumber: Int!
+    gallery: [String!]!
 
     # Company
     companyId: Int!

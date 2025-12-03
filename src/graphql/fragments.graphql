@@ -197,6 +197,7 @@ fragment TravelFields on Travel {
   totalSeatNumber
   companyId
   destinationId
+  gallery
   createdAt
   updatedAt
 }

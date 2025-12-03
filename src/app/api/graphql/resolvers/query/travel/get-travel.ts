@@ -18,7 +18,7 @@ export const getTravel: QueryResolvers["getTravel"] = async (_, { id }) => {
 
   return {
     ...travel,
-    subCategories: travel.subCategories.map(({ subCategory }) => subCategory),
-    categories: travel.categories.map(({ category }) => category),
+    subCategories: travel.subCategories.map(({ subCategory }) => subCategory).filter((sc) => sc !== null),
+    categories: travel.categories.map(({ category }) => category).filter((c) => c !== null),
   };
 };

@@ -58,8 +58,6 @@ export const getTravels: QueryResolvers["getTravels"] = async (_, { input }) => 
 
   const totalPages = Math.ceil(totalTravels / limit);
 
-  console.log(travels[0]);
-
   return {
     travels: travels.map((travel) => ({
       ...travel,

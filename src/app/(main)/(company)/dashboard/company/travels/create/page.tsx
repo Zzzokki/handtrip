@@ -11,7 +11,6 @@ import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { UploadCoverImage } from "./_components/inputs/UploadCoverImage";
 import { UploadGallery } from "./_components/UploadGallery";
 
 const formSchema = z.object({
@@ -20,11 +19,21 @@ const formSchema = z.object({
   coverImage: z.url("Аяллын зураг заавал шаардлагатай"),
   duration: z.number().min(1, "Хугацаа заавал шаардлагатай"),
   totalSeatNumber: z.number().min(1, "Нийт суудлын тоо заавал шаардлагатай"),
-  gallery: z.array(z.url("Зураг буруу форматтай байна"), "Аяллын галерей"),
+  gallery: z.array(z.url("Зураг буруу форматтай байна"), "Аяллын галерей").min(1, "Галерейд хамгийн багадаа 1 зураг байх ёстой"),
   destinationId: z.number().min(1, "Зориулалтын газар заавал шаардлагатай"),
-  agendaName: z.string().min(1, "Хөтөлбөрийн нэр заавал шаардлагатай"),
-  agendaDescription: z.string().min(1, "Хөтөлбөрийн тайлбар заавал шаардлагатай"),
-  subCategoryIds: z.array(z.number()),
+  subCategoryIds: z.array(z.number()).min(1, "Хамгийн багадаа 1 ангилал сонгох шаардлагатай"),
+  agendas: z
+    .array(
+      z.object({
+        day: z.number().min(1),
+        name: z.string().min(1, "Өдрийн нэр заавал шаардлагатай"),
+        content: z.string().min(1, "Өдрийн агуулга заавал шаардлагатай"),
+      })
+    )
+    .refine((agendas) => {
+      const uniqueDays = new Set(agendas.map((agenda) => agenda.day));
+      return uniqueDays.size === agendas.length;
+    }, "Өдрийн дугаар давхцаж болохгүй"),
   sessions: z
     .array(
       z.object({
@@ -46,18 +55,37 @@ export default function CreateTravelPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+
+      // Description
       description: "",
+
+      // Cover Image
       coverImage: "",
+
+      // Duration
       duration: 1,
+
+      // Total Seat Number
       totalSeatNumber: 1,
+
+      // Destination
+      destinationId: undefined,
+
+      // Gallery
       gallery: [],
-      destinationId: 0,
-      agendaName: "",
-      agendaDescription: "",
+
+      // Agendas
+      agendas: [],
+
+      // Subcategories
       subCategoryIds: [],
+
+      // Travel Sessions
       sessions: [],
     },
   });
+
+  console.log(form.formState.errors);
 
   const [createTravel, { loading }] = useCreateTravelByCompanyMutation({
     onError: (error) => toast.error(`Аяллын багц үүсгэхэд алдаа гарлаа: ${error.message}`),
@@ -78,13 +106,21 @@ export default function CreateTravelPage() {
           totalSeatNumber: values.totalSeatNumber,
           gallery: values.gallery,
           destinationId: values.destinationId,
-          agendas: [],
+          agendas: values.agendas.map((agenda) => ({
+            day: agenda.day,
+            name: agenda.name,
+            description: agenda.content,
+          })),
           travelSessions: values.sessions,
           subCategoryIds: values.subCategoryIds,
         },
       },
     });
   };
+
+  const v = form.watch();
+
+  console.log(v);
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -95,7 +131,12 @@ export default function CreateTravelPage() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <BasicInfoSection form={form} />
 
-            <UploadGallery onUploadComplete={(urls) => form.setValue("gallery", urls)} />
+            <UploadGallery
+              onUploadComplete={(urls) => {
+                console.log("urls", urls);
+                form.setValue("gallery", urls);
+              }}
+            />
 
             <AgendaSection form={form} />
 

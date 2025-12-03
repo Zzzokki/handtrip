@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { AgendaItenaryItem } from "./AgendaItenaryItem";
 import { SerializedEditorState } from "lexical";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { $getRoot } from "lexical";
 
 type AgendaSectionProps = {
   form: UseFormReturn<FormDataType>;
@@ -19,7 +18,6 @@ export type Agenda = {
   content: SerializedEditorState;
 };
 
-// Helper function to convert Lexical editor state to plain text
 const serializeEditorStateToText = (editorState: SerializedEditorState): string => {
   try {
     const textContent: string[] = [];
@@ -87,12 +85,12 @@ export const AgendaSection = ({ form }: AgendaSectionProps) => {
 
     setAgendas(newAgendas);
 
-    // Initialize form agendas array
     const formAgendas = newAgendas.map((agenda) => ({
       day: agenda.day,
       name: agenda.name,
-      description: "",
+      content: serializeEditorStateToText(agenda.content),
     }));
+
     form.setValue("agendas", formAgendas);
   }, [duration]);
 
@@ -100,12 +98,12 @@ export const AgendaSection = ({ form }: AgendaSectionProps) => {
     setAgendas((prevAgendas) => {
       const updatedAgendas = prevAgendas.map((agenda) => (agenda.day === day ? { ...agenda, content: content } : agenda));
 
-      // Update form with plain text version
       const formAgendas = updatedAgendas.map((agenda) => ({
         day: agenda.day,
         name: agenda.name,
-        description: serializeEditorStateToText(agenda.content),
+        content: serializeEditorStateToText(agenda.content),
       }));
+
       form.setValue("agendas", formAgendas);
 
       return updatedAgendas;
@@ -116,12 +114,12 @@ export const AgendaSection = ({ form }: AgendaSectionProps) => {
     setAgendas((prevAgendas) => {
       const updatedAgendas = prevAgendas.map((agenda) => (agenda.day === day ? { ...agenda, name: name } : agenda));
 
-      // Update form with new name
       const formAgendas = updatedAgendas.map((agenda) => ({
         day: agenda.day,
         name: agenda.name,
-        description: serializeEditorStateToText(agenda.content),
+        content: serializeEditorStateToText(agenda.content),
       }));
+
       form.setValue("agendas", formAgendas);
 
       return updatedAgendas;
