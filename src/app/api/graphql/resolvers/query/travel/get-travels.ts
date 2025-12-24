@@ -11,17 +11,20 @@ export const getTravels: QueryResolvers["getTravels"] = async (_, { input }) => 
 
   if (filters.destinationIds) conditions.push(inArray(travelTable.destinationId, filters.destinationIds));
 
-  if (filters.subCategoryIds) {
+  if (filters.subCategoryIds && filters.subCategoryIds.length > 0) {
     const joins = await db.query.subCategoryToTravelTable.findMany({
       where: (table, { inArray }) => inArray(table.subCategoryId, filters.subCategoryIds!),
     });
 
-    conditions.push(
-      inArray(
-        travelTable.id,
-        joins.map((join) => join.travelId)
-      )
-    );
+    const travelIds = joins.map((join) => join.travelId);
+
+    // Only add the condition if we found matching travels
+    if (travelIds.length > 0) {
+      conditions.push(inArray(travelTable.id, travelIds));
+    } else {
+      // If no travels match the subcategories, return empty results
+      conditions.push(eq(travelTable.id, -1));
+    }
   }
 
   if (filters.minDuration) conditions.push(gte(travelTable.duration, filters.minDuration));
@@ -47,14 +50,35 @@ export const getTravels: QueryResolvers["getTravels"] = async (_, { input }) => 
       categories: { with: { category: true } },
       travelSessions: {
         where: (table, { gte }) => gte(table.startDate, new Date()),
-        with: { guide: true },
+        with: {
+          guide: true,
+          seats: {
+            with: {
+              seatCost: true,
+            },
+          },
+        },
       },
       agenda: true,
       destination: true,
     },
   });
 
-  const [{ count: totalTravels }] = await db.select({ count: count() }).from(travelTable);
+  // Count total travels with the same filter conditions
+  const [{ count: totalTravels }] = await db
+    .select({ count: count() })
+    .from(travelTable)
+    .where(
+      and(
+        ...conditions,
+        exists(
+          db
+            .select()
+            .from(travelSessionTable)
+            .where(and(gte(travelSessionTable.startDate, new Date()), eq(travelSessionTable.travelId, travelTable.id)))
+        )
+      )
+    );
 
   const totalPages = Math.ceil(totalTravels / limit);
 

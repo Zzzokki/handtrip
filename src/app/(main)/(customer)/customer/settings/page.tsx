@@ -49,21 +49,16 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-6">
       <div className="container mx-auto px-4 max-w-4xl">
-        {/* Header */}
         <div className="mb-6">
           <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Миний Хувийн Мэдээлэл</h1>
           <p className="text-sm text-gray-600 mt-1">Хувийн мэдээлэл болон тохиргоо</p>
         </div>
 
-        {/* Profile Card */}
         <Card className="border-0 shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden mb-4">
-          {/* Cover Photo */}
-          <div className="h-24 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 relative" />
-
           {/* Profile Info */}
           <CardContent className="pt-0 px-6 pb-6">
             {/* Avatar and Info */}
-            <div className="flex items-start gap-4 -mt-12 mb-6">
+            <div className="flex items-start gap-4 mt-6 mb-6">
               <div className="w-24 h-24 rounded-xl border-4 border-white bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-3xl font-bold shadow-lg group-hover:scale-105 transition-transform">
                 {initials}
               </div>

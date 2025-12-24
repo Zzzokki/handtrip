@@ -11,6 +11,11 @@ export const getOrdersByTravelSession: QueryResolvers["getOrdersByTravelSession"
         with: {
           travel: true,
           guide: true,
+          seats: {
+            with: {
+              seatCost: true,
+            },
+          },
         },
       },
       travelers: {

@@ -91,6 +91,9 @@ fragment TravelSessionWithGuide on TravelSession {
   guide {
     ...GuideFields
   }
+  seats {
+    ...SeatWithCost
+  }
 }
 
 # TravelSession with Full Relations
@@ -98,15 +101,6 @@ fragment TravelSessionWithRelations on TravelSession {
   ...TravelSessionFields
   guide {
     ...GuideFields
-  }
-  travel {
-    ...TravelFields
-    company {
-      ...CompanyFields
-    }
-    destination {
-      ...DestinationFields
-    }
   }
 }
 

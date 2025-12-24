@@ -67,9 +67,15 @@ export default function TravelDetailsPage() {
 
   const travel = data.getTravel;
 
+  // Calculate total available seats across all sessions
+  const totalAvailableSeats =
+    travel.travelSessions?.reduce((total, session) => {
+      const availableInSession = session.seats?.filter((s) => s.status === "available").length || 0;
+      return total + availableInSession;
+    }, 0) || 0;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 pt-14">
-      {/* Hero Section */}
       <div className="relative h-[420px] overflow-hidden">
         <div className="absolute inset-0">{travel.coverImage && <Image src={travel.coverImage} alt={travel.name} fill className="object-cover" priority />}</div>
 
@@ -78,7 +84,6 @@ export default function TravelDetailsPage() {
         <div className="absolute inset-0 flex items-end">
           <div className="container mx-auto px-4 pb-8">
             <div className="max-w-4xl">
-              {/* Categories */}
               <div className="flex flex-wrap gap-2 mb-4">
                 {travel.categories.map((category) => (
                   <span
@@ -90,10 +95,8 @@ export default function TravelDetailsPage() {
                 ))}
               </div>
 
-              {/* Title */}
               <h1 className="text-4xl lg:text-5xl font-bold mb-5 text-white drop-shadow-2xl leading-tight">{travel.name}</h1>
 
-              {/* Info Badges */}
               <div className="flex flex-wrap gap-3">
                 <div className="group flex items-center gap-2 bg-white/10 backdrop-blur-xl px-4 py-2 rounded-lg border border-white/20 hover:bg-white/20 transition-all duration-200 shadow-lg">
                   <div className="p-1.5 bg-blue-500/90 rounded-md group-hover:bg-blue-600 transition-colors">
@@ -113,6 +116,21 @@ export default function TravelDetailsPage() {
                   </div>
                   <span className="font-semibold text-white text-sm">{travel.company.name}</span>
                 </div>
+                {totalAvailableSeats > 0 ? (
+                  <div className="group flex items-center gap-2 bg-emerald-500/90 backdrop-blur-xl px-4 py-2 rounded-lg border border-emerald-400/30 hover:bg-emerald-600/90 transition-all duration-200 shadow-lg">
+                    <div className="p-1.5 bg-white/20 rounded-md">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-white" />
+                    </div>
+                    <span className="font-semibold text-white text-sm">{totalAvailableSeats} суудал үлдсэн</span>
+                  </div>
+                ) : (
+                  <div className="group flex items-center gap-2 bg-rose-500/90 backdrop-blur-xl px-4 py-2 rounded-lg border border-rose-400/30 transition-all duration-200 shadow-lg">
+                    <div className="p-1.5 bg-white/20 rounded-md">
+                      <Calendar className="w-3.5 h-3.5 text-white" />
+                    </div>
+                    <span className="font-semibold text-white text-sm">Суудал дүүрсэн</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -165,7 +183,6 @@ export default function TravelDetailsPage() {
             <TravelCompany company={travel.company} />
           </div>
 
-          {/* Right Column - Booking */}
           <div className="lg:col-span-1">
             <div className="sticky top-20">
               <TravelOrder travel={travel} />

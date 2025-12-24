@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/components/providers";
-import { useGetOrderQuery } from "@/types/generated";
+import { useGetOrderQuery, useGetTravelQuery } from "@/types/generated";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -29,6 +29,13 @@ export default function OrderDetailPage() {
   const { data, loading, error } = useGetOrderQuery({
     variables: { getOrderId: parseInt(id) },
   });
+
+  const { data: travelData } = useGetTravelQuery({
+    variables: { getTravelId: data?.getOrder?.travelSession.travelId || 0 },
+    skip: !data?.getOrder,
+  });
+
+  const travel = travelData?.getTravel;
 
   useEffect(() => {
     if (!isLoading && (!isAuthenticated || user?.role !== "customer")) {
@@ -73,7 +80,6 @@ export default function OrderDetailPage() {
   if (!user) return null;
 
   const order = data.getOrder;
-  const travel = order.travelSession.travel;
   const status = ORDER_STATUS[order.orderStatus as keyof typeof ORDER_STATUS];
   const StatusIcon = status.icon;
 
@@ -252,7 +258,6 @@ export default function OrderDetailPage() {
           </CardContent>
         </Card>
 
-        {/* Actions */}
         <div className="mt-6 flex gap-4">
           <Link href="/customer" className="flex-1">
             <Button variant="outline" className="w-full">

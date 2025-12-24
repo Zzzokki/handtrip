@@ -11,6 +11,11 @@ export const getOrdersByCustomer: QueryResolvers["getOrdersByCustomer"] = async 
         with: {
           travel: true,
           guide: true,
+          seats: {
+            with: {
+              seatCost: true,
+            },
+          },
         },
       },
       travelers: {

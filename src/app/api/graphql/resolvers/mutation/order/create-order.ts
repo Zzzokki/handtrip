@@ -1,7 +1,7 @@
 import { MutationResolvers } from "@/api/types";
 import { db, orderTable, paymentTable, travelerTable, seatTable, travelSessionTable, seatCostTable } from "@/database";
 import Stripe from "stripe";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2025-12-15.clover",
@@ -10,68 +10,29 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
 export const createOrder: MutationResolvers["createOrder"] = async (_, { input }, context) => {
   const { user } = context;
 
-  if (!user || user.role !== "customer") {
-    throw new Error("Unauthorized: Only customers can create orders");
-  }
+  if (!user || user.role !== "customer") throw new Error("Зөвшөөрөлгүй: Зөвхөн хэрэглэгчид захиалга үүсгэх боломжтой");
 
   const { travelSessionId, travelers, paymentIntentId } = input;
 
   try {
-    // 1. Verify payment intent with Stripe
     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
 
-    if (paymentIntent.status !== "succeeded") {
-      throw new Error("Payment not completed. Please complete the payment first.");
-    }
+    if (paymentIntent.status !== "succeeded") throw new Error("Төлбөр төлөгдөөгүй байна. Эхлээд төлбөрөө төлнө үү.");
 
-    // 2. Get travel session details
     const travelSession = await db.query.travelSessionTable.findFirst({
       where: eq(travelSessionTable.id, travelSessionId),
-      with: {
-        travel: true,
-      },
     });
 
-    if (!travelSession) {
-      throw new Error("Travel session not found");
-    }
+    if (!travelSession) throw new Error("Аялалын сесс олдсонгүй");
 
-    // 3. Check available seats
-    let existingSeats = await db.query.seatTable.findMany({
-      where: eq(seatTable.travelSessionId, travelSessionId),
+    const availableSeats = await db.query.seatTable.findMany({
+      where: and(eq(seatTable.travelSessionId, travelSessionId), eq(seatTable.status, "available")),
     });
 
-    // If no seats exist, create them
-    if (existingSeats.length === 0) {
-      const totalSeats = travelSession.travel.totalSeatNumber;
+    if (availableSeats.length < travelers.length) throw new Error(`Хүрэлцэхүйц суудал байхгүй байна. Зөвхөн ${availableSeats.length} суудал үлдсэн.`);
 
-      // Create a default seat cost if needed
-      const [{ id: seatCostId }] = await db.insert(seatCostTable).values({ cost: 10000 }).returning();
-
-      await db.insert(seatTable).values(
-        Array.from({ length: totalSeats }).map(() => ({
-          travelSessionId,
-          seatCostId,
-          status: "AVAILABLE" as const,
-        }))
-      );
-
-      // Fetch the newly created seats
-      existingSeats = await db.query.seatTable.findMany({
-        where: eq(seatTable.travelSessionId, travelSessionId),
-      });
-    }
-
-    const availableSeats = existingSeats.filter((seat) => seat.status === "AVAILABLE");
-
-    if (availableSeats.length < travelers.length) {
-      throw new Error(`Not enough seats available. Only ${availableSeats.length} seats remaining.`);
-    }
-
-    // 4. Calculate total price (convert from cents)
     const totalPrice = paymentIntent.amount;
 
-    // 5. Create payment record
     const [payment] = await db
       .insert(paymentTable)
       .values({
@@ -83,28 +44,24 @@ export const createOrder: MutationResolvers["createOrder"] = async (_, { input }
       })
       .returning();
 
-    // 6. Create order
     const [order] = await db
       .insert(orderTable)
       .values({
         totalSeats: travelers.length,
         totalPrice,
-        orderStatus: 1, // 1 = confirmed
+        orderStatus: 1,
         customerId: user.id,
         travelSessionId,
         paymentId: payment.id,
       })
       .returning();
 
-    // 7. Create travelers and book seats
     for (let i = 0; i < travelers.length; i++) {
       const travelerData = travelers[i];
       const seat = availableSeats[i];
 
-      // Book the seat
-      await db.update(seatTable).set({ status: "OCCUPIED" }).where(eq(seatTable.id, seat.id));
+      await db.update(seatTable).set({ status: "occupied" }).where(eq(seatTable.id, seat.id));
 
-      // Create traveler
       await db.insert(travelerTable).values({
         name: travelerData.name,
         email: travelerData.email,
@@ -115,19 +72,12 @@ export const createOrder: MutationResolvers["createOrder"] = async (_, { input }
       });
     }
 
-    // 8. Fetch complete order with relations
     const completeOrder = await db.query.orderTable.findFirst({
       where: eq(orderTable.id, order.id),
       with: {
         customer: true,
         travelSession: {
           with: {
-            travel: {
-              with: {
-                destination: true,
-                company: true,
-              },
-            },
             guide: true,
           },
         },
@@ -147,10 +97,10 @@ export const createOrder: MutationResolvers["createOrder"] = async (_, { input }
     return {
       order: completeOrder as any,
       success: true,
-      message: "Order created successfully",
+      message: "Захиалга амжилттай үүсгэгдлээ",
     };
   } catch (error: any) {
     console.error("Error creating order:", error);
-    throw new Error(`Failed to create order: ${error.message}`);
+    throw new Error(`Захиалга үүсгэхэд алдаа гарлаа: ${error.message}`);
   }
 };

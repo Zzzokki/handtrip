@@ -7,8 +7,8 @@ export const seatTable = pgTable("seat", {
   id: serial("id").primaryKey(),
 
   // Travel session seat details
-  status: varchar("status", { enum: ["AVAILABLE", "OCCUPIED", "RESERVED"] })
-    .default("AVAILABLE")
+  status: varchar("status", { enum: ["available", "occupied", "reserved"] })
+    .default("available")
     .notNull(),
 
   // Foreign key to Travel Session

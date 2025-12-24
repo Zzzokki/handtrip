@@ -494,9 +494,9 @@ export type SeatCost = {
 };
 
 export type SeatStatus =
-  | 'AVAILABLE'
-  | 'OCCUPIED'
-  | 'RESERVED';
+  | 'available'
+  | 'occupied'
+  | 'reserved';
 
 export type SubCategory = {
   __typename?: 'SubCategory';
@@ -535,6 +535,7 @@ export type TravelSession = {
   guide: Guide;
   guideId: Scalars['Int']['output'];
   id: Scalars['Int']['output'];
+  seats: Array<Seat>;
   startDate: Scalars['Timestamp']['output'];
   travelId: Scalars['Int']['output'];
   updatedAt: Scalars['Timestamp']['output'];
@@ -679,25 +680,25 @@ export type ResolversTypes = {
   Customer: ResolverTypeWrapper<Customer>;
   Destination: ResolverTypeWrapper<Destination>;
   GetTravelsByCompanyInput: GetTravelsByCompanyInput;
-  GetTravelsByCompanyResult: ResolverTypeWrapper<GetTravelsByCompanyResult>;
+  GetTravelsByCompanyResult: ResolverTypeWrapper<Omit<GetTravelsByCompanyResult, 'travels'> & { travels: Array<ResolversTypes['Travel']> }>;
   GetTravelsFilterInput: GetTravelsFilterInput;
   GetTravelsInput: GetTravelsInput;
-  GetTravelsResult: ResolverTypeWrapper<GetTravelsResult>;
+  GetTravelsResult: ResolverTypeWrapper<Omit<GetTravelsResult, 'travels'> & { travels: Array<ResolversTypes['Travel']> }>;
   Guide: ResolverTypeWrapper<Guide>;
   LoginAsCompanyResponse: ResolverTypeWrapper<LoginAsCompanyResponse>;
   LoginAsCustomerResponse: ResolverTypeWrapper<LoginAsCustomerResponse>;
   Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
-  Order: ResolverTypeWrapper<Omit<Order, 'travelers'> & { travelers: Array<ResolversTypes['Traveler']> }>;
+  Order: ResolverTypeWrapper<Omit<Order, 'travelSession' | 'travelers'> & { travelSession: ResolversTypes['TravelSession'], travelers: Array<ResolversTypes['Traveler']> }>;
   Payment: ResolverTypeWrapper<Payment>;
   Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
   RegisterAsCustomerInput: RegisterAsCustomerInput;
   Seat: ResolverTypeWrapper<Omit<Seat, 'status'> & { status: ResolversTypes['SeatStatus'] }>;
   SeatCost: ResolverTypeWrapper<SeatCost>;
-  SeatStatus: ResolverTypeWrapper<'AVAILABLE' | 'RESERVED' | 'OCCUPIED'>;
+  SeatStatus: ResolverTypeWrapper<'available' | 'reserved' | 'occupied'>;
   SubCategory: ResolverTypeWrapper<SubCategory>;
   Timestamp: ResolverTypeWrapper<Scalars['Timestamp']['output']>;
-  Travel: ResolverTypeWrapper<Travel>;
-  TravelSession: ResolverTypeWrapper<TravelSession>;
+  Travel: ResolverTypeWrapper<Omit<Travel, 'travelSessions'> & { travelSessions: Array<ResolversTypes['TravelSession']> }>;
+  TravelSession: ResolverTypeWrapper<Omit<TravelSession, 'seats'> & { seats: Array<ResolversTypes['Seat']> }>;
   Traveler: ResolverTypeWrapper<Omit<Traveler, 'seat'> & { seat: ResolversTypes['Seat'] }>;
   TravelerInput: TravelerInput;
   UpdateCompanyInput: UpdateCompanyInput;
@@ -724,15 +725,15 @@ export type ResolversParentTypes = {
   Customer: Customer;
   Destination: Destination;
   GetTravelsByCompanyInput: GetTravelsByCompanyInput;
-  GetTravelsByCompanyResult: GetTravelsByCompanyResult;
+  GetTravelsByCompanyResult: Omit<GetTravelsByCompanyResult, 'travels'> & { travels: Array<ResolversParentTypes['Travel']> };
   GetTravelsFilterInput: GetTravelsFilterInput;
   GetTravelsInput: GetTravelsInput;
-  GetTravelsResult: GetTravelsResult;
+  GetTravelsResult: Omit<GetTravelsResult, 'travels'> & { travels: Array<ResolversParentTypes['Travel']> };
   Guide: Guide;
   LoginAsCompanyResponse: LoginAsCompanyResponse;
   LoginAsCustomerResponse: LoginAsCustomerResponse;
   Mutation: Record<PropertyKey, never>;
-  Order: Omit<Order, 'travelers'> & { travelers: Array<ResolversParentTypes['Traveler']> };
+  Order: Omit<Order, 'travelSession' | 'travelers'> & { travelSession: ResolversParentTypes['TravelSession'], travelers: Array<ResolversParentTypes['Traveler']> };
   Payment: Payment;
   Query: Record<PropertyKey, never>;
   RegisterAsCustomerInput: RegisterAsCustomerInput;
@@ -740,8 +741,8 @@ export type ResolversParentTypes = {
   SeatCost: SeatCost;
   SubCategory: SubCategory;
   Timestamp: Scalars['Timestamp']['output'];
-  Travel: Travel;
-  TravelSession: TravelSession;
+  Travel: Omit<Travel, 'travelSessions'> & { travelSessions: Array<ResolversParentTypes['TravelSession']> };
+  TravelSession: Omit<TravelSession, 'seats'> & { seats: Array<ResolversParentTypes['Seat']> };
   Traveler: Omit<Traveler, 'seat'> & { seat: ResolversParentTypes['Seat'] };
   TravelerInput: TravelerInput;
   UpdateCompanyInput: UpdateCompanyInput;
@@ -935,7 +936,7 @@ export type SeatCostResolvers<ContextType = Context, ParentType extends Resolver
   updatedAt?: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
 };
 
-export type SeatStatusResolvers = EnumResolverSignature<{ AVAILABLE?: any, OCCUPIED?: any, RESERVED?: any }, ResolversTypes['SeatStatus']>;
+export type SeatStatusResolvers = EnumResolverSignature<{ available?: any, occupied?: any, reserved?: any }, ResolversTypes['SeatStatus']>;
 
 export type SubCategoryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['SubCategory'] = ResolversParentTypes['SubCategory']> = {
   categoryId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -975,6 +976,7 @@ export type TravelSessionResolvers<ContextType = Context, ParentType extends Res
   guide?: Resolver<ResolversTypes['Guide'], ParentType, ContextType>;
   guideId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  seats?: Resolver<Array<ResolversTypes['Seat']>, ParentType, ContextType>;
   startDate?: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
   travelId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;

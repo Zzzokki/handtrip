@@ -10,11 +10,13 @@ export const travelSessionTypeDefs = gql`
 
     # Travel
     travelId: Int!
-    travel: Travel!
 
     # Guide
     guideId: Int!
     guide: Guide!
+
+    # Seats
+    seats: [Seat!]!
 
     # Timestamps
     createdAt: Timestamp!

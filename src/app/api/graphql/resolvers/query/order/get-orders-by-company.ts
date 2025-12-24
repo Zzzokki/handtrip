@@ -16,6 +16,11 @@ export const getOrdersByCompany: QueryResolvers["getOrdersByCompany"] = async (_
             },
           },
           guide: true,
+          seats: {
+            with: {
+              seatCost: true,
+            },
+          },
         },
       },
       travelers: {

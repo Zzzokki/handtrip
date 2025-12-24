@@ -9,6 +9,13 @@ type TravelCardProps = {
 };
 
 export const TravelCard = ({ travel }: TravelCardProps) => {
+  // Calculate total available seats across all sessions
+  const totalAvailableSeats =
+    travel.travelSessions?.reduce((total, session) => {
+      const availableInSession = session.seats?.filter((s) => s.status === "available").length || 0;
+      return total + availableInSession;
+    }, 0) || 0;
+
   return (
     <Link href={`/travels/${travel.id}`}>
       <Card className="group overflow-hidden cursor-pointer h-full hover:shadow-xl transition-all duration-300 border-gray-200 bg-white">
@@ -25,15 +32,26 @@ export const TravelCard = ({ travel }: TravelCardProps) => {
             <span className="text-xs font-semibold text-gray-900">{travel.duration} өдөр</span>
           </div>
 
-          {/* Sessions Badge */}
-          {travel.travelSessions && travel.travelSessions.length > 0 && (
-            <div className="absolute top-3 right-3">
+          {/* Badges */}
+          <div className="absolute top-3 right-3 flex flex-col gap-2">
+            {travel.travelSessions && travel.travelSessions.length > 0 && (
               <div className="flex items-center gap-1.5 bg-emerald-500 text-white text-xs px-2.5 py-1 rounded-md font-semibold shadow-lg">
                 <Calendar className="w-3 h-3" />
-                <span>{travel.travelSessions.length}</span>
+                <span>{travel.travelSessions.length} хуваарь</span>
               </div>
-            </div>
-          )}
+            )}
+            {totalAvailableSeats > 0 && (
+              <div className="flex items-center gap-1.5 bg-blue-500 text-white text-xs px-2.5 py-1 rounded-md font-semibold shadow-lg">
+                <Users className="w-3 h-3" />
+                <span>{totalAvailableSeats} суудал</span>
+              </div>
+            )}
+            {totalAvailableSeats === 0 && (
+              <div className="flex items-center gap-1.5 bg-rose-500 text-white text-xs px-2.5 py-1 rounded-md font-semibold shadow-lg">
+                <span>Дүүрсэн</span>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Content Section */}

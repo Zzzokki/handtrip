@@ -2,9 +2,9 @@ import { gql } from "graphql-tag";
 
 export const seatTypeDefs = gql`
   enum SeatStatus {
-    AVAILABLE
-    RESERVED
-    OCCUPIED
+    available
+    reserved
+    occupied
   }
 
   type Seat {

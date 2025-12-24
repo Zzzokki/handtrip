@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,9 +13,15 @@ export default function OrderSuccessPage() {
   const searchParams = useSearchParams();
   const [isProcessing, setIsProcessing] = useState(true);
   const [createOrder] = useCreateOrderMutation();
+  const hasProcessed = useRef(false);
 
   useEffect(() => {
     const processOrder = async () => {
+      // Prevent duplicate order creation
+      if (hasProcessed.current) {
+        return;
+      }
+
       try {
         const paymentIntentId = searchParams.get("payment_intent");
         const sessionId = searchParams.get("sessionId");
@@ -26,6 +32,9 @@ export default function OrderSuccessPage() {
           setIsProcessing(false);
           return;
         }
+
+        // Mark as processing to prevent duplicate calls
+        hasProcessed.current = true;
 
         const travelers = JSON.parse(decodeURIComponent(travelersData));
 
@@ -51,11 +60,13 @@ export default function OrderSuccessPage() {
         } else {
           toast.error(result.data?.createOrder.message || "Захиалга үүсгэхэд алдаа гарлаа");
           setIsProcessing(false);
+          hasProcessed.current = false; // Allow retry on error
         }
       } catch (error: any) {
         console.error("Order creation error:", error);
         toast.error(error.message || "Захиалга үүсгэхэд алдаа гарлаа");
         setIsProcessing(false);
+        hasProcessed.current = false; // Allow retry on error
       }
     };
 

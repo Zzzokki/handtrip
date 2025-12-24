@@ -136,8 +136,21 @@ export default function CreateOrderPage() {
       return;
     }
 
-    // Calculate total amount (for testing, using $100 per person)
-    const amount = travelers.length * 100;
+    // Get seat cost from the first available seat
+    const availableSeats = selectedSession.seats?.filter((s) => s.status === "available") || [];
+    if (availableSeats.length === 0) {
+      toast.error("Боломжтой суудал байхгүй байна");
+      return;
+    }
+
+    if (availableSeats.length < travelers.length) {
+      toast.error(`Зөвхөн ${availableSeats.length} суудал үлдсэн байна`);
+      return;
+    }
+
+    const seatCost = availableSeats[0]?.seatCost?.cost || 0;
+    // Calculate total amount (seat cost * number of travelers)
+    const amount = seatCost * travelers.length;
 
     try {
       // Create payment intent
@@ -397,7 +410,7 @@ export default function CreateOrderPage() {
                     </div>
                   </div>
 
-                  <div className="border-t border-gray-200 pt-4">
+                  <div className="border-t border-gray-200 pt-4 space-y-3">
                     <div className="flex justify-between items-center p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg">
                       <span className="text-sm text-gray-700 font-semibold flex items-center gap-1.5">
                         <Users className="w-4 h-4 text-blue-600" />
@@ -405,6 +418,20 @@ export default function CreateOrderPage() {
                       </span>
                       <span className="text-xl font-bold text-gray-900">{travelers.length}</span>
                     </div>
+
+                    {selectedSession.seats && selectedSession.seats.length > 0 && (
+                      <div className="p-4 bg-gradient-to-br from-emerald-600 to-teal-600 rounded-xl text-white">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-sm font-medium">Нэг хүний үнэ</span>
+                          <span className="text-base font-semibold">₮{selectedSession.seats.find((s) => s.status === "available")?.seatCost?.cost.toLocaleString()}</span>
+                        </div>
+                        <div className="border-t border-white/20 my-2"></div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium">Нийт дүн</span>
+                          <span className="text-2xl font-bold">₮{((selectedSession.seats.find((s) => s.status === "available")?.seatCost?.cost || 0) * travelers.length).toLocaleString()}</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <Button
