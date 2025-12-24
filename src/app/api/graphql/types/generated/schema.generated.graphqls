@@ -318,7 +318,6 @@ type TravelSession {
   guideId: Int!
   id: Int!
   startDate: Timestamp!
-  travel: Travel!
   travelId: Int!
   updatedAt: Timestamp!
 }

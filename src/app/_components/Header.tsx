@@ -33,7 +33,6 @@ export const Header = () => {
     <header className="fixed top-0 left-0 w-full z-[99999] bg-white/95 backdrop-blur-md border-b border-gray-200/80 shadow-sm">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-14">
-          {/* Logo */}
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center gap-2 group">
               <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center transition-transform group-hover:scale-110 group-hover:rotate-6 duration-300">
@@ -50,7 +49,6 @@ export const Header = () => {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => {
               const Icon = link.icon;
@@ -84,21 +82,12 @@ export const Header = () => {
             )}
           </nav>
 
-          {/* Desktop Auth Section */}
           <div className="hidden md:flex items-center gap-2">
             {isAuthenticated ? (
-              <>
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200">
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-semibold text-xs shadow-sm">
-                    {user?.name?.charAt(0).toUpperCase() || "U"}
-                  </div>
-                  <span className="text-sm font-medium text-gray-700 max-w-[100px] truncate">{user?.name || "User"}</span>
-                </div>
-                <Button onClick={handleLogout} variant="outline" size="sm" className="gap-1.5 h-9">
-                  <LogOut className="w-3.5 h-3.5" />
-                  Гарах
-                </Button>
-              </>
+              <Button onClick={handleLogout} variant="outline" size="sm" className="gap-1.5 h-9">
+                <LogOut className="w-3.5 h-3.5" />
+                Гарах
+              </Button>
             ) : (
               <>
                 <Link href="/login">
@@ -115,7 +104,6 @@ export const Header = () => {
             )}
           </div>
 
-          {/* Mobile Menu */}
           <div className="md:hidden">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
@@ -125,12 +113,10 @@ export const Header = () => {
               </SheetTrigger>
               <SheetContent side="right" className="w-[280px] p-0">
                 <div className="flex flex-col h-full">
-                  {/* Mobile Header */}
                   <div className="flex items-center justify-between p-4 border-b border-gray-200">
                     <span className="text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">HandTrip</span>
                   </div>
 
-                  {/* Mobile Navigation */}
                   <nav className="flex-1 p-4 space-y-1">
                     {navLinks.map((link) => {
                       const Icon = link.icon;
@@ -169,21 +155,10 @@ export const Header = () => {
                   {/* Mobile Auth Section */}
                   <div className="p-4 border-t border-gray-200 space-y-3">
                     {isAuthenticated ? (
-                      <>
-                        <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200">
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-semibold shadow-sm">
-                            {user?.name?.charAt(0).toUpperCase() || "U"}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold text-gray-900 truncate">{user?.name || "User"}</p>
-                            <p className="text-xs text-gray-500 truncate">{user?.email || ""}</p>
-                          </div>
-                        </div>
-                        <Button onClick={handleLogout} variant="outline" className="w-full gap-2">
-                          <LogOut className="w-4 h-4" />
-                          Гарах
-                        </Button>
-                      </>
+                      <Button onClick={handleLogout} variant="outline" className="w-full gap-2">
+                        <LogOut className="w-4 h-4" />
+                        Гарах
+                      </Button>
                     ) : (
                       <>
                         <Link href="/login" onClick={() => setIsOpen(false)} className="block">

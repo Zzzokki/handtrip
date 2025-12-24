@@ -536,7 +536,6 @@ export type TravelSession = {
   guideId: Scalars['Int']['output'];
   id: Scalars['Int']['output'];
   startDate: Scalars['Timestamp']['output'];
-  travel: Travel;
   travelId: Scalars['Int']['output'];
   updatedAt: Scalars['Timestamp']['output'];
 };
@@ -977,7 +976,6 @@ export type TravelSessionResolvers<ContextType = Context, ParentType extends Res
   guideId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   startDate?: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
-  travel?: Resolver<ResolversTypes['Travel'], ParentType, ContextType>;
   travelId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
 };

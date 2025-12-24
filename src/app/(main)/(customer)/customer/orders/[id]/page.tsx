@@ -12,9 +12,9 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin, User, Mail, Phone, DollarSign, CheckCircle, Clock, XCircle, ArrowLeft, Users, Building2, Clock3 } from "lucide-react";
 
 const ORDER_STATUS = {
-  0: { label: "Pending", color: "bg-yellow-100 text-yellow-800", icon: Clock },
-  1: { label: "Confirmed", color: "bg-green-100 text-green-800", icon: CheckCircle },
-  2: { label: "Cancelled", color: "bg-red-100 text-red-800", icon: XCircle },
+  0: { label: "Хүлээгдэж буй", color: "bg-yellow-100 text-yellow-800", icon: Clock },
+  1: { label: "Баталгаажсан", color: "bg-green-100 text-green-800", icon: CheckCircle },
+  2: { label: "Цуцалсан", color: "bg-red-100 text-red-800", icon: XCircle },
 };
 
 type Params = {
@@ -57,12 +57,12 @@ export default function OrderDetailPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <Card className="max-w-md w-full">
           <CardHeader>
-            <CardTitle>Order Not Found</CardTitle>
-            <CardDescription>The order you're looking for doesn't exist.</CardDescription>
+            <CardTitle>Захиалга олдсонгүй</CardTitle>
+            <CardDescription>Таны хайж буй захиалга олдсонгүй эсвэл устгагдсан байна.</CardDescription>
           </CardHeader>
           <CardContent>
-            <Link href="/orders">
-              <Button className="w-full">Back to Orders</Button>
+            <Link href="/customer">
+              <Button className="w-full">Захиалгууд руу буцах</Button>
             </Link>
           </CardContent>
         </Card>
@@ -82,23 +82,23 @@ export default function OrderDetailPage() {
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Header */}
         <div className="mb-8">
-          <Link href="/orders">
+          <Link href="/customer">
             <Button variant="ghost" className="mb-4">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Orders
+              Буцах
             </Button>
           </Link>
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
-              <h1 className="text-3xl font-bold mb-2">Order #{order.id}</h1>
-              <p className="text-gray-600">Booked on {new Date(order.createdAt).toLocaleDateString()}</p>
+              <h1 className="text-3xl font-bold mb-2">Захиалга #{order.id}</h1>
+              <p className="text-gray-600">Захиалсан огноо: {new Date(order.createdAt).toLocaleDateString()}</p>
             </div>
             <div className="flex items-center gap-2">
               <Badge className={status.color}>
                 <StatusIcon className="w-3 h-3 mr-1" />
                 {status.label}
               </Badge>
-              {order.payment.isPaid ? <Badge className="bg-blue-100 text-blue-800">Paid</Badge> : <Badge className="bg-gray-100 text-gray-800">Unpaid</Badge>}
+              {order.payment.isPaid ? <Badge className="bg-blue-100 text-blue-800">Төлсөн</Badge> : <Badge className="bg-gray-100 text-gray-800">Төлөөгүй</Badge>}
             </div>
           </div>
         </div>
@@ -126,7 +126,7 @@ export default function OrderDetailPage() {
             <CardContent className="pt-6">
               <div className="flex items-center gap-2 text-gray-600">
                 <Building2 className="w-5 h-5" />
-                <span>Organized by {travel.company?.name || "Unknown"}</span>
+                <span>Зохион байгуулагч: {travel.company?.name || "Тодорхойгүй"}</span>
               </div>
             </CardContent>
           </Card>
@@ -136,13 +136,13 @@ export default function OrderDetailPage() {
           {/* Booking Details */}
           <Card>
             <CardHeader>
-              <CardTitle>Booking Details</CardTitle>
+              <CardTitle>Захиалгын дэлгэрэнгүй</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-start gap-3">
                 <Calendar className="w-5 h-5 text-gray-400 mt-0.5" />
                 <div>
-                  <p className="text-sm text-gray-500 mb-1">Travel Dates</p>
+                  <p className="text-sm text-gray-500 mb-1">Аяллын огноо</p>
                   <p className="font-medium">
                     {new Date(order.travelSession.startDate).toLocaleDateString()} - {new Date(order.travelSession.endDate).toLocaleDateString()}
                   </p>
@@ -152,18 +152,16 @@ export default function OrderDetailPage() {
               <div className="flex items-start gap-3">
                 <Users className="w-5 h-5 text-gray-400 mt-0.5" />
                 <div>
-                  <p className="text-sm text-gray-500 mb-1">Seats Booked</p>
-                  <p className="font-medium">
-                    {order.totalSeats} {order.totalSeats === 1 ? "seat" : "seats"}
-                  </p>
+                  <p className="text-sm text-gray-500 mb-1">Суудлын тоо</p>
+                  <p className="font-medium">{order.totalSeats} суудал</p>
                 </div>
               </div>
 
               <div className="flex items-start gap-3">
                 <DollarSign className="w-5 h-5 text-gray-400 mt-0.5" />
                 <div>
-                  <p className="text-sm text-gray-500 mb-1">Total Price</p>
-                  <p className="font-medium text-2xl">${order.totalPrice.toLocaleString()}</p>
+                  <p className="text-sm text-gray-500 mb-1">Нийт дүн</p>
+                  <p className="font-medium text-2xl">₮{order.totalPrice.toLocaleString()}</p>
                 </div>
               </div>
 
@@ -171,8 +169,8 @@ export default function OrderDetailPage() {
                 <div className="flex items-start gap-3">
                   <User className="w-5 h-5 text-gray-400 mt-0.5" />
                   <div>
-                    <p className="text-sm text-gray-500 mb-1">Guide</p>
-                    <p className="font-medium">{order.travelSession.guide?.name || "Not assigned"}</p>
+                    <p className="text-sm text-gray-500 mb-1">Хөтөч</p>
+                    <p className="font-medium">{order.travelSession.guide?.name || "Томилогдоогүй"}</p>
                     {order.travelSession.guide?.email && <p className="text-sm text-gray-500">{order.travelSession.guide.email}</p>}
                   </div>
                 </div>
@@ -183,32 +181,32 @@ export default function OrderDetailPage() {
           {/* Payment Information */}
           <Card>
             <CardHeader>
-              <CardTitle>Payment Information</CardTitle>
+              <CardTitle>Төлбөрийн мэдээлэл</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between items-center">
-                <span className="text-gray-600">Payment Status</span>
-                <Badge className={order.payment.isPaid ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}>{order.payment.isPaid ? "Paid" : "Pending"}</Badge>
+                <span className="text-gray-600">Төлбөрийн төлөв</span>
+                <Badge className={order.payment.isPaid ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}>{order.payment.isPaid ? "Төлсөн" : "Хүлээгдэж буй"}</Badge>
               </div>
 
               {order.payment.isPaid && order.payment.paidAt && (
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Paid On</span>
+                  <span className="text-gray-600">Төлсөн огноо</span>
                   <span className="font-medium">{new Date(order.payment.paidAt).toLocaleDateString()}</span>
                 </div>
               )}
 
               <div className="pt-4 border-t">
                 <div className="flex justify-between items-center text-lg font-semibold">
-                  <span>Total Amount</span>
-                  <span>${order.payment.total.toLocaleString()}</span>
+                  <span>Нийт дүн</span>
+                  <span>₮{order.payment.total.toLocaleString()}</span>
                 </div>
               </div>
 
               {!order.payment.isPaid && (
                 <Button className="w-full mt-4">
                   <DollarSign className="w-4 h-4 mr-2" />
-                  Pay Now
+                  Төлбөр төлөх
                 </Button>
               )}
             </CardContent>
@@ -218,33 +216,33 @@ export default function OrderDetailPage() {
         {/* Travelers */}
         <Card className="mt-6">
           <CardHeader>
-            <CardTitle>Travelers ({order.travelers.length})</CardTitle>
-            <CardDescription>List of all travelers for this booking</CardDescription>
+            <CardTitle>Аялагчид ({order.travelers.length})</CardTitle>
+            <CardDescription>Захиалгад хамрагдсан аялагчдын жагсаалт</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {order.travelers.map((traveler, index) => (
                 <div key={traveler.id} className="p-4 bg-gray-50 rounded-lg space-y-3">
-                  <h4 className="font-semibold text-lg">Traveler {index + 1}</h4>
+                  <h4 className="font-semibold text-lg">Аялагч {index + 1}</h4>
                   <div className="grid md:grid-cols-2 gap-3 text-sm">
                     <div className="flex items-center gap-2">
                       <User className="w-4 h-4 text-gray-400" />
-                      <span className="text-gray-600">Name:</span>
+                      <span className="text-gray-600">Нэр:</span>
                       <span className="font-medium">{traveler.name}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Mail className="w-4 h-4 text-gray-400" />
-                      <span className="text-gray-600">Email:</span>
+                      <span className="text-gray-600">И-мэйл:</span>
                       <span className="font-medium">{traveler.email}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Phone className="w-4 h-4 text-gray-400" />
-                      <span className="text-gray-600">Phone:</span>
+                      <span className="text-gray-600">Утас:</span>
                       <span className="font-medium">{traveler.phoneNumber}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-gray-400" />
-                      <span className="text-gray-600">DOB:</span>
+                      <span className="text-gray-600">Төрсөн огноо:</span>
                       <span className="font-medium">{new Date(traveler.dateOfBirth).toLocaleDateString()}</span>
                     </div>
                   </div>
@@ -256,14 +254,14 @@ export default function OrderDetailPage() {
 
         {/* Actions */}
         <div className="mt-6 flex gap-4">
-          <Link href="/orders" className="flex-1">
+          <Link href="/customer" className="flex-1">
             <Button variant="outline" className="w-full">
-              Back to Orders
+              Захиалгууд руу буцах
             </Button>
           </Link>
           {order.orderStatus === 0 && (
             <Button variant="destructive" className="flex-1">
-              Cancel Booking
+              Захиалга цуцлах
             </Button>
           )}
         </div>

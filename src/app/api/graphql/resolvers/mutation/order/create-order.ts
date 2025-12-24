@@ -1,5 +1,5 @@
 import { MutationResolvers } from "@/api/types";
-import { db, orderTable, paymentTable, travelerTable, seatTable, travelSessionTable } from "@/database";
+import { db, orderTable, paymentTable, travelerTable, seatTable, travelSessionTable, seatCostTable } from "@/database";
 import Stripe from "stripe";
 import { eq } from "drizzle-orm";
 
@@ -37,9 +37,30 @@ export const createOrder: MutationResolvers["createOrder"] = async (_, { input }
     }
 
     // 3. Check available seats
-    const existingSeats = await db.query.seatTable.findMany({
+    let existingSeats = await db.query.seatTable.findMany({
       where: eq(seatTable.travelSessionId, travelSessionId),
     });
+
+    // If no seats exist, create them
+    if (existingSeats.length === 0) {
+      const totalSeats = travelSession.travel.totalSeatNumber;
+
+      // Create a default seat cost if needed
+      const [{ id: seatCostId }] = await db.insert(seatCostTable).values({ cost: 10000 }).returning();
+
+      await db.insert(seatTable).values(
+        Array.from({ length: totalSeats }).map(() => ({
+          travelSessionId,
+          seatCostId,
+          status: "AVAILABLE" as const,
+        }))
+      );
+
+      // Fetch the newly created seats
+      existingSeats = await db.query.seatTable.findMany({
+        where: eq(seatTable.travelSessionId, travelSessionId),
+      });
+    }
 
     const availableSeats = existingSeats.filter((seat) => seat.status === "AVAILABLE");
 

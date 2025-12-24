@@ -17,15 +17,11 @@ export default function PaymentForm({ onSuccess, amount }: PaymentFormProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!stripe) {
-      return;
-    }
+    if (!stripe) return;
 
     const clientSecret = new URLSearchParams(window.location.search).get("payment_intent_client_secret");
 
-    if (!clientSecret) {
-      return;
-    }
+    if (!clientSecret) return;
 
     stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
       switch (paymentIntent?.status) {
@@ -58,7 +54,7 @@ export default function PaymentForm({ onSuccess, amount }: PaymentFormProps) {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${window.location.origin}/orders/success`,
+        return_url: `${window.location.origin}/orders/success?${window.location.search.substring(1)}`,
       },
     });
 

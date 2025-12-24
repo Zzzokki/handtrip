@@ -3,6 +3,7 @@
 import { useAuth } from "@/components";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
+import { useGetCustomerQuery } from "@/types/generated";
 import { LogOut, Settings, Ticket, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -19,6 +20,11 @@ export const CustomerSidebar = () => {
   const { user, logout } = useAuth();
   const pathname = usePathname();
 
+  const { data } = useGetCustomerQuery({
+    variables: { id: parseInt(user?.id || "0") },
+    skip: !user?.id,
+  });
+
   return (
     <Sidebar className="w-[320px]">
       <SidebarHeader className="border-b">
@@ -27,7 +33,7 @@ export const CustomerSidebar = () => {
             <User className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-slate-900">{user?.name}</h2>
+            <p className="font-semibold">{data?.getCustomer ? `${data.getCustomer.firstName} ${data.getCustomer.lastName}` : "Хэрэглэгч"}</p>
             <p className="text-sm text-slate-600">Хэрэглэгчийн бүртгэл</p>
           </div>
         </div>
@@ -62,7 +68,7 @@ export const CustomerSidebar = () => {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link href="/dashboard/company/settings">
+                  <Link href="/customer/settings">
                     <Settings />
                     Тохиргоо
                   </Link>

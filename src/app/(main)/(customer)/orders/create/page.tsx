@@ -160,6 +160,13 @@ export default function CreateOrderPage() {
         // Extract payment intent ID from client secret
         const intentId = data.clientSecret.split("_secret_")[0];
         setPaymentIntentId(intentId);
+
+        // Store travelers data in URL for success page
+        const travelersParam = encodeURIComponent(JSON.stringify(travelers));
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.set("travelers", travelersParam);
+        window.history.replaceState({}, "", currentUrl.toString());
+
         setShowPayment(true);
       } else {
         toast.error("Төлбөрийн систем эхлүүлэхэд алдаа гарлаа");
