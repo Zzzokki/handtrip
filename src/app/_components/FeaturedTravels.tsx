@@ -29,22 +29,22 @@ export const FeaturedTravels = () => {
   const travels = data?.getTravels.travels || [];
 
   return (
-    <section className="py-20 bg-gradient-to-b from-white to-gray-50">
+    <section className="py-12 bg-gradient-to-b from-white to-slate-50">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-full mb-4">
-            <Sparkles className="w-4 h-4 text-blue-600" />
-            <span className="text-sm font-medium text-blue-600">Гайхалтай аяллууд</span>
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 rounded-full mb-3">
+            <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+            <span className="text-xs font-semibold text-blue-600">Гайхалтай аяллууд</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Онцлох аяллын багцууд</h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">Монголынхоо байгалийн үзэсгэлэнт газруудаар аялах гайхалтай боломжууд</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Онцлох аяллын багцууд</h2>
+          <p className="text-sm text-gray-600 max-w-2xl mx-auto">Монголынхоо байгалийн үзэсгэлэнт газруудаар аялах гайхалтай боломжууд</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
           {travels?.map((travel) => (
             <Link key={travel.id} href={`/travels/${travel.id}`}>
-              <Card className="group relative overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-300 h-full bg-white rounded-2xl">
-                <div className="relative h-64 overflow-hidden">
+              <Card className="group relative overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300 h-full bg-white rounded-xl hover:-translate-y-1">
+                <div className="relative h-48 overflow-hidden">
                   {travel.coverImage ? (
                     <div
                       className="w-full h-full bg-cover bg-center transform group-hover:scale-110 transition-transform duration-500"
@@ -57,16 +57,16 @@ export const FeaturedTravels = () => {
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
 
-                  <div className="absolute bottom-4 left-4">
-                    <Badge className="bg-white/95 backdrop-blur-sm text-blue-600 border-0 shadow-lg">
+                  <div className="absolute bottom-3 left-3">
+                    <Badge className="bg-white/95 backdrop-blur-sm text-blue-600 border-0 shadow-md text-xs h-6">
                       <Clock className="w-3 h-3 mr-1" />
                       {travel.duration} өдөр
                     </Badge>
                   </div>
 
                   {travel.travelSessions && travel.travelSessions.length > 0 && (
-                    <div className="absolute top-4 left-4">
-                      <Badge className="bg-green-500 text-white border-0 shadow-lg">
+                    <div className="absolute top-3 left-3">
+                      <Badge className="bg-green-500/90 backdrop-blur-sm text-white border-0 shadow-md text-xs h-6">
                         <Calendar className="w-3 h-3 mr-1" />
                         {travel.travelSessions.length} хуваарь
                       </Badge>
@@ -74,51 +74,51 @@ export const FeaturedTravels = () => {
                   )}
 
                   {travel.categories && travel.categories.length > 0 && (
-                    <div className="absolute top-4 right-4">
-                      <Badge className="bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0 shadow-lg">{travel.categories[0].name}</Badge>
+                    <div className="absolute top-3 right-3">
+                      <Badge className="bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0 shadow-md text-xs h-6">{travel.categories[0].name}</Badge>
                     </div>
                   )}
                 </div>
 
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">{travel.name}</h3>
+                <div className="p-4">
+                  <h3 className="text-lg font-bold text-gray-900 mb-1.5 group-hover:text-blue-600 transition-colors line-clamp-2">{travel.name}</h3>
 
-                  {travel.description && <p className="text-gray-600 text-sm mb-4 line-clamp-2">{travel.description}</p>}
+                  {travel.description && <p className="text-gray-600 text-xs mb-3 line-clamp-2">{travel.description}</p>}
 
-                  <div className="space-y-2 mb-4">
+                  <div className="space-y-1.5 mb-3">
                     {travel.destination && (
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-100 to-emerald-100 flex items-center justify-center">
-                          <MapPin className="w-4 h-4 text-green-600" />
+                      <div className="flex items-center gap-2 text-xs text-gray-600">
+                        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-green-100 to-emerald-100 flex items-center justify-center flex-shrink-0">
+                          <MapPin className="w-3.5 h-3.5 text-green-600" />
                         </div>
-                        <span className="font-medium">{travel.destination.name}</span>
+                        <span className="font-medium truncate">{travel.destination.name}</span>
                       </div>
                     )}
 
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center">
-                        <Users className="w-4 h-4 text-blue-600" />
+                    <div className="flex items-center gap-2 text-xs text-gray-600">
+                      <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center flex-shrink-0">
+                        <Users className="w-3.5 h-3.5 text-blue-600" />
                       </div>
                       <span>Дээд тал {travel.totalSeatNumber}</span>
                     </div>
 
                     {travel.company && (
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center">
-                          <Building2 className="w-4 h-4 text-purple-600" />
+                      <div className="flex items-center gap-2 text-xs text-gray-600">
+                        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center flex-shrink-0">
+                          <Building2 className="w-3.5 h-3.5 text-purple-600" />
                         </div>
                         <span className="truncate">{travel.company.name}</span>
                       </div>
                     )}
                   </div>
 
-                  <div className="flex items-center gap-2 text-blue-600 font-medium text-sm group-hover:gap-3 transition-all">
+                  <div className="flex items-center gap-1.5 text-blue-600 font-semibold text-xs group-hover:gap-2 transition-all">
                     <span>Дэлгэрэнгүй үзэх</span>
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </div>
                 </div>
 
-                <div className="absolute inset-0 border-2 border-transparent group-hover:border-blue-400 rounded-2xl transition-colors pointer-events-none" />
+                <div className="absolute inset-0 border-2 border-transparent group-hover:border-blue-400 rounded-xl transition-colors pointer-events-none" />
               </Card>
             </Link>
           ))}
@@ -126,12 +126,9 @@ export const FeaturedTravels = () => {
 
         <div className="text-center">
           <Link href="/travels">
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 rounded-full px-8 h-12"
-            >
-              <span className="font-semibold">Бүх аяллууд үзэх</span>
-              <ArrowRight className="w-5 h-5 ml-2" />
+            <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-md hover:shadow-lg transition-all duration-300 rounded-lg px-6 h-10 text-sm font-semibold">
+              <span>Бүх аяллууд үзэх</span>
+              <ArrowRight className="w-4 h-4 ml-1.5" />
             </Button>
           </Link>
         </div>

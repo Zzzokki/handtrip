@@ -29,16 +29,16 @@ export const TravelSessionsSection = ({ form }: TravelSessionsSectionProps) => {
   };
 
   return (
-    <Card className="overflow-hidden shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
-      <CardHeader className="bg-gradient-to-r from-slate-50 to-white border-b border-slate-100">
+    <Card className="overflow-hidden shadow-sm border border-gray-200">
+      <CardHeader className="bg-gradient-to-r from-emerald-50 to-teal-50 border-b border-gray-200">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center">
-              <CalendarDays className="w-5 h-5 text-emerald-600" />
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-md">
+              <CalendarDays className="w-5 h-5 text-white" />
             </div>
             <div>
-              <CardTitle className="text-xl">Аяллын хуваарь</CardTitle>
-              <CardDescription>Боломжтой огноо, хөтөч томилох</CardDescription>
+              <CardTitle className="text-lg font-bold text-gray-900">Аяллын хуваарь</CardTitle>
+              <CardDescription className="text-sm">Боломжтой огноо, хөтөч томилох</CardDescription>
             </div>
           </div>
 
@@ -46,14 +46,15 @@ export const TravelSessionsSection = ({ form }: TravelSessionsSectionProps) => {
             type="button"
             variant="outline"
             onClick={addSession}
-            className="border-2 border-dashed border-slate-300 hover:border-emerald-400 hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
+            className="border-2 border-dashed border-gray-300 hover:border-emerald-400 hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
+            size="sm"
           >
             <Plus className="w-4 h-4 mr-2" />
             Хуваарь нэмэх
           </Button>
         </div>
       </CardHeader>
-      <CardContent className="pt-6 space-y-4">
+      <CardContent className="pt-5 space-y-4">
         {fields.length === 0 && (
           <div className="text-center py-8 text-slate-500">
             <CalendarDays className="w-12 h-12 mx-auto mb-3 text-slate-300" />

@@ -24,17 +24,17 @@ export const Pagination = ({ page, totalPages, setPage }: PaginationProps) => {
 
   return (
     <ShadcnPagination className="m-0 w-fit">
-      <PaginationContent>
+      <PaginationContent className="gap-1">
         <PaginationItem>
-          <Button variant="outline" disabled={page === 1} onClick={prev}>
-            <ChevronLeft className="w-4 h-4 mr-2" />
+          <Button variant="outline" size="sm" disabled={page === 1} onClick={prev} className="h-9">
+            <ChevronLeft className="w-4 h-4 mr-1" />
             Өмнөх
           </Button>
         </PaginationItem>
 
         {page > 2 && (
           <PaginationItem>
-            <Button variant="outline" onClick={() => goToPage(1)}>
+            <Button variant="outline" size="sm" onClick={() => goToPage(1)} className="h-9 w-9">
               1
             </Button>
           </PaginationItem>
@@ -42,25 +42,27 @@ export const Pagination = ({ page, totalPages, setPage }: PaginationProps) => {
 
         {page > 3 && (
           <PaginationItem>
-            <PaginationEllipsis />
+            <PaginationEllipsis className="h-9 w-9" />
           </PaginationItem>
         )}
 
         {page > 1 && (
           <PaginationItem>
-            <Button variant="outline" onClick={() => goToPage(page - 1)}>
+            <Button variant="outline" size="sm" onClick={() => goToPage(page - 1)} className="h-9 w-9">
               {page - 1}
             </Button>
           </PaginationItem>
         )}
 
         <PaginationItem>
-          <Button variant="default">{page}</Button>
+          <Button variant="default" size="sm" className="h-9 w-9">
+            {page}
+          </Button>
         </PaginationItem>
 
         {page < totalPages && (
           <PaginationItem>
-            <Button variant="outline" onClick={() => goToPage(page + 1)}>
+            <Button variant="outline" size="sm" onClick={() => goToPage(page + 1)} className="h-9 w-9">
               {page + 1}
             </Button>
           </PaginationItem>
@@ -68,22 +70,22 @@ export const Pagination = ({ page, totalPages, setPage }: PaginationProps) => {
 
         {page < totalPages - 2 && (
           <PaginationItem>
-            <PaginationEllipsis />
+            <PaginationEllipsis className="h-9 w-9" />
           </PaginationItem>
         )}
 
         {page < totalPages - 1 && (
           <PaginationItem>
-            <Button variant="outline" onClick={() => goToPage(totalPages)}>
+            <Button variant="outline" size="sm" onClick={() => goToPage(totalPages)} className="h-9 w-9">
               {totalPages}
             </Button>
           </PaginationItem>
         )}
 
         <PaginationItem>
-          <Button variant="outline" disabled={page === totalPages} onClick={next}>
+          <Button variant="outline" size="sm" disabled={page === totalPages} onClick={next} className="h-9">
             Дараах
-            <ChevronRight className="w-4 h-4 mr-2" />
+            <ChevronRight className="w-4 h-4 ml-1" />
           </Button>
         </PaginationItem>
       </PaginationContent>

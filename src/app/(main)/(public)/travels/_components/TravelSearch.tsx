@@ -15,11 +15,9 @@ export const TravelSearch = ({ query, setQuery }: TravelSearchProps) => {
   };
 
   return (
-    <div className="flex gap-4">
-      <div className="relative w-[400px]">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-        <Input placeholder="Аялал хайх..." className="pl-10" value={query} onChange={handleSearchChange} />
-      </div>
+    <div className="relative w-full max-w-xl">
+      <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+      <Input placeholder="Аялал хайх..." className="pl-10 h-11 border-gray-300 focus-visible:ring-blue-500" value={query} onChange={handleSearchChange} />
     </div>
   );
 };

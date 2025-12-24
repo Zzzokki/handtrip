@@ -25,9 +25,8 @@ export const registerAsCustomer: MutationResolvers["registerAsCustomer"] = async
     .returning();
 
   const token = generateToken({
-    id: customer.id.toString(),
-    email: customer.email,
-    type: "customer",
+    id: customer.id,
+    role: "customer",
   });
 
   return { token, customer };

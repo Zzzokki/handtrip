@@ -53,6 +53,7 @@ fragment DestinationFields on Destination {
 # Agenda Fragment
 fragment AgendaFields on Agenda {
   id
+  day
   name
   description
   travelId
@@ -97,6 +98,15 @@ fragment TravelSessionWithRelations on TravelSession {
   ...TravelSessionFields
   guide {
     ...GuideFields
+  }
+  travel {
+    ...TravelFields
+    company {
+      ...CompanyFields
+    }
+    destination {
+      ...DestinationFields
+    }
   }
 }
 

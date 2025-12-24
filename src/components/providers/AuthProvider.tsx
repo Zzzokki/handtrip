@@ -5,9 +5,7 @@ import { createContext, PropsWithChildren, useContext, useState, useEffect } fro
 
 type User = {
   id: string;
-  name: string;
-  email: string;
-  type: "customer" | "company";
+  role: "customer" | "company";
 };
 
 type AuthContextType = {

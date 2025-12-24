@@ -3,25 +3,41 @@
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/providers";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { Building2, LayoutDashboard, LogOut, Map, Menu, X } from "lucide-react";
+import { useState } from "react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export const Header = () => {
   const { user, logout, isAuthenticated } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
     router.push("/");
+    setIsOpen(false);
   };
 
+  const isActive = (path: string) => pathname === path;
+
+  const navLinks = [
+    { href: "/travels", label: "Аяллууд", icon: Map },
+    { href: "/companies", label: "Компаниуд", icon: Building2 },
+  ];
+
+  const dashboardLink = user?.role === "customer" ? "/customer" : "/dashboard/company";
+
   return (
-    <header className="fixed top-0 left-0 w-full z-[99999] bg-white/80 backdrop-blur-lg border-b border-gray-200">
-      <div className="container mx-auto">
-        <div className="flex justify-between items-center h-16">
+    <header className="fixed top-0 left-0 w-full z-[99999] bg-white/95 backdrop-blur-md border-b border-gray-200/80 shadow-sm">
+      <div className="container mx-auto px-4">
+        <div className="flex justify-between items-center h-14">
+          {/* Logo */}
           <div className="flex-shrink-0">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <Link href="/" className="flex items-center gap-2 group">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center transition-transform group-hover:scale-110 group-hover:rotate-6 duration-300">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -30,54 +46,160 @@ export const Header = () => {
                   />
                 </svg>
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">HandTrip</span>
+              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">HandTrip</span>
             </Link>
           </div>
 
-          <nav className="hidden md:flex items-center gap-8">
-            <Link href="/travels" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
-              Аяллууд
-            </Link>
-            <Link href="/companies" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
-              Компаниуд
-            </Link>
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-1">
+            {navLinks.map((link) => {
+              const Icon = link.icon;
+              const active = isActive(link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`
+                    flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200
+                    ${active ? "bg-blue-50 text-blue-700" : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"}
+                  `}
+                >
+                  <Icon className="w-4 h-4" />
+                  {link.label}
+                </Link>
+              );
+            })}
 
             {isAuthenticated && (
-              <>
-                <Link href="/dashboard/company" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
-                  Хянах самбар
-                </Link>
-              </>
+              <Link
+                href={dashboardLink}
+                className={`
+                  flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200
+                  ${isActive(dashboardLink) ? "bg-blue-50 text-blue-700" : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"}
+                `}
+              >
+                <LayoutDashboard className="w-4 h-4" />
+                Хянах самбар
+              </Link>
             )}
           </nav>
 
-          <div className="flex items-center gap-3">
+          {/* Desktop Auth Section */}
+          <div className="hidden md:flex items-center gap-2">
             {isAuthenticated ? (
               <>
-                <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-semibold text-sm">
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200">
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-semibold text-xs shadow-sm">
                     {user?.name?.charAt(0).toUpperCase() || "U"}
                   </div>
-                  <span className="text-sm font-medium text-gray-700">{user?.name || "User"}</span>
+                  <span className="text-sm font-medium text-gray-700 max-w-[100px] truncate">{user?.name || "User"}</span>
                 </div>
-                <Button onClick={handleLogout} variant="outline" size="sm">
+                <Button onClick={handleLogout} variant="outline" size="sm" className="gap-1.5 h-9">
+                  <LogOut className="w-3.5 h-3.5" />
                   Гарах
                 </Button>
               </>
             ) : (
               <>
-                <Link href="/login" className="hidden sm:block">
-                  <Button variant="ghost" size="sm">
+                <Link href="/login">
+                  <Button variant="ghost" size="sm" className="h-9">
                     Нэвтрэх
                   </Button>
                 </Link>
                 <Link href="/signup">
-                  <Button size="sm" className="font-semibold">
+                  <Button size="sm" className="font-semibold h-9 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
                     Эхлэх
                   </Button>
                 </Link>
               </>
             )}
+          </div>
+
+          {/* Mobile Menu */}
+          <div className="md:hidden">
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="sm" className="h-9 w-9 p-0">
+                  <Menu className="w-5 h-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[280px] p-0">
+                <div className="flex flex-col h-full">
+                  {/* Mobile Header */}
+                  <div className="flex items-center justify-between p-4 border-b border-gray-200">
+                    <span className="text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">HandTrip</span>
+                  </div>
+
+                  {/* Mobile Navigation */}
+                  <nav className="flex-1 p-4 space-y-1">
+                    {navLinks.map((link) => {
+                      const Icon = link.icon;
+                      const active = isActive(link.href);
+                      return (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          onClick={() => setIsOpen(false)}
+                          className={`
+                            flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-sm transition-all duration-200
+                            ${active ? "bg-blue-50 text-blue-700" : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"}
+                          `}
+                        >
+                          <Icon className="w-5 h-5" />
+                          {link.label}
+                        </Link>
+                      );
+                    })}
+
+                    {isAuthenticated && (
+                      <Link
+                        href={dashboardLink}
+                        onClick={() => setIsOpen(false)}
+                        className={`
+                          flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-sm transition-all duration-200
+                          ${isActive(dashboardLink) ? "bg-blue-50 text-blue-700" : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"}
+                        `}
+                      >
+                        <LayoutDashboard className="w-5 h-5" />
+                        Хянах самбар
+                      </Link>
+                    )}
+                  </nav>
+
+                  {/* Mobile Auth Section */}
+                  <div className="p-4 border-t border-gray-200 space-y-3">
+                    {isAuthenticated ? (
+                      <>
+                        <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-semibold shadow-sm">
+                            {user?.name?.charAt(0).toUpperCase() || "U"}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-semibold text-gray-900 truncate">{user?.name || "User"}</p>
+                            <p className="text-xs text-gray-500 truncate">{user?.email || ""}</p>
+                          </div>
+                        </div>
+                        <Button onClick={handleLogout} variant="outline" className="w-full gap-2">
+                          <LogOut className="w-4 h-4" />
+                          Гарах
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Link href="/login" onClick={() => setIsOpen(false)} className="block">
+                          <Button variant="outline" className="w-full">
+                            Нэвтрэх
+                          </Button>
+                        </Link>
+                        <Link href="/signup" onClick={() => setIsOpen(false)} className="block">
+                          <Button className="w-full font-semibold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">Эхлэх</Button>
+                        </Link>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </div>

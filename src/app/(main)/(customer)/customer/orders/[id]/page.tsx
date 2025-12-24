@@ -31,7 +31,7 @@ export default function OrderDetailPage() {
   });
 
   useEffect(() => {
-    if (!isLoading && (!isAuthenticated || user?.type !== "customer")) {
+    if (!isLoading && (!isAuthenticated || user?.role !== "customer")) {
       router.push("/login");
     }
   }, [isAuthenticated, isLoading, user, router]);

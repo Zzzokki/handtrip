@@ -19,20 +19,20 @@ export function BasicInfoSection({ form }: BasicInfoSectionProps) {
   };
 
   return (
-    <Card className="overflow-hidden shadow-sm">
-      <CardHeader className="bg-gradient-to-r from-slate-50 to-white border-b border-slate-100">
+    <Card className="overflow-hidden shadow-sm border border-gray-200">
+      <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-            <Info className="w-5 h-5 text-blue-600" />
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-md">
+            <Info className="w-5 h-5 text-white" />
           </div>
           <div>
-            <CardTitle className="text-xl">Үндсэн мэдээлэл</CardTitle>
-            <CardDescription>Аяллын багцын үндсэн мэдээллийг оруулна уу</CardDescription>
+            <CardTitle className="text-lg font-bold text-gray-900">Үндсэн мэдээлэл</CardTitle>
+            <CardDescription className="text-sm">Аяллын багцын үндсэн мэдээллийг оруулна уу</CardDescription>
           </div>
         </div>
       </CardHeader>
 
-      <CardContent className="pt-6 space-y-5">
+      <CardContent className="pt-5 space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}

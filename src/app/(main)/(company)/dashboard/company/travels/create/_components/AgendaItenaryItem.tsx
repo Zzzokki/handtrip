@@ -27,29 +27,19 @@ export const AgendaItenaryItem = ({ agenda, handleChangeAgendaByDay, handleChang
   };
 
   return (
-    <Card className="border-slate-200 hover:shadow-lg transition-shadow">
-      <CardContent className="p-6 space-y-4">
-        <div className="flex items-center gap-3 pb-3 border-b border-slate-200">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-md">
-            <Calendar className="w-5 h-5 text-white" />
-          </div>
-          <div>
-            <h3 className="font-bold text-slate-900">Өдөр {day}</h3>
-            <p className="text-sm text-slate-500">Өдрийн хөтөлбөр</p>
-          </div>
-        </div>
-
+    <Card className="border-gray-200 hover:shadow-md transition-shadow">
+      <CardContent className="p-4 space-y-3.5">
         <div className="space-y-2">
-          <Label htmlFor={`agenda-name-${day}`} className="flex items-center gap-2 font-semibold text-slate-700">
-            <FileText className="w-4 h-4 text-blue-600" />
+          <Label htmlFor={`agenda-name-${day}`} className="flex items-center gap-2 font-semibold text-gray-700 text-sm">
+            <FileText className="w-3.5 h-3.5 text-purple-600" />
             Өдрийн гарчиг
           </Label>
-          <Input id={`agenda-name-${day}`} value={name} onChange={handleNameChange} placeholder="Өдрийн гарчиг оруулна уу" className="border-slate-300 focus:border-blue-500 focus:ring-blue-500" />
+          <Input id={`agenda-name-${day}`} value={name} onChange={handleNameChange} placeholder="Өдрийн гарчиг оруулна уу" className="border-gray-300 focus:border-purple-500 focus:ring-purple-500" />
         </div>
 
         <div className="space-y-2">
-          <Label className="font-semibold text-slate-700">Өдрийн дэлгэрэнгүй</Label>
-          <div className="rounded-lg border border-slate-200 overflow-hidden">
+          <Label className="font-semibold text-gray-700 text-sm">Өдрийн дэлгэрэнгүй</Label>
+          <div className="rounded-lg border border-gray-200 overflow-hidden">
             <Editor editorSerializedState={content} onSerializedChange={handleEditorStateChange} />
           </div>
         </div>

@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 export const deleteGuide: MutationResolvers["deleteGuide"] = async (_, { id }, context) => {
   const companyId = context.user?.id;
 
-  if (!companyId || context.user?.type !== "company") {
+  if (!companyId || context.user?.role !== "company") {
     throw new Error("Unauthorized: Only companies can delete guides");
   }
 

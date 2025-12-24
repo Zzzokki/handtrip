@@ -4,7 +4,7 @@ import { AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useGetCategoriesQuery } from "@/types/generated";
 import { AccordionContent } from "@radix-ui/react-accordion";
-import { Loader } from "lucide-react";
+import { ChevronDown, Loader, Tag } from "lucide-react";
 import { toast } from "sonner";
 
 type CategoryFilterProps = {
@@ -28,27 +28,40 @@ export const CategoryFilter = ({ subCategoryIds, setSubCategoryIds }: CategoryFi
   if (loading) {
     return (
       <div className="flex justify-center py-8">
-        <Loader className="w-4 h-4 animate-spin text-gray-500" />
+        <Loader className="w-5 h-5 animate-spin text-blue-500" />
       </div>
     );
   }
 
   return (
     <AccordionItem value="category" className="border-b-0">
-      <AccordionTrigger className="border px-4 rounded-lg py-2 bg-slate-200">Ангилал</AccordionTrigger>
-      <AccordionContent className="p-4 space-y-2">
+      <AccordionTrigger className="px-3 py-2.5 rounded-lg bg-gradient-to-br from-blue-50 to-purple-50 hover:from-blue-100 hover:to-purple-100 transition-all duration-200 border border-blue-100 hover:border-blue-200 text-sm font-semibold text-gray-900 group">
+        <div className="flex items-center gap-2">
+          <Tag className="w-4 h-4 text-blue-600" />
+          Ангилал
+        </div>
+      </AccordionTrigger>
+      <AccordionContent className="pt-3 pb-1 space-y-3">
         {data?.getCategories.map((category) => (
           <div key={category.id} className="space-y-2">
-            <div className="text-sm font-medium text-gray-700">{category.name}</div>
+            <div className="text-xs font-semibold text-gray-700 uppercase tracking-wide px-1">{category.name}</div>
 
-            <div className="space-y-2">
-              {category.subCategories?.map((subCategory) => (
-                <div key={subCategory.id} className="flex gap-2 items-center ml-4">
-                  <Checkbox checked={subCategoryIds.includes(subCategory.id)} onClick={() => handleClick(subCategory.id)} />
-
-                  <div className="text-xs text-gray-500">{subCategory.name}</div>
-                </div>
-              ))}
+            <div>
+              {category.subCategories?.map((subCategory) => {
+                const isChecked = subCategoryIds.includes(subCategory.id);
+                return (
+                  <label
+                    key={subCategory.id}
+                    className={`
+                      flex items-center gap-2.5 ml-2 px-3 py-2 rounded-lg cursor-pointer transition-all duration-200
+                      ${isChecked ? "bg-blue-50 border border-blue-200 shadow-sm" : "hover:bg-gray-50 border border-transparent"}
+                    `}
+                  >
+                    <Checkbox checked={isChecked} onClick={() => handleClick(subCategory.id)} className="data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600" />
+                    <span className={`text-sm ${isChecked ? "font-medium text-blue-900" : "text-gray-600"}`}>{subCategory.name}</span>
+                  </label>
+                );
+              })}
             </div>
           </div>
         ))}

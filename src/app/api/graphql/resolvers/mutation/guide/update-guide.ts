@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 export const updateGuide: MutationResolvers["updateGuide"] = async (_, { id, input }, context) => {
   const companyId = context.user?.id;
 
-  if (!companyId || context.user?.type !== "company") {
+  if (!companyId || context.user?.role !== "company") {
     throw new Error("Unauthorized: Only companies can update guides");
   }
 
@@ -22,6 +22,7 @@ export const updateGuide: MutationResolvers["updateGuide"] = async (_, { id, inp
     .update(guideTable)
     .set({
       ...(input.name && { name: input.name }),
+      ...(input.description && { description: input.description }),
       ...(input.email && { email: input.email }),
       ...(input.phoneNumber && { phoneNumber: input.phoneNumber }),
       ...(input.profileImage && { profileImage: input.profileImage }),

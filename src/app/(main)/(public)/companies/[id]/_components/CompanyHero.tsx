@@ -7,7 +7,7 @@ interface CompanyHeroProps {
 
 export default function CompanyHero({ company }: CompanyHeroProps) {
   return (
-    <div className="relative h-[400px] md:h-[500px]">
+    <div className="relative h-[300px] md:h-[380px]">
       {/* Cover Image */}
       {company.coverImage ? (
         <div
@@ -17,7 +17,7 @@ export default function CompanyHero({ company }: CompanyHeroProps) {
           }}
         />
       ) : (
-        <div className="w-full h-full bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500" />
+        <div className="w-full h-full bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-500" />
       )}
 
       {/* Gradient Overlay */}
@@ -25,31 +25,31 @@ export default function CompanyHero({ company }: CompanyHeroProps) {
 
       {/* Content */}
       <div className="absolute inset-0 flex items-end">
-        <div className="container mx-auto px-4 pb-16">
-          <div className="flex items-end gap-6 max-w-5xl">
+        <div className="container mx-auto px-4 pb-8">
+          <div className="flex items-end gap-4 max-w-5xl">
             {/* Logo */}
             <div className="flex-shrink-0">
               {company.logo ? (
-                <div className="w-28 h-28 md:w-36 md:h-36 rounded-2xl border-4 border-white shadow-2xl overflow-hidden bg-white">
+                <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl border-3 border-white shadow-xl overflow-hidden bg-white">
                   <img src={company.logo} alt={`${company.name} logo`} className="w-full h-full object-cover" />
                 </div>
               ) : (
-                <div className="w-28 h-28 md:w-36 md:h-36 rounded-2xl border-4 border-white shadow-2xl bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center">
-                  <Building2 className="w-16 h-16 md:w-20 md:h-20 text-white" />
+                <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl border-3 border-white shadow-xl bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center">
+                  <Building2 className="w-10 h-10 md:w-12 md:h-12 text-white" />
                 </div>
               )}
             </div>
 
             {/* Company Info */}
-            <div className="text-white flex-1 pb-2">
-              <h1 className="text-4xl md:text-6xl font-bold mb-3 drop-shadow-lg">{company.name}</h1>
-              <div className="flex flex-wrap gap-4 text-base md:text-lg">
-                <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
-                  <span className="text-xl">✉️</span>
+            <div className="text-white flex-1 pb-1">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 drop-shadow-lg">{company.name}</h1>
+              <div className="flex flex-wrap gap-2 text-xs md:text-sm">
+                <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                  <span className="text-base">✉️</span>
                   <span className="font-medium">{company.email}</span>
                 </div>
-                <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
-                  <span className="text-xl">📞</span>
+                <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                  <span className="text-base">📞</span>
                   <span className="font-medium">{company.phoneNumber}</span>
                 </div>
               </div>

@@ -58,21 +58,21 @@ export default function TravelFilters({ categories, subCategories, selectedCateg
 
         {/* SubCategories */}
         {selectedCategoryId !== null && filteredSubCategories.length > 0 && (
-          <div className="pt-6 border-t">
-            <h3 className="font-semibold text-gray-900 mb-3">Сонирхол</h3>
-            <div className="space-y-2">
+          <div className="pt-4 border-t">
+            <h3 className="font-semibold text-gray-900 mb-2 text-sm">Сонирхол</h3>
+            <div className="space-y-1.5">
               {filteredSubCategories.map((subCategory) => {
                 const isSelected = selectedSubCategoryIds.includes(subCategory.id);
                 return (
                   <button
                     key={subCategory.id}
                     onClick={() => onSubCategoryToggle(subCategory.id)}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-gray-50 transition-all text-left"
+                    className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 transition-all text-left"
                   >
-                    <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${isSelected ? "bg-purple-600 border-purple-600" : "border-gray-300"}`}>
-                      {isSelected && <Check className="w-3 h-3 text-white" />}
+                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-all ${isSelected ? "bg-purple-600 border-purple-600" : "border-gray-300"}`}>
+                      {isSelected && <Check className="w-2.5 h-2.5 text-white" />}
                     </div>
-                    <span className="text-gray-700">{subCategory.name}</span>
+                    <span className="text-gray-700 text-sm">{subCategory.name}</span>
                   </button>
                 );
               })}
@@ -82,14 +82,16 @@ export default function TravelFilters({ categories, subCategories, selectedCateg
 
         {/* Active Filters */}
         {hasFilters && (
-          <div className="pt-6 border-t">
-            <h3 className="font-semibold text-gray-900 mb-3 text-sm">Идэвхтэй шүүлтүүр</h3>
-            <div className="flex flex-wrap gap-2">
-              {selectedCategoryId !== null && <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-200 border-0">{categories.find((c) => c.id.toString() === selectedCategoryId)?.name}</Badge>}
+          <div className="pt-4 border-t">
+            <h3 className="font-semibold text-gray-900 mb-2 text-xs">Идэвхтэй шүүлтүүр</h3>
+            <div className="flex flex-wrap gap-1.5">
+              {selectedCategoryId !== null && (
+                <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-200 border-0 text-xs">{categories.find((c) => c.id.toString() === selectedCategoryId)?.name}</Badge>
+              )}
               {selectedSubCategoryIds.map((id) => {
                 const subCategory = subCategories.find((s) => s.id.toString() === id);
                 return (
-                  <Badge key={id} className="bg-purple-100 text-purple-700 hover:bg-purple-200 border-0">
+                  <Badge key={id} className="bg-purple-100 text-purple-700 hover:bg-purple-200 border-0 text-xs">
                     {subCategory?.name}
                   </Badge>
                 );

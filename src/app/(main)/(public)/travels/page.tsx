@@ -28,46 +28,63 @@ export default function TravelsPage() {
       }),
   });
 
-  const { travels, totalPages } = useMemo(() => {
-    if (!data) return { travels: [], totalPages: 1 };
-    const { travels, totalPages } = data.getTravels;
-    return { travels, totalPages };
+  const { travels, totalPages, totalTravels } = useMemo(() => {
+    if (!data) return { travels: [], totalPages: 1, totalTravels: 0 };
+    const { travels, totalPages, totalTravels } = data.getTravels;
+    return { travels, totalPages, totalTravels };
   }, [data]);
 
   return (
-    <div className="container mx-auto pb-8 pt-24">
-      <div className="flex gap-4">
-        <TravelFilter subCategoryIds={subCategoryIds} setSubCategoryIds={setSubCategoryIds} />
+    <div className="bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 min-h-screen">
+      <div className="container mx-auto px-4 pb-12 pt-20">
+        <div className="flex gap-6">
+          <div className="w-72 flex-shrink-0">
+            <TravelFilter subCategoryIds={subCategoryIds} setSubCategoryIds={setSubCategoryIds} />
+          </div>
 
-        <div className="flex-1 flex flex-col gap-4">
-          <TravelSearch query={query} setQuery={setQuery} />
-
-          {loading && (
-            <div className="grid grid-cols-3 gap-4">
-              {[...Array(15)].map((_, index) => (
-                <TravelCardSkeleton key={index} />
-              ))}
+          <div className="flex-1 min-w-0">
+            <div className="mb-6">
+              <TravelSearch query={query} setQuery={setQuery} />
             </div>
-          )}
 
-          {!loading && travels.length === 0 && (
-            <div className="border w-full flex flex-col items-center justify-center py-8 rounded-lg">
-              <Inbox className="w-12 h-12 text-gray-400 mb-4" />
-              <div className="text-gray-500">Аялал олдсонгүй</div>
-            </div>
-          )}
-
-          {!loading && travels.length > 0 && (
-            <div className="flex flex-col gap-8 items-end">
-              <div className="grid grid-cols-3 gap-4">
-                {travels.map((travel) => (
-                  <TravelCard key={travel.id} travel={travel} />
+            {loading && (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+                {[...Array(15)].map((_, index) => (
+                  <TravelCardSkeleton key={index} />
                 ))}
               </div>
+            )}
 
-              <Pagination totalPages={totalPages} page={page} setPage={setPage} />
-            </div>
-          )}
+            {!loading && travels.length === 0 && (
+              <div className="bg-white border border-gray-200 shadow-sm w-full flex flex-col items-center justify-center py-16 rounded-xl">
+                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                  <Inbox className="w-8 h-8 text-gray-400" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-1">Аялал олдсонгүй</h3>
+                <p className="text-sm text-gray-500">Өөр хайлтын үг оруулж үзнэ үү</p>
+              </div>
+            )}
+
+            {!loading && travels.length > 0 && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm text-gray-600">
+                    Нийт <span className="font-semibold text-gray-900">{totalTravels}</span> аялал олдлоо
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+                  {travels.map((travel) => (
+                    <TravelCard key={travel.id} travel={travel} />
+                  ))}
+                </div>
+
+                <div className="flex justify-center pt-4">
+                  <Pagination totalPages={totalPages} page={page} setPage={setPage} />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

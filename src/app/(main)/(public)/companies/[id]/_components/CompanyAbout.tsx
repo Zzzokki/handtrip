@@ -7,12 +7,12 @@ interface CompanyAboutProps {
 
 export default function CompanyAbout({ company }: CompanyAboutProps) {
   return (
-    <Card className="border-0 shadow-lg rounded-2xl">
-      <CardHeader>
-        <CardTitle className="text-2xl">Бидний тухай</CardTitle>
+    <Card className="border-0 shadow-md rounded-xl">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-xl">Бидний тухай</CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-gray-700 leading-relaxed text-base">{company.description}</p>
+        <p className="text-gray-700 leading-relaxed text-sm">{company.description}</p>
       </CardContent>
     </Card>
   );

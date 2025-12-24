@@ -118,30 +118,42 @@ export default function CreateGuidePage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto py-8 w-full">
+    <div className="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8 w-full">
       {/* Header */}
-      <div className="flex items-center gap-4 mb-8">
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
-          <User className="w-8 h-8 text-white" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-bold">Шинэ хөтөч нэмэх</h1>
-          <p className="text-slate-600">Хөтчийн мэдээллийг бүрэн бөглөнө үү</p>
+      <div className="mb-6 space-y-3">
+        <Link href="/dashboard/company/guides">
+          <Button variant="ghost" size="sm" className="hover:bg-gray-100 -ml-2">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Буцах
+          </Button>
+        </Link>
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-md">
+            <User className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Шинэ хөтөч нэмэх</h1>
+            <p className="text-sm text-gray-600">Хөтчийн мэдээллийг бүрэн бөглөнө үү</p>
+          </div>
         </div>
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 pb-24">
           {/* Profile Image */}
-          <Card className="border-slate-200">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <ImageIcon className="w-5 h-5 text-blue-600" />
-                Профайл зураг
-              </CardTitle>
-              <CardDescription>Хөтчийн профайл зургийг оруулна уу</CardDescription>
+          <Card className="border-gray-200 shadow-sm overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-purple-50 to-pink-50 border-b border-gray-200 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center shadow-sm">
+                  <ImageIcon className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <CardTitle className="text-base font-bold text-gray-900">Профайл зураг</CardTitle>
+                  <CardDescription className="text-sm">Хөтчийн профайл зургийг оруулна уу</CardDescription>
+                </div>
+              </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-5">
               <FormField
                 control={form.control}
                 name="profileImage"
@@ -152,24 +164,24 @@ export default function CreateGuidePage() {
                         <div className="flex items-center gap-4">
                           {imagePreview && (
                             <div className="relative">
-                              <img src={imagePreview} alt="Preview" className="w-24 h-24 rounded-xl object-cover border-2 border-slate-200" />
+                              <img src={imagePreview} alt="Preview" className="w-20 h-20 rounded-xl object-cover border-2 border-gray-200 shadow-sm" />
                               {isUploadingImage && (
                                 <div className="absolute inset-0 bg-black/50 rounded-xl flex items-center justify-center">
-                                  <Loader2 className="w-6 h-6 text-white animate-spin" />
+                                  <Loader2 className="w-5 h-5 text-white animate-spin" />
                                 </div>
                               )}
                             </div>
                           )}
                           <label
                             htmlFor="profile-image"
-                            className="flex-1 cursor-pointer border-2 border-dashed border-slate-300 rounded-xl p-6 hover:border-blue-400 hover:bg-blue-50/30 transition-all"
+                            className="flex-1 cursor-pointer border-2 border-dashed border-gray-300 rounded-lg p-5 hover:border-purple-400 hover:bg-purple-50/50 transition-all"
                           >
                             <div className="flex flex-col items-center text-center">
-                              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-2">
-                                <ImageIcon className="w-6 h-6 text-blue-600" />
+                              <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mb-2">
+                                <ImageIcon className="w-5 h-5 text-purple-600" />
                               </div>
-                              <p className="text-sm font-medium text-slate-700">Зураг сонгох</p>
-                              <p className="text-xs text-slate-500 mt-1">PNG, JPG • Хамгийн их 10MB</p>
+                              <p className="text-sm font-medium text-gray-700">Зураг сонгох</p>
+                              <p className="text-xs text-gray-500 mt-1">PNG, JPG • Хамгийн их 10MB</p>
                             </div>
                             <input
                               id="profile-image"
@@ -195,25 +207,29 @@ export default function CreateGuidePage() {
           </Card>
 
           {/* Personal Information */}
-          <Card className="border-slate-200">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <User className="w-5 h-5 text-blue-600" />
-                Хувийн мэдээлэл
-              </CardTitle>
-              <CardDescription>Хөтчийн үндсэн мэдээлэл</CardDescription>
+          <Card className="border-gray-200 shadow-sm overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-sm">
+                  <User className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <CardTitle className="text-base font-bold text-gray-900">Хувийн мэдээлэл</CardTitle>
+                  <CardDescription className="text-sm">Хөтчийн үндсэн мэдээлэл</CardDescription>
+                </div>
+              </div>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 pt-5">
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Нэр *</FormLabel>
+                    <FormLabel className="text-sm font-semibold text-gray-700">Нэр *</FormLabel>
                     <FormControl>
-                      <Input placeholder="Бат Болд" {...field} disabled={loading} />
+                      <Input placeholder="Бат Болд" {...field} disabled={loading} className="border-gray-300" />
                     </FormControl>
-                    <FormDescription>Хөтчийн бүтэн нэр</FormDescription>
+                    <FormDescription className="text-xs">Хөтчийн бүтэн нэр</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -224,14 +240,14 @@ export default function CreateGuidePage() {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="flex items-center gap-2">
-                      <FileText className="w-4 h-4" />
+                    <FormLabel className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                      <FileText className="w-3.5 h-3.5" />
                       Тайлбар *
                     </FormLabel>
                     <FormControl>
-                      <Textarea placeholder="Хөтчийн туршлага, мэргэжлийн талаар товч тайлбар бичнэ үү" rows={4} {...field} disabled={loading} />
+                      <Textarea placeholder="Хөтчийн туршлага, мэргэжлийн талаар товч тайлбар бичнэ үү" rows={3} {...field} disabled={loading} className="border-gray-300" />
                     </FormControl>
-                    <FormDescription>Хөтчийн туршлага, мэргэжил</FormDescription>
+                    <FormDescription className="text-xs">Хөтчийн туршлага, мэргэжил</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -240,27 +256,31 @@ export default function CreateGuidePage() {
           </Card>
 
           {/* Contact Information */}
-          <Card className="border-slate-200">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Mail className="w-5 h-5 text-emerald-600" />
-                Холбоо барих мэдээлэл
-              </CardTitle>
-              <CardDescription>И-мэйл болон утасны дугаар</CardDescription>
+          <Card className="border-gray-200 shadow-sm overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-emerald-50 to-teal-50 border-b border-gray-200 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-sm">
+                  <Mail className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <CardTitle className="text-base font-bold text-gray-900">Холбоо барих мэдээлэл</CardTitle>
+                  <CardDescription className="text-sm">И-мэйл болон утасны дугаар</CardDescription>
+                </div>
+              </div>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="pt-5">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="flex items-center gap-2">
-                        <Mail className="w-4 h-4" />
+                      <FormLabel className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                        <Mail className="w-3.5 h-3.5" />
                         И-мэйл *
                       </FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="example@mail.com" {...field} disabled={loading} />
+                        <Input type="email" placeholder="example@mail.com" {...field} disabled={loading} className="border-gray-300" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -272,12 +292,12 @@ export default function CreateGuidePage() {
                   name="phoneNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="flex items-center gap-2">
-                        <Phone className="w-4 h-4" />
+                      <FormLabel className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                        <Phone className="w-3.5 h-3.5" />
                         Утас *
                       </FormLabel>
                       <FormControl>
-                        <Input type="tel" placeholder="+976 9999-1234" {...field} disabled={loading} />
+                        <Input type="tel" placeholder="+976 9999-1234" {...field} disabled={loading} className="border-gray-300" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -287,31 +307,32 @@ export default function CreateGuidePage() {
             </CardContent>
           </Card>
 
-          {/* Actions */}
-          <div className="flex items-center gap-4">
-            <Button
-              type="submit"
-              disabled={loading || isUploadingImage}
-              className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Хадгалж байна...
-                </>
-              ) : (
-                <>
-                  <Save className="w-4 h-4 mr-2" />
-                  Хөтөч үүсгэх
-                </>
-              )}
-            </Button>
-            <Link href="/dashboard/company/guides">
-              <Button type="button" variant="outline" className="border-slate-300" disabled={loading}>
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Буцах
+          {/* Sticky Actions */}
+          <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-lg z-10">
+            <div className="max-w-4xl mx-auto flex items-center gap-3">
+              <Button
+                type="submit"
+                disabled={loading || isUploadingImage}
+                className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-md hover:shadow-lg transition-all"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Хадгалж байна...
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4 mr-2" />
+                    Хөтөч үүсгэх
+                  </>
+                )}
               </Button>
-            </Link>
+              <Link href="/dashboard/company/guides">
+                <Button type="button" variant="outline" className="border-gray-300" disabled={loading}>
+                  Цуцлах
+                </Button>
+              </Link>
+            </div>
           </div>
         </form>
       </Form>

@@ -22,7 +22,7 @@ export default function CompanyDetailPage() {
   });
 
   const { data: travelsData, loading: travelsLoading } = useGetTravelsByCompanyQuery({
-    variables: { companyId: parseInt(id) },
+    variables: { input: { companyId: parseInt(id) } },
   });
 
   const { data: categoriesData } = useGetCategoriesQuery();
@@ -67,19 +67,19 @@ export default function CompanyDetailPage() {
   }
 
   const company = data.getCompany;
-  const allTravels = travelsData?.getTravelsByCompany || [];
+  const allTravels = travelsData?.getTravelsByCompany?.travels || [];
 
   // Filter travels based on selected filters
-  const filteredTravels = allTravels.filter((travel) => {
+  const filteredTravels = allTravels.filter((travel: any) => {
     // Filter by category
     if (selectedCategoryId) {
-      const matchesCategory = travel.subCategories?.some((sub) => sub.categoryId.toString() === selectedCategoryId);
+      const matchesCategory = travel.subCategories?.some((sub: any) => sub.categoryId.toString() === selectedCategoryId);
       if (!matchesCategory) return false;
     }
 
     // Filter by subcategories
     if (selectedSubCategoryIds.length > 0) {
-      const matchesSubCategory = travel.subCategories?.some((sub) => selectedSubCategoryIds.includes(sub.id.toString()));
+      const matchesSubCategory = travel.subCategories?.some((sub: any) => selectedSubCategoryIds.includes(sub.id.toString()));
       if (!matchesSubCategory) return false;
     }
 
@@ -101,15 +101,15 @@ export default function CompanyDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       {/* Hero Section */}
       <CompanyHero company={company} />
 
       {/* Content */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid lg:grid-cols-3 gap-8">
+      <div className="container mx-auto px-4 py-8">
+        <div className="grid lg:grid-cols-3 gap-6">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-6">
             {/* About */}
             <CompanyAbout company={company} />
 

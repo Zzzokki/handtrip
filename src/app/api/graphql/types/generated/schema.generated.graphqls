@@ -1,5 +1,6 @@
 type Agenda {
   createdAt: Timestamp!
+  day: Int!
   description: String!
   id: Int!
   name: String!
@@ -60,6 +61,18 @@ input CreateGuideInput {
   name: String!
   phoneNumber: String!
   profileImage: String!
+}
+
+input CreateOrderInput {
+  paymentIntentId: String!
+  travelSessionId: Int!
+  travelers: [TravelerInput!]!
+}
+
+type CreateOrderResponse {
+  message: String!
+  order: Order!
+  success: Boolean!
 }
 
 input CreateTravelInput {
@@ -164,6 +177,7 @@ type Mutation {
   createCustomer(input: CreateCustomerInput!): Customer!
   createDestination(location: String!, name: String!): Destination!
   createGuide(input: CreateGuideInput!): Guide!
+  createOrder(input: CreateOrderInput!): CreateOrderResponse!
   createTravelByCompany(input: CreateTravelInput!): Travel!
   deleteCompany(id: Int!): Company!
   deleteCustomer(id: Int!): Customer!
@@ -199,6 +213,8 @@ type Payment {
   id: Int!
   isPaid: Boolean!
   paidAt: Timestamp
+  stripePaymentIntentId: String
+  stripePaymentMethod: String
   total: Int!
   updatedAt: Timestamp!
 }
@@ -268,7 +284,7 @@ enum SeatStatus {
 type SubCategory {
   categoryId: Int!
   createdAt: Timestamp!
-  id: ID!
+  id: Int!
   name: String!
   updatedAt: Timestamp!
 }
@@ -286,6 +302,7 @@ type Travel {
   destination: Destination!
   destinationId: Int!
   duration: Int!
+  gallery: [String!]!
   id: Int!
   name: String!
   subCategories: [SubCategory!]!
@@ -301,6 +318,7 @@ type TravelSession {
   guideId: Int!
   id: Int!
   startDate: Timestamp!
+  travel: Travel!
   travelId: Int!
   updatedAt: Timestamp!
 }
@@ -316,6 +334,13 @@ type Traveler {
   seat: Seat!
   seatId: Int!
   updatedAt: Timestamp!
+}
+
+input TravelerInput {
+  dateOfBirth: Timestamp!
+  email: String!
+  name: String!
+  phoneNumber: String!
 }
 
 input UpdateCompanyInput {

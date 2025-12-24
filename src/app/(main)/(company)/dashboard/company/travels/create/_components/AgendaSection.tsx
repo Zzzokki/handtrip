@@ -127,34 +127,34 @@ export const AgendaSection = ({ form }: AgendaSectionProps) => {
   };
 
   return (
-    <Card className="overflow-hidden shadow-sm">
-      <CardHeader className="bg-gradient-to-r from-slate-50 to-white border-b border-slate-100">
+    <Card className="overflow-hidden shadow-sm border border-gray-200">
+      <CardHeader className="bg-gradient-to-r from-purple-50 to-pink-50 border-b border-gray-200">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
-            <Calendar className="w-5 h-5 text-purple-600" />
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center shadow-md">
+            <Calendar className="w-5 h-5 text-white" />
           </div>
           <div>
-            <CardTitle className="text-xl">Аяллын хөтөлбөр</CardTitle>
-            <CardDescription>Өдөр тутмын үйл ажиллагааг тодорхойлно уу</CardDescription>
+            <CardTitle className="text-lg font-bold text-gray-900">Аяллын хөтөлбөр</CardTitle>
+            <CardDescription className="text-sm">Өдөр тутмын үйл ажиллагааг тодорхойлно уу</CardDescription>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="pt-6 space-y-5">
-        {agendas.length === 0 && <p className="text-sm text-slate-500">Аяллын хугацааг оруулснаар хөтөлбөрийн хэсэг үүснэ.</p>}
+      <CardContent className="pt-5 space-y-4">
+        {agendas.length === 0 && <p className="text-sm text-gray-500">Аяллын хугацааг оруулснаар хөтөлбөрийн хэсэг үүснэ.</p>}
 
         {agendas.length > 0 && (
-          <Accordion type="single" collapsible className="w-full" defaultValue="item-1">
+          <Accordion type="single" collapsible className="w-full" defaultValue="1">
             {agendas.map((agenda) => (
-              <AccordionItem value={agenda.day.toString()} key={agenda.day}>
-                <AccordionTrigger>
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
-                      <Calendar className="w-4 h-4 text-purple-600" />
+              <AccordionItem value={agenda.day.toString()} key={agenda.day} className="border-gray-200">
+                <AccordionTrigger className="hover:no-underline hover:bg-gray-50 px-3 rounded-lg">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center shadow-sm">
+                      <span className="text-white text-sm font-bold">{agenda.day}</span>
                     </div>
-                    <span className="font-semibold text-purple-700">Өдөр {agenda.day}</span>
+                    <span className="font-semibold text-gray-900">Өдөр {agenda.day}</span>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="flex flex-col gap-4 text-balance">
+                <AccordionContent className="px-3 pt-3">
                   <AgendaItenaryItem key={agenda.day} agenda={agenda} handleChangeAgendaByDay={handleChangeAgendaByDay} handleChangeNameByDay={handleChangeNameByDay} />
                 </AccordionContent>
               </AccordionItem>

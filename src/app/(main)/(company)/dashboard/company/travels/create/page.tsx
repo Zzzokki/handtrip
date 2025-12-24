@@ -123,48 +123,48 @@ export default function CreateTravelPage() {
   console.log(v);
 
   return (
-    <div className="max-w-6xl mx-auto">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-8">
-        <CreateTravelHeader />
+    <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 w-full">
+      <CreateTravelHeader />
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <BasicInfoSection form={form} />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <BasicInfoSection form={form} />
 
-            <UploadGallery
-              onUploadComplete={(urls) => {
-                console.log("urls", urls);
-                form.setValue("gallery", urls);
-              }}
-            />
+          <UploadGallery
+            onUploadComplete={(urls) => {
+              console.log("urls", urls);
+              form.setValue("gallery", urls);
+            }}
+          />
 
-            <AgendaSection form={form} />
+          <AgendaSection form={form} />
 
-            <TravelSessionsSection form={form} />
+          <TravelSessionsSection form={form} />
 
-            <div className="flex gap-3 justify-end">
+          <div className="sticky bottom-0 bg-white border-t border-gray-200 p-4 -mx-4 sm:-mx-6 lg:-mx-8 shadow-lg">
+            <div className="max-w-7xl mx-auto flex gap-3 justify-end">
               <Link href="/dashboard/company/travels">
-                <Button type="button" variant="outline" className="w-full border-slate-300 hover:bg-slate-100" disabled={loading}>
+                <Button type="button" variant="outline" className="border-gray-300 hover:bg-gray-100" disabled={loading}>
                   Цуцлах
                 </Button>
               </Link>
-              <Button type="submit" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-md hover:shadow-lg transition-all" disabled={loading}>
+              <Button type="submit" className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-md hover:shadow-lg transition-all" disabled={loading}>
                 {loading ? (
                   <>
-                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                     Үүсгэж байна...
                   </>
                 ) : (
                   <>
-                    <CheckCircle2 className="w-5 h-5 mr-2" />
+                    <CheckCircle2 className="w-4 h-4 mr-2" />
                     Аяллын багц үүсгэх
                   </>
                 )}
               </Button>
             </div>
-          </form>
-        </Form>
-      </div>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 }

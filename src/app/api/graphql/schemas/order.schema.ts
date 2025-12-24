@@ -29,11 +29,34 @@ export const orderTypeDefs = gql`
     updatedAt: Timestamp!
   }
 
+  input TravelerInput {
+    name: String!
+    email: String!
+    phoneNumber: String!
+    dateOfBirth: Timestamp!
+  }
+
+  input CreateOrderInput {
+    travelSessionId: Int!
+    travelers: [TravelerInput!]!
+    paymentIntentId: String!
+  }
+
+  type CreateOrderResponse {
+    order: Order!
+    success: Boolean!
+    message: String!
+  }
+
   type Query {
     getOrders: [Order!]!
     getOrder(id: Int!): Order!
     getOrdersByCustomer(customerId: Int!): [Order!]!
     getOrdersByCompany(companyId: Int!): [Order!]!
     getOrdersByTravelSession(travelSessionId: Int!): [Order!]!
+  }
+
+  type Mutation {
+    createOrder(input: CreateOrderInput!): CreateOrderResponse!
   }
 `;

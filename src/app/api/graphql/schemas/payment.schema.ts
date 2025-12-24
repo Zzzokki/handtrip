@@ -9,6 +9,10 @@ export const paymentTypeDefs = gql`
     isPaid: Boolean!
     paidAt: Timestamp
 
+    # Stripe fields
+    stripePaymentIntentId: String
+    stripePaymentMethod: String
+
     # Timestamps
     createdAt: Timestamp!
     updatedAt: Timestamp!

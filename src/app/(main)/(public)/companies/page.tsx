@@ -51,27 +51,27 @@ export default function CompaniesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white py-20">
-        <div className="container mx-auto px-4 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full mb-6">
-            <Sparkles className="w-4 h-4" />
-            <span className="text-sm font-medium">Итгэлтэй түншүүд</span>
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+      <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white py-12 md:py-16">
+        <div className="container mx-auto px-4 text-center pt-8">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-sm rounded-full mb-4">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span className="text-xs font-semibold">Итгэлтэй түншүүд</span>
           </div>
-          <h1 className="text-5xl md:text-6xl font-bold mb-4">Аялал жуулчлалын компаниуд</h1>
-          <p className="text-xl text-white/90 max-w-2xl mx-auto">Мэргэжлийн аялал жуулчлалын компаниудын гайхалтай санал, үйлчилгээг судлаарай</p>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-2">Аялал жуулчлалын компаниуд</h1>
+          <p className="text-sm md:text-base text-white/90 max-w-2xl mx-auto">Мэргэжлийн аялал жуулчлалын компаниудын гайхалтай санал, үйлчилгээг судлаарай</p>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 -mt-8">
-        <div className="mb-12">
+      <div className="container mx-auto px-4 -mt-6">
+        <div className="mb-8">
           <CompanySearch searchQuery={searchQuery} onSearchChange={setSearchQuery} />
         </div>
 
         {filteredCompanies && <CompanyGrid companies={filteredCompanies} searchQuery={searchQuery} onClearSearch={() => setSearchQuery("")} />}
       </div>
 
-      <div className="py-12" />
+      <div className="py-8" />
     </div>
   );
 }

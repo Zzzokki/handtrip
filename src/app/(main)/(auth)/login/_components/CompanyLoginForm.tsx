@@ -6,9 +6,11 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/components/providers";
 import { useLoginAsCompanyMutation } from "@/types/generated";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Building2, Lock, LogIn } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 
 const loginFormSchema = z.object({
@@ -45,16 +47,14 @@ export const CompanyLoginForm = () => {
         login(
           {
             id: company.id.toString(),
-            name: company.name,
-            email: company.email,
-            type: "company",
+            role: "company",
           },
           token
         );
         router.push("/dashboard/company");
       }
     } catch (error: any) {
-      alert(error.message || "Invalid username or password");
+      toast.error(error.message || "Invalid username or password");
       console.error(error);
     }
   }
@@ -67,9 +67,12 @@ export const CompanyLoginForm = () => {
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Хэрэглэгчийн нэр</FormLabel>
+              <FormLabel className="text-sm font-semibold text-gray-700">Хэрэглэгчийн нэр</FormLabel>
               <FormControl>
-                <Input placeholder="Компанийн хэрэглэгчийн нэр" type="text" disabled={loading} {...field} />
+                <div className="relative">
+                  <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Input placeholder="Компанийн хэрэглэгчийн нэр" type="text" disabled={loading} className="pl-10 h-10 border-gray-300 focus-visible:ring-blue-500" {...field} />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -80,23 +83,40 @@ export const CompanyLoginForm = () => {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Нууц үг</FormLabel>
+              <FormLabel className="text-sm font-semibold text-gray-700">Нууц үг</FormLabel>
               <FormControl>
-                <Input placeholder="Нууц үгээ оруулна уу" type="password" disabled={loading} {...field} />
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Input placeholder="Нууц үгээ оруулна уу" type="password" disabled={loading} className="pl-10 h-10 border-gray-300 focus-visible:ring-blue-500" {...field} />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <div className="flex items-center justify-between">
-          <Link href="/forgot-password" className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors">
+        <div className="flex items-center justify-end">
+          <Link href="/forgot-password" className="text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors hover:underline">
             Нууц үгээ мартсан?
           </Link>
         </div>
 
-        <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" size="lg" disabled={loading}>
-          {loading ? "Нэвтэрч байна..." : `Компани нэвтрэх`}
+        <Button
+          type="submit"
+          className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 h-10 font-semibold shadow-md hover:shadow-lg transition-all duration-200"
+          disabled={loading}
+        >
+          {loading ? (
+            <>
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+              Нэвтэрч байна...
+            </>
+          ) : (
+            <>
+              <LogIn className="w-4 h-4 mr-2" />
+              Компани нэвтрэх
+            </>
+          )}
         </Button>
       </form>
     </Form>

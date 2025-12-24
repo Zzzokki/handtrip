@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { Travel } from "@/types/generated";
 import { Calendar, ChevronRight, ShoppingCart, User, Users } from "lucide-react";
 import Link from "next/link";
@@ -44,39 +45,36 @@ export const TravelOrder = ({ travel }: TravelOrderProps) => {
   };
 
   return (
-    <Card className="overflow-hidden">
-      <div className="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 px-6 py-4 relative overflow-hidden">
+    <Card className="overflow-hidden border-gray-200 shadow-md hover:shadow-lg transition-shadow duration-300">
+      <div className="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 px-5 py-3.5 relative overflow-hidden">
         <div className="relative">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-white/20 backdrop-blur-xl rounded-xl border border-white/30">
+          <div className="flex items-center gap-2.5">
+            <div className="p-1.5 bg-white/20 backdrop-blur-xl rounded-lg border border-white/30">
               <ShoppingCart className="w-4 h-4 text-white" />
             </div>
-            <CardTitle className="text-2xl font-bold text-white">Захиалга өгөх</CardTitle>
+            <CardTitle className="text-lg font-bold text-white">Захиалга өгөх</CardTitle>
           </div>
         </div>
       </div>
 
-      <CardContent className="space-y-6 p-6">
-        <div className="space-y-3">
-          <Label htmlFor="session" className="text-base font-semibold text-gray-900 flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-blue-600" />
+      <CardContent className="space-y-5 p-5">
+        <div className="space-y-2.5">
+          <Label htmlFor="session" className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+            <Calendar className="w-4 h-4 text-blue-600" />
             Огноо сонгох
           </Label>
           <Select value={selectedSession} onValueChange={setSelectedSession}>
-            <SelectTrigger
-              id="session"
-              className="h-12 text-base border-2 border-gray-200 hover:border-blue-500 focus:border-blue-600 transition-all duration-300 rounded-xl bg-gradient-to-r from-white to-gray-50"
-            >
+            <SelectTrigger id="session" className="h-10 text-sm border-2 border-gray-200 hover:border-blue-400 focus:border-blue-500 transition-all duration-200 rounded-lg bg-white">
               <SelectValue placeholder="Огноо сонгоно уу" />
             </SelectTrigger>
-            <SelectContent className="rounded-xl">
+            <SelectContent className="rounded-lg">
               {travelSessions.map((session) => (
-                <SelectItem key={session.id} value={session.id.toString()} className="py-2 h-12 rounded-lg hover:bg-blue-50">
-                  <div className="flex items-center gap-3">
-                    <div className="p-1 bg-blue-100 rounded-lg">
-                      <Calendar className="w-4 h-4 text-blue-600" />
+                <SelectItem key={session.id} value={session.id.toString()} className="py-2.5 h-auto rounded-md hover:bg-blue-50">
+                  <div className="flex items-center gap-2.5">
+                    <div className="p-1 bg-blue-100 rounded-md">
+                      <Calendar className="w-3.5 h-3.5 text-blue-600" />
                     </div>
-                    <span className="font-semibold text-gray-900">
+                    <span className="font-medium text-gray-900 text-sm">
                       {new Date(session.startDate).toLocaleDateString("mn-MN", { month: "short", day: "numeric" })} -{" "}
                       {new Date(session.endDate).toLocaleDateString("mn-MN", { month: "short", day: "numeric" })}
                     </span>
@@ -87,79 +85,77 @@ export const TravelOrder = ({ travel }: TravelOrderProps) => {
           </Select>
 
           {selectedSessionData && (
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-4 mt-3 hover:shadow-md transition-shadow">
-              <div className="flex items-start gap-3">
-                <div className="p-2 bg-blue-500 rounded-lg mt-0.5">
-                  <User className="w-5 h-5 text-white" />
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-3.5 mt-2 hover:shadow-sm transition-shadow">
+              <div className="flex items-start gap-2.5">
+                <div className="p-1.5 bg-blue-500 rounded-md mt-0.5">
+                  <User className="w-4 h-4 text-white" />
                 </div>
-                <div className="flex-1">
-                  <p className="text-sm font-bold text-gray-900 mb-1">Хөтөч: {selectedSessionData.guide.name}</p>
-                  {selectedSessionData.guide.description && <p className="text-sm text-gray-700 leading-relaxed">{selectedSessionData.guide.description}</p>}
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-bold text-gray-900 mb-0.5">Хөтөч: {selectedSessionData.guide.name}</p>
+                  {selectedSessionData.guide.description && <p className="text-xs text-gray-700 leading-relaxed line-clamp-2">{selectedSessionData.guide.description}</p>}
                 </div>
               </div>
             </div>
           )}
         </div>
 
-        <div className="space-y-3">
-          <Label htmlFor="travelers" className="text-base font-bold text-gray-900 flex items-center gap-2">
-            <Users className="w-5 h-5 text-purple-600" />
+        <div className="space-y-2.5">
+          <Label htmlFor="travelers" className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+            <Users className="w-4 h-4 text-purple-600" />
             Хүний тоо
           </Label>
-          <Select value={numberOfTravelers.toString()} onValueChange={(v) => setNumberOfTravelers(parseInt(v))}>
-            <SelectTrigger
+          <div className="relative">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 p-1 bg-purple-100 rounded-md">
+              <Users className="w-3.5 h-3.5 text-purple-600" />
+            </div>
+            <Input
               id="travelers"
-              className="h-12 text-base border-2 border-gray-200 hover:border-purple-500 focus:border-purple-600 transition-all duration-300 rounded-xl bg-gradient-to-r from-white to-gray-50"
-            >
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl">
-              {Array.from({ length: Math.min(10, travel.totalSeatNumber) }, (_, i) => (
-                <SelectItem key={i + 1} value={(i + 1).toString()} className="py-4 rounded-lg hover:bg-purple-50">
-                  <div className="flex items-center gap-3">
-                    <div className="p-1 bg-purple-100 rounded-lg">
-                      <Users className="w-4 h-4 text-purple-600" />
-                    </div>
-                    <span className="font-semibold text-gray-900">
-                      {i + 1} {i === 0 ? "хүн" : "хүн"}
-                    </span>
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="border-t border-gray-100 pt-4">
-          <div className="flex justify-between items-center py-2 px-6 bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
-            <span className="text-gray-700 font-semibold flex items-center gap-3">
-              <div className="p-1 bg-blue-100 rounded-lg">
-                <Users className="w-4 h-4 text-blue-600" />
-              </div>
-              Нийт суудал
-            </span>
-            <span className="font-bold text-xl text-gray-900">{travel.totalSeatNumber}</span>
+              type="number"
+              min={1}
+              max={travel.totalSeatNumber}
+              value={numberOfTravelers}
+              onChange={(e) => {
+                const value = parseInt(e.target.value);
+                if (value >= 1 && value <= travel.totalSeatNumber) {
+                  setNumberOfTravelers(value);
+                }
+              }}
+              className="h-10 pl-11 text-sm border-2 border-gray-200 hover:border-purple-400 focus:border-purple-500 transition-all duration-200 rounded-lg bg-white font-medium"
+              placeholder="Хүний тоо оруулна уу"
+            />
           </div>
         </div>
 
-        <div className="space-y-4 pt-2">
+        <div className="border-t border-gray-100 pt-4">
+          <div className="flex justify-between items-center py-2.5 px-4 bg-gradient-to-r from-gray-50 to-blue-50 rounded-lg border border-gray-200 hover:shadow-sm transition-shadow">
+            <span className="text-gray-700 font-semibold flex items-center gap-2 text-sm">
+              <div className="p-1 bg-blue-100 rounded-md">
+                <Users className="w-3.5 h-3.5 text-blue-600" />
+              </div>
+              Нийт суудал
+            </span>
+            <span className="font-bold text-lg text-gray-900">{travel.totalSeatNumber}</span>
+          </div>
+        </div>
+
+        <div className="space-y-3 pt-1">
           <Button
             onClick={handleBooking}
-            className="w-full h-12 text-lg font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 shadow-xl hover:shadow-2xl transition-all duration-300 rounded-xl group relative overflow-hidden"
+            className="w-full h-11 text-base font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-300 rounded-lg group relative overflow-hidden"
             disabled={!selectedSession}
           >
-            <ShoppingCart className="w-6 h-6 mr-3" />
+            <ShoppingCart className="w-5 h-5 mr-2" />
             {user ? "Захиалга үүсгэх" : "Нэвтрэх"}
-            <ChevronRight className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform" />
+            <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
           </Button>
 
           {!user && (
-            <div className="text-sm text-center bg-gradient-to-r from-amber-50 to-yellow-50 border-2 border-amber-200 rounded-xl p-4 shadow-sm">
+            <div className="text-xs text-center bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-lg p-3 shadow-sm">
               <p className="text-gray-700 font-medium">
                 Захиалга өгөхийн тулд{" "}
-                <Link href="/login" className="text-blue-600 hover:text-blue-700 font-bold hover:underline inline-flex items-center gap-1">
+                <Link href="/login" className="text-blue-600 hover:text-blue-700 font-bold hover:underline inline-flex items-center gap-0.5">
                   нэвтрэх
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className="w-3.5 h-3.5" />
                 </Link>{" "}
                 шаардлагатай
               </p>
