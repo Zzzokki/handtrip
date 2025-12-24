@@ -41,10 +41,7 @@ export default function ProfilePage() {
               iTrip
             </Link>
             <div className="flex gap-4 items-center">
-              <Link
-                href="/trips"
-                className="text-gray-600 hover:text-gray-900 transition-colors"
-              >
+              <Link href="/trips" className="text-gray-600 hover:text-gray-900 transition-colors">
                 Browse Trips
               </Link>
               <Button variant="outline" onClick={logout}>
@@ -75,38 +72,28 @@ export default function ProfilePage() {
             {/* User Details */}
             <div className="space-y-6">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">
-                  {user.name}
-                </h2>
+                <h2 className="text-2xl font-bold text-gray-900">{user.name}</h2>
                 <p className="text-gray-500">Customer Account</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="text-sm font-semibold text-gray-700">
-                    Email
-                  </label>
+                  <label className="text-sm font-semibold text-gray-700">Email</label>
                   <p className="mt-1 text-gray-900">{user.email}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-semibold text-gray-700">
-                    User ID
-                  </label>
+                  <label className="text-sm font-semibold text-gray-700">User ID</label>
                   <p className="mt-1 text-gray-600">{user.id}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-semibold text-gray-700">
-                    Account Type
-                  </label>
-                  <p className="mt-1 text-gray-900 capitalize">{user.type}</p>
+                  <label className="text-sm font-semibold text-gray-700">Account Type</label>
+                  <p className="mt-1 text-gray-900 capitalize">{user.role}</p>
                 </div>
               </div>
 
               {/* Quick Actions */}
               <div className="pt-6 border-t border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                  Quick Actions
-                </h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <Link href="/trips">
                     <Button className="w-full" variant="outline">
@@ -129,13 +116,8 @@ export default function ProfilePage() {
 
         {/* Additional Info Card */}
         <div className="mt-6 bg-blue-50 rounded-xl p-6 border border-blue-100">
-          <h3 className="text-lg font-semibold text-blue-900 mb-2">
-            Welcome to iTrip!
-          </h3>
-          <p className="text-blue-700">
-            Start exploring amazing destinations and book your next adventure
-            with us.
-          </p>
+          <h3 className="text-lg font-semibold text-blue-900 mb-2">Welcome to iTrip!</h3>
+          <p className="text-blue-700">Start exploring amazing destinations and book your next adventure with us.</p>
         </div>
       </div>
     </div>

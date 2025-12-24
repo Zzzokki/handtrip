@@ -16,7 +16,7 @@ export default function CompanyOrdersPage() {
   });
 
   useEffect(() => {
-    if (!isLoading && (!isAuthenticated || user?.type !== "company")) {
+    if (!isLoading && (!isAuthenticated || user?.role !== "company")) {
       router.push("/login");
     }
   }, [isAuthenticated, isLoading, user, router]);

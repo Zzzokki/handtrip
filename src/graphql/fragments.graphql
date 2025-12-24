@@ -142,6 +142,8 @@ fragment PaymentFields on Payment {
   total
   isPaid
   paidAt
+  stripePaymentIntentId
+  stripePaymentMethod
   createdAt
   updatedAt
 }
