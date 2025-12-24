@@ -1,15 +1,25 @@
 "use client";
 
 import { useGetTravelsQuery } from "@/types/generated";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Pagination, TravelCard, TravelCardSkeleton, TravelFilter, TravelSearch } from "./_components";
 import { Inbox } from "lucide-react";
 
 export default function TravelsPage() {
+  const searchParams = useSearchParams();
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState("");
   const [subCategoryIds, setSubCategoryIds] = useState<number[]>([]);
+
+  // Initialize query from URL search params
+  useEffect(() => {
+    const searchQuery = searchParams.get("search");
+    if (searchQuery) {
+      setQuery(searchQuery);
+    }
+  }, [searchParams]);
 
   const { data, loading } = useGetTravelsQuery({
     variables: {

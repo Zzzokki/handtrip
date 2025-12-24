@@ -11,8 +11,8 @@ export async function POST(req: NextRequest) {
 
     // Create a PaymentIntent with the order amount and currency
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount * 100), // Stripe expects amount in cents
-      currency: "usd", // You can change this to your preferred currency
+      amount: Math.round(amount), // MNT doesn't use decimal units, so pass amount as-is
+      currency: "mnt", // Mongolian Tugrik
       automatic_payment_methods: {
         enabled: true,
       },

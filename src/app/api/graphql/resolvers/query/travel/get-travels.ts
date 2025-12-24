@@ -1,13 +1,30 @@
 import { QueryResolvers } from "@/api/types";
-import { db, travelSessionTable, travelTable } from "@/database";
-import { and, count, eq, exists, gte, ilike, inArray, lte, SQL } from "drizzle-orm";
+import { db, destinationTable, travelSessionTable, travelTable } from "@/database";
+import { and, count, eq, exists, gte, ilike, inArray, lte, or, SQL } from "drizzle-orm";
 
 export const getTravels: QueryResolvers["getTravels"] = async (_, { input }) => {
   const { page = 1, limit = 16, filters = {} } = input;
 
   const conditions: SQL[] = [];
 
-  if (filters.query) conditions.push(ilike(travelTable.name, `%${filters.query.toLowerCase().trim()}%`));
+  // Enhanced search: search in travel name, description, and destination name
+  if (filters.query) {
+    const searchTerm = `%${filters.query.toLowerCase().trim()}%`;
+
+    // Get destinations that match the search query
+    const matchingDestinations = await db.query.destinationTable.findMany({
+      where: (destination) => or(ilike(destination.name, searchTerm), ilike(destination.location, searchTerm)),
+    });
+
+    const matchingDestinationIds = matchingDestinations.map((d) => d.id);
+
+    // Search in travel name, description, or matching destinations
+    if (matchingDestinationIds.length > 0) {
+      conditions.push(or(ilike(travelTable.name, searchTerm), ilike(travelTable.description, searchTerm), inArray(travelTable.destinationId, matchingDestinationIds))!);
+    } else {
+      conditions.push(or(ilike(travelTable.name, searchTerm), ilike(travelTable.description, searchTerm))!);
+    }
+  }
 
   if (filters.destinationIds) conditions.push(inArray(travelTable.destinationId, filters.destinationIds));
 
