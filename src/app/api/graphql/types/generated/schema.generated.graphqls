@@ -172,6 +172,16 @@ type LoginAsCustomerResponse {
   token: String!
 }
 
+type ManagerStats {
+  activeTravels: Int!
+  pendingCompanies: Int!
+  todayOrders: Int!
+  totalCompanies: Int!
+  totalOrders: Int!
+  totalRevenue: Float!
+  totalUsers: Int!
+}
+
 type Mutation {
   createCompany(input: CreateCompanyInput!): Company!
   createCustomer(input: CreateCustomerInput!): Customer!
@@ -227,6 +237,7 @@ type Query {
   getDestinations: [Destination!]!
   getGuideByCompany(id: Int!): Guide!
   getGuidesByCompany: [Guide!]!
+  getManagerStats: ManagerStats!
   getMeAsCompany: Company!
   getMeAsCustomer: Customer!
   getOrder(id: Int!): Order!

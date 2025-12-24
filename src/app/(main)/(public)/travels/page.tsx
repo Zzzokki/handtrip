@@ -38,6 +38,16 @@ export default function TravelsPage() {
       }),
   });
 
+  // Debug: Log when filters change
+  useEffect(() => {
+    console.log("Filter state changed:", {
+      page,
+      query,
+      subCategoryIds,
+      subCategoryIdsLength: subCategoryIds.length,
+    });
+  }, [page, query, subCategoryIds]);
+
   const { travels, totalPages, totalTravels } = useMemo(() => {
     if (!data) return { travels: [], totalPages: 1, totalTravels: 0 };
     const { travels, totalPages, totalTravels } = data.getTravels;

@@ -10,7 +10,7 @@ export default function CompanyOrdersPage() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
 
-  const { data, loading, error } = useGetOrdersByCompanyQuery({
+  const { data, loading } = useGetOrdersByCompanyQuery({
     variables: { companyId: parseInt(user?.id || "0") },
     skip: !user?.id,
   });
@@ -32,14 +32,12 @@ export default function CompanyOrdersPage() {
     return { orders, stats };
   }, [data]);
 
-  if (isLoading || loading) {
-    return <LoadingSkeleton />;
-  }
+  if (isLoading || loading) return <LoadingSkeleton />;
 
   if (!user) return null;
 
   return (
-    <div className="max-w-6xl mx-auto py-8 w-full">
+    <div className="max-w-6xl mx-auto py-6 w-full">
       <OrdersHeader totalOrders={stats.totalOrders} />
 
       <OrderStats totalOrders={stats.totalOrders} confirmedOrders={stats.confirmedOrders} pendingOrders={stats.pendingOrders} totalRevenue={stats.totalRevenue} />

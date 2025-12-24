@@ -18,10 +18,15 @@ export const CategoryFilter = ({ subCategoryIds, setSubCategoryIds }: CategoryFi
   });
 
   const handleClick = (subCategoryId: number) => {
+    console.log("Category clicked:", subCategoryId, "Current selected:", subCategoryIds);
     if (subCategoryIds.includes(subCategoryId)) {
-      setSubCategoryIds(subCategoryIds.filter((id) => id !== subCategoryId));
+      const newIds = subCategoryIds.filter((id) => id !== subCategoryId);
+      console.log("Removing category, new IDs:", newIds);
+      setSubCategoryIds(newIds);
     } else {
-      setSubCategoryIds([...subCategoryIds, subCategoryId]);
+      const newIds = [...subCategoryIds, subCategoryId];
+      console.log("Adding category, new IDs:", newIds);
+      setSubCategoryIds(newIds);
     }
   };
 

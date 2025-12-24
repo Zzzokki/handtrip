@@ -1,0 +1,11 @@
+query GetManagerStats {
+  getManagerStats {
+    totalCompanies
+    totalOrders
+    totalUsers
+    totalRevenue
+    activeTravels
+    todayOrders
+    pendingCompanies
+  }
+}

@@ -6,15 +6,15 @@ interface OrdersHeaderProps {
 
 export const OrdersHeader = ({ totalOrders }: OrdersHeaderProps) => {
   return (
-    <div className="flex justify-between items-center w-full mb-8">
-      <div className="flex items-center gap-4">
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg">
-          <ShoppingBag className="w-8 h-8 text-white" />
+    <div className="mb-6">
+      <div className="flex items-center gap-2.5">
+        <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center">
+          <ShoppingBag className="w-4 h-4 text-blue-600" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold">Захиалгууд</h1>
-          <p className="text-slate-600">
-            Аяллын багцуудын бүх захиалгыг харах, удирдах • <span className="font-semibold text-emerald-600">{totalOrders} захиалга</span>
+          <h1 className="text-2xl font-bold text-gray-900">Захиалгууд</h1>
+          <p className="text-sm text-gray-500">
+            Нийт <span className="font-semibold text-gray-900">{totalOrders}</span> захиалга
           </p>
         </div>
       </div>

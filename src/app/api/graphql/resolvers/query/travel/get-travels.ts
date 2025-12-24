@@ -7,18 +7,15 @@ export const getTravels: QueryResolvers["getTravels"] = async (_, { input }) => 
 
   const conditions: SQL[] = [];
 
-  // Enhanced search: search in travel name, description, and destination name
   if (filters.query) {
     const searchTerm = `%${filters.query.toLowerCase().trim()}%`;
 
-    // Get destinations that match the search query
     const matchingDestinations = await db.query.destinationTable.findMany({
       where: (destination) => or(ilike(destination.name, searchTerm), ilike(destination.location, searchTerm)),
     });
 
     const matchingDestinationIds = matchingDestinations.map((d) => d.id);
 
-    // Search in travel name, description, or matching destinations
     if (matchingDestinationIds.length > 0) {
       conditions.push(or(ilike(travelTable.name, searchTerm), ilike(travelTable.description, searchTerm), inArray(travelTable.destinationId, matchingDestinationIds))!);
     } else {
@@ -33,13 +30,15 @@ export const getTravels: QueryResolvers["getTravels"] = async (_, { input }) => 
       where: (table, { inArray }) => inArray(table.subCategoryId, filters.subCategoryIds!),
     });
 
+    console.log(joins, "SUBCATEGORY JOINS");
+
     const travelIds = joins.map((join) => join.travelId);
 
-    // Only add the condition if we found matching travels
+    console.log(travelIds, "TRAVEL IDS");
+
     if (travelIds.length > 0) {
       conditions.push(inArray(travelTable.id, travelIds));
     } else {
-      // If no travels match the subcategories, return empty results
       conditions.push(eq(travelTable.id, -1));
     }
   }

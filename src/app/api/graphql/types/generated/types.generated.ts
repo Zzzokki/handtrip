@@ -204,6 +204,17 @@ export type LoginAsCustomerResponse = {
   token: Scalars['String']['output'];
 };
 
+export type ManagerStats = {
+  __typename?: 'ManagerStats';
+  activeTravels: Scalars['Int']['output'];
+  pendingCompanies: Scalars['Int']['output'];
+  todayOrders: Scalars['Int']['output'];
+  totalCompanies: Scalars['Int']['output'];
+  totalOrders: Scalars['Int']['output'];
+  totalRevenue: Scalars['Float']['output'];
+  totalUsers: Scalars['Int']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createCompany: Company;
@@ -353,6 +364,7 @@ export type Query = {
   getDestinations: Array<Destination>;
   getGuideByCompany: Guide;
   getGuidesByCompany: Array<Guide>;
+  getManagerStats: ManagerStats;
   getMeAsCompany: Company;
   getMeAsCustomer: Customer;
   getOrder: Order;
@@ -687,6 +699,8 @@ export type ResolversTypes = {
   Guide: ResolverTypeWrapper<Guide>;
   LoginAsCompanyResponse: ResolverTypeWrapper<LoginAsCompanyResponse>;
   LoginAsCustomerResponse: ResolverTypeWrapper<LoginAsCustomerResponse>;
+  ManagerStats: ResolverTypeWrapper<ManagerStats>;
+  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
   Order: ResolverTypeWrapper<Omit<Order, 'travelSession' | 'travelers'> & { travelSession: ResolversTypes['TravelSession'], travelers: Array<ResolversTypes['Traveler']> }>;
   Payment: ResolverTypeWrapper<Payment>;
@@ -732,6 +746,8 @@ export type ResolversParentTypes = {
   Guide: Guide;
   LoginAsCompanyResponse: LoginAsCompanyResponse;
   LoginAsCustomerResponse: LoginAsCustomerResponse;
+  ManagerStats: ManagerStats;
+  Float: Scalars['Float']['output'];
   Mutation: Record<PropertyKey, never>;
   Order: Omit<Order, 'travelSession' | 'travelers'> & { travelSession: ResolversParentTypes['TravelSession'], travelers: Array<ResolversParentTypes['Traveler']> };
   Payment: Payment;
@@ -842,6 +858,16 @@ export type LoginAsCustomerResponseResolvers<ContextType = Context, ParentType e
   token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 };
 
+export type ManagerStatsResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ManagerStats'] = ResolversParentTypes['ManagerStats']> = {
+  activeTravels?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  pendingCompanies?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  todayOrders?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  totalCompanies?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  totalOrders?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  totalRevenue?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  totalUsers?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createCompany?: Resolver<ResolversTypes['Company'], ParentType, ContextType, RequireFields<MutationcreateCompanyArgs, 'input'>>;
   createCustomer?: Resolver<ResolversTypes['Customer'], ParentType, ContextType, RequireFields<MutationcreateCustomerArgs, 'input'>>;
@@ -897,6 +923,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   getDestinations?: Resolver<Array<ResolversTypes['Destination']>, ParentType, ContextType>;
   getGuideByCompany?: Resolver<ResolversTypes['Guide'], ParentType, ContextType, RequireFields<QuerygetGuideByCompanyArgs, 'id'>>;
   getGuidesByCompany?: Resolver<Array<ResolversTypes['Guide']>, ParentType, ContextType>;
+  getManagerStats?: Resolver<ResolversTypes['ManagerStats'], ParentType, ContextType>;
   getMeAsCompany?: Resolver<ResolversTypes['Company'], ParentType, ContextType>;
   getMeAsCustomer?: Resolver<ResolversTypes['Customer'], ParentType, ContextType>;
   getOrder?: Resolver<ResolversTypes['Order'], ParentType, ContextType, RequireFields<QuerygetOrderArgs, 'id'>>;
@@ -1007,6 +1034,7 @@ export type Resolvers<ContextType = Context> = {
   Guide?: GuideResolvers<ContextType>;
   LoginAsCompanyResponse?: LoginAsCompanyResponseResolvers<ContextType>;
   LoginAsCustomerResponse?: LoginAsCustomerResponseResolvers<ContextType>;
+  ManagerStats?: ManagerStatsResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Order?: OrderResolvers<ContextType>;
   Payment?: PaymentResolvers<ContextType>;

@@ -59,7 +59,7 @@ export const createTravelByCompany: MutationResolvers["createTravelByCompany"] =
       company: true,
       subCategories: { with: { subCategory: true } },
       categories: { with: { category: true } },
-      travelSessions: { with: { guide: true } },
+      travelSessions: { with: { guide: true, seats: { with: { seatCost: true } } } },
       agenda: true,
       destination: true,
     },

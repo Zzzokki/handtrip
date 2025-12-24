@@ -101,6 +101,13 @@ export const UploadGallery = ({ onUploadComplete }: UploadGalleryProps) => {
       setImages((prev) => prev.map((img, i) => (i === index ? { ...img, url: blob.url, isUploading: false, progress: 100 } : img)));
 
       toast.success("Зураг амжилттай байршуулагдлаа!");
+
+      // Automatically update the form with all uploaded URLs
+      setImages((prevImages) => {
+        const uploadedUrls = prevImages.filter((img) => img.url).map((img) => img.url!);
+        onUploadComplete(uploadedUrls);
+        return prevImages;
+      });
     } catch {
       toast.error("Зураг байршуулахад алдаа гарлаа");
       setImages((prev) => prev.map((img, i) => (i === index ? { ...img, isUploading: false, progress: 0 } : img)));
@@ -129,7 +136,13 @@ export const UploadGallery = ({ onUploadComplete }: UploadGalleryProps) => {
     if (image.preview) {
       URL.revokeObjectURL(image.preview);
     }
-    setImages((prev) => prev.filter((_, i) => i !== index));
+    setImages((prev) => {
+      const newImages = prev.filter((_, i) => i !== index);
+      // Update the form with remaining uploaded URLs
+      const uploadedUrls = newImages.filter((img) => img.url).map((img) => img.url!);
+      onUploadComplete(uploadedUrls);
+      return newImages;
+    });
   };
 
   const clearAll = () => {
@@ -137,6 +150,8 @@ export const UploadGallery = ({ onUploadComplete }: UploadGalleryProps) => {
       if (img.preview) URL.revokeObjectURL(img.preview);
     });
     setImages([]);
+    // Clear the form gallery field
+    onUploadComplete([]);
   };
 
   const formatFileSize = (bytes: number) => {

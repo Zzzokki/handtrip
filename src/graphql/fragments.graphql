@@ -102,6 +102,9 @@ fragment TravelSessionWithRelations on TravelSession {
   guide {
     ...GuideFields
   }
+  seats {
+    ...SeatWithCost
+  }
 }
 
 # SeatCost Fragment
@@ -159,7 +162,7 @@ fragment TravelerFields on Traveler {
 fragment TravelerWithSeat on Traveler {
   ...TravelerFields
   seat {
-    ...SeatFields
+    ...SeatWithCost
   }
 }
 
@@ -189,7 +192,7 @@ fragment OrderWithRelations on Order {
     ...PaymentFields
   }
   travelers {
-    ...TravelerFields
+    ...TravelerWithSeat
   }
 }
 

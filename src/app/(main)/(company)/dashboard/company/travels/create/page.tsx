@@ -96,26 +96,47 @@ export default function CreateTravelPage() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    createTravel({
-      variables: {
-        input: {
-          name: values.name,
-          description: values.description,
-          coverImage: values.coverImage,
-          duration: values.duration,
-          totalSeatNumber: values.totalSeatNumber,
-          gallery: values.gallery,
-          destinationId: values.destinationId,
-          agendas: values.agendas.map((agenda) => ({
-            day: agenda.day,
-            name: agenda.name,
-            description: agenda.content,
-          })),
-          travelSessions: values.sessions,
-          subCategoryIds: values.subCategoryIds,
+    console.log("Form submitted with values:", values);
+
+    try {
+      await createTravel({
+        variables: {
+          input: {
+            name: values.name,
+            description: values.description,
+            coverImage: values.coverImage,
+            duration: values.duration,
+            totalSeatNumber: values.totalSeatNumber,
+            gallery: values.gallery,
+            destinationId: values.destinationId,
+            agendas: values.agendas.map((agenda) => ({
+              day: agenda.day,
+              name: agenda.name,
+              description: agenda.content,
+            })),
+            travelSessions: values.sessions,
+            subCategoryIds: values.subCategoryIds,
+          },
         },
-      },
+      });
+    } catch (error) {
+      console.error("Error creating travel:", error);
+    }
+  };
+
+  const handleFormError = (errors: any) => {
+    console.log("Form validation errors:", errors);
+
+    // Show toast for validation errors
+    const errorMessages = Object.entries(errors).map(([field, error]: [string, any]) => {
+      return `${field}: ${error.message}`;
     });
+
+    if (errorMessages.length > 0) {
+      toast.error("Форм бөглөхөд алдаа гарлаа", {
+        description: errorMessages.slice(0, 3).join(", "),
+      });
+    }
   };
 
   const v = form.watch();
@@ -127,7 +148,7 @@ export default function CreateTravelPage() {
       <CreateTravelHeader />
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit, handleFormError)} className="space-y-6">
           <BasicInfoSection form={form} />
 
           <UploadGallery
