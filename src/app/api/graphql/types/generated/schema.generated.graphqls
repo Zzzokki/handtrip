@@ -74,7 +74,7 @@ input CreateGuideInput {
 }
 
 input CreateOrderInput {
-  paymentIntentId: String
+  paymentIntentId: String!
   travelSessionId: Int!
   travelers: [TravelerInput!]!
 }
@@ -210,7 +210,6 @@ type Mutation {
   updateCompany(input: UpdateCompanyInput!): Company!
   updateCustomer(input: UpdateCustomerInput!): Customer!
   updateGuide(id: Int!, input: UpdateGuideInput!): Guide!
-  updateOrderPayment(input: UpdateOrderPaymentInput!): UpdateOrderPaymentResponse!
   updateTravel(id: Int!, input: CreateTravelInput!): Travel!
 }
 
@@ -394,15 +393,4 @@ input UpdateGuideInput {
   name: String
   phoneNumber: String
   profileImage: String
-}
-
-input UpdateOrderPaymentInput {
-  orderId: Int!
-  paymentIntentId: String!
-}
-
-type UpdateOrderPaymentResponse {
-  message: String!
-  order: Order!
-  success: Boolean!
 }

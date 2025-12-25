@@ -1,16 +1,49 @@
+"use client";
+
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin, Edit, Trash2, Users, Clock } from "lucide-react";
 import Image from "next/image";
-import { GetTravelsByCompanyQuery } from "@/types/generated";
+import { GetTravelsByCompanyQuery, useDeleteTravelMutation } from "@/types/generated";
+import { toast } from "sonner";
+import { useState } from "react";
 
 interface TravelCardProps {
   travel: GetTravelsByCompanyQuery["getTravelsByCompany"]["travels"][number];
 }
 
 export function TravelCard({ travel }: TravelCardProps) {
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteTravel] = useDeleteTravelMutation();
+
+  const handleDelete = async () => {
+    if (!confirm(`Та "${travel.name}" аялалыг устгахдаа итгэлтэй байна уу?`)) {
+      return;
+    }
+
+    setIsDeleting(true);
+    try {
+      const result = await deleteTravel({
+        variables: {
+          deleteTravelId: travel.id,
+        },
+        refetchQueries: ["GetTravelsByCompany"],
+        awaitRefetchQueries: true,
+      });
+
+      if (result.data?.deleteTravel) {
+        toast.success("Аялал амжилттай устгагдлаа");
+      }
+    } catch (error: any) {
+      console.error("Delete error:", error);
+      toast.error(error.message || "Аялал устгахад алдаа гарлаа");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <Card className="group relative overflow-hidden border border-gray-200 bg-white hover:shadow-xl hover:border-indigo-300 transition-all duration-300 hover:scale-[1.02]">
       <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -56,7 +89,7 @@ export function TravelCard({ travel }: TravelCardProps) {
               Засах
             </Button>
           </Link>
-          <Button variant="destructive" size="sm" className="bg-red-500 hover:bg-red-600 px-3">
+          <Button variant="destructive" size="sm" className="bg-red-500 hover:bg-red-600 px-3" onClick={handleDelete} disabled={isDeleting}>
             <Trash2 className="w-3.5 h-3.5" />
           </Button>
         </div>

@@ -1,13 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useGetTravelsByCompanyQuery } from "@/types/generated";
 import { TravelCard, TravelsHeader, EmptyState, Pagination, LoadingSkeleton } from "./_components";
 
 export default function CompanyTravelsPage() {
   const [page, setPage] = useState(1);
 
-  const { data, loading } = useGetTravelsByCompanyQuery({
+  const { data, loading, refetch } = useGetTravelsByCompanyQuery({
     variables: { input: { page } },
   });
 
@@ -16,6 +16,10 @@ export default function CompanyTravelsPage() {
     const { travels, totalPages, totalTravels } = data.getTravelsByCompany;
     return { travels, totalPages, totalTravels };
   }, [data]);
+
+  useEffect(() => {
+    refetch({ input: { page } });
+  }, [page, refetch]);
 
   return (
     <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 w-full">

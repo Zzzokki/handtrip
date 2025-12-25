@@ -1,0 +1,30 @@
+mutation UpdateTravel($updateTravelId: Int!, $input: CreateTravelInput!) {
+  updateTravel(id: $updateTravelId, input: $input) {
+    id
+    name
+    description
+    coverImage
+    duration
+    totalSeatNumber
+    destinationId
+    destination {
+      id
+      name
+    }
+    categories {
+      id
+      name
+    }
+    subCategories {
+      id
+      name
+    }
+  }
+}
+
+mutation DeleteTravel($deleteTravelId: Int!) {
+  deleteTravel(id: $deleteTravelId) {
+    id
+    name
+  }
+}

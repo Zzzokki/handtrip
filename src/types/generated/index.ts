@@ -98,7 +98,7 @@ export type CreateGuideInput = {
 };
 
 export type CreateOrderInput = {
-  paymentIntentId?: InputMaybe<Scalars['String']['input']>;
+  paymentIntentId: Scalars['String']['input'];
   travelSessionId: Scalars['Int']['input'];
   travelers: Array<TravelerInput>;
 };
@@ -244,7 +244,6 @@ export type Mutation = {
   updateCompany: Company;
   updateCustomer: Customer;
   updateGuide: Guide;
-  updateOrderPayment: UpdateOrderPaymentResponse;
   updateTravel: Travel;
 };
 
@@ -330,11 +329,6 @@ export type MutationUpdateCustomerArgs = {
 export type MutationUpdateGuideArgs = {
   id: Scalars['Int']['input'];
   input: UpdateGuideInput;
-};
-
-
-export type MutationUpdateOrderPaymentArgs = {
-  input: UpdateOrderPaymentInput;
 };
 
 
@@ -622,18 +616,6 @@ export type UpdateGuideInput = {
   profileImage?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type UpdateOrderPaymentInput = {
-  orderId: Scalars['Int']['input'];
-  paymentIntentId: Scalars['String']['input'];
-};
-
-export type UpdateOrderPaymentResponse = {
-  __typename?: 'UpdateOrderPaymentResponse';
-  message: Scalars['String']['output'];
-  order: Order;
-  success: Scalars['Boolean']['output'];
-};
-
 export type LoginAsCompanyMutationVariables = Exact<{
   username: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -809,13 +791,6 @@ export type CreateOrderMutationVariables = Exact<{
 
 export type CreateOrderMutation = { __typename?: 'Mutation', createOrder: { __typename?: 'CreateOrderResponse', success: boolean, message: string, order: { __typename?: 'Order', id: number, totalSeats: number, totalPrice: number, orderStatus: number, customerId: number, travelSessionId: number, paymentId: number, createdAt: any, updatedAt: any, customer: { __typename?: 'Customer', id: number, firstName: string, lastName: string, phoneNumber: string, email: string, username: string, createdAt: any, updatedAt: any }, travelSession: { __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any }, seats: Array<{ __typename?: 'Seat', id: number, status: SeatStatus, travelSessionId: number, seatCostId: number, createdAt: any, updatedAt: any, seatCost: { __typename?: 'SeatCost', id: number, cost: number, createdAt: any, updatedAt: any } }> }, payment: { __typename?: 'Payment', id: number, total: number, isPaid: boolean, paidAt?: any | null, stripePaymentIntentId?: string | null, stripePaymentMethod?: string | null, createdAt: any, updatedAt: any }, travelers: Array<{ __typename?: 'Traveler', id: number, name: string, email: string, phoneNumber: string, dateOfBirth: any, orderId: number, seatId: number, createdAt: any, updatedAt: any, seat: { __typename?: 'Seat', id: number, status: SeatStatus, travelSessionId: number, seatCostId: number, createdAt: any, updatedAt: any, seatCost: { __typename?: 'SeatCost', id: number, cost: number, createdAt: any, updatedAt: any } } }> } } };
 
-export type UpdateOrderPaymentMutationVariables = Exact<{
-  input: UpdateOrderPaymentInput;
-}>;
-
-
-export type UpdateOrderPaymentMutation = { __typename?: 'Mutation', updateOrderPayment: { __typename?: 'UpdateOrderPaymentResponse', success: boolean, message: string, order: { __typename?: 'Order', id: number, totalSeats: number, totalPrice: number, orderStatus: number, customerId: number, travelSessionId: number, paymentId: number, createdAt: any, updatedAt: any, customer: { __typename?: 'Customer', id: number, firstName: string, lastName: string, phoneNumber: string, email: string, username: string, createdAt: any, updatedAt: any }, travelSession: { __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any }, seats: Array<{ __typename?: 'Seat', id: number, status: SeatStatus, travelSessionId: number, seatCostId: number, createdAt: any, updatedAt: any, seatCost: { __typename?: 'SeatCost', id: number, cost: number, createdAt: any, updatedAt: any } }> }, payment: { __typename?: 'Payment', id: number, total: number, isPaid: boolean, paidAt?: any | null, stripePaymentIntentId?: string | null, stripePaymentMethod?: string | null, createdAt: any, updatedAt: any }, travelers: Array<{ __typename?: 'Traveler', id: number, name: string, email: string, phoneNumber: string, dateOfBirth: any, orderId: number, seatId: number, createdAt: any, updatedAt: any, seat: { __typename?: 'Seat', id: number, status: SeatStatus, travelSessionId: number, seatCostId: number, createdAt: any, updatedAt: any, seatCost: { __typename?: 'SeatCost', id: number, cost: number, createdAt: any, updatedAt: any } } }> } } };
-
 export type GetOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -848,6 +823,21 @@ export type GetOrdersByTravelSessionQueryVariables = Exact<{
 
 
 export type GetOrdersByTravelSessionQuery = { __typename?: 'Query', getOrdersByTravelSession: Array<{ __typename?: 'Order', id: number, totalSeats: number, totalPrice: number, orderStatus: number, customerId: number, travelSessionId: number, paymentId: number, createdAt: any, updatedAt: any, customer: { __typename?: 'Customer', id: number, firstName: string, lastName: string, phoneNumber: string, email: string, username: string, createdAt: any, updatedAt: any }, travelSession: { __typename?: 'TravelSession', id: number, startDate: any, endDate: any, travelId: number, guideId: number, createdAt: any, updatedAt: any, guide: { __typename?: 'Guide', id: number, name: string, description: string, email: string, phoneNumber: string, profileImage: string, companyId: number, createdAt: any, updatedAt: any }, seats: Array<{ __typename?: 'Seat', id: number, status: SeatStatus, travelSessionId: number, seatCostId: number, createdAt: any, updatedAt: any, seatCost: { __typename?: 'SeatCost', id: number, cost: number, createdAt: any, updatedAt: any } }> }, payment: { __typename?: 'Payment', id: number, total: number, isPaid: boolean, paidAt?: any | null, stripePaymentIntentId?: string | null, stripePaymentMethod?: string | null, createdAt: any, updatedAt: any }, travelers: Array<{ __typename?: 'Traveler', id: number, name: string, email: string, phoneNumber: string, dateOfBirth: any, orderId: number, seatId: number, createdAt: any, updatedAt: any, seat: { __typename?: 'Seat', id: number, status: SeatStatus, travelSessionId: number, seatCostId: number, createdAt: any, updatedAt: any, seatCost: { __typename?: 'SeatCost', id: number, cost: number, createdAt: any, updatedAt: any } } }> }> };
+
+export type UpdateTravelMutationVariables = Exact<{
+  updateTravelId: Scalars['Int']['input'];
+  input: CreateTravelInput;
+}>;
+
+
+export type UpdateTravelMutation = { __typename?: 'Mutation', updateTravel: { __typename?: 'Travel', id: number, name: string, description: string, coverImage?: string | null, duration: number, totalSeatNumber: number, destinationId: number, destination: { __typename?: 'Destination', id: number, name: string }, categories: Array<{ __typename?: 'Category', id: number, name: string }>, subCategories: Array<{ __typename?: 'SubCategory', id: number, name: string }> } };
+
+export type DeleteTravelMutationVariables = Exact<{
+  deleteTravelId: Scalars['Int']['input'];
+}>;
+
+
+export type DeleteTravelMutation = { __typename?: 'Mutation', deleteTravel: { __typename?: 'Travel', id: number, name: string } };
 
 export type GetTravelsQueryVariables = Exact<{
   input: GetTravelsInput;
@@ -1958,43 +1948,6 @@ export function useCreateOrderMutation(baseOptions?: Apollo.MutationHookOptions<
 export type CreateOrderMutationHookResult = ReturnType<typeof useCreateOrderMutation>;
 export type CreateOrderMutationResult = Apollo.MutationResult<CreateOrderMutation>;
 export type CreateOrderMutationOptions = Apollo.BaseMutationOptions<CreateOrderMutation, CreateOrderMutationVariables>;
-export const UpdateOrderPaymentDocument = gql`
-    mutation UpdateOrderPayment($input: UpdateOrderPaymentInput!) {
-  updateOrderPayment(input: $input) {
-    success
-    message
-    order {
-      ...OrderWithRelations
-    }
-  }
-}
-    ${OrderWithRelationsFragmentDoc}`;
-export type UpdateOrderPaymentMutationFn = Apollo.MutationFunction<UpdateOrderPaymentMutation, UpdateOrderPaymentMutationVariables>;
-
-/**
- * __useUpdateOrderPaymentMutation__
- *
- * To run a mutation, you first call `useUpdateOrderPaymentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateOrderPaymentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateOrderPaymentMutation, { data, loading, error }] = useUpdateOrderPaymentMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useUpdateOrderPaymentMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOrderPaymentMutation, UpdateOrderPaymentMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateOrderPaymentMutation, UpdateOrderPaymentMutationVariables>(UpdateOrderPaymentDocument, options);
-      }
-export type UpdateOrderPaymentMutationHookResult = ReturnType<typeof useUpdateOrderPaymentMutation>;
-export type UpdateOrderPaymentMutationResult = Apollo.MutationResult<UpdateOrderPaymentMutation>;
-export type UpdateOrderPaymentMutationOptions = Apollo.BaseMutationOptions<UpdateOrderPaymentMutation, UpdateOrderPaymentMutationVariables>;
 export const GetOrdersDocument = gql`
     query GetOrders {
   getOrders {
@@ -2194,6 +2147,92 @@ export type GetOrdersByTravelSessionQueryHookResult = ReturnType<typeof useGetOr
 export type GetOrdersByTravelSessionLazyQueryHookResult = ReturnType<typeof useGetOrdersByTravelSessionLazyQuery>;
 export type GetOrdersByTravelSessionSuspenseQueryHookResult = ReturnType<typeof useGetOrdersByTravelSessionSuspenseQuery>;
 export type GetOrdersByTravelSessionQueryResult = Apollo.QueryResult<GetOrdersByTravelSessionQuery, GetOrdersByTravelSessionQueryVariables>;
+export const UpdateTravelDocument = gql`
+    mutation UpdateTravel($updateTravelId: Int!, $input: CreateTravelInput!) {
+  updateTravel(id: $updateTravelId, input: $input) {
+    id
+    name
+    description
+    coverImage
+    duration
+    totalSeatNumber
+    destinationId
+    destination {
+      id
+      name
+    }
+    categories {
+      id
+      name
+    }
+    subCategories {
+      id
+      name
+    }
+  }
+}
+    `;
+export type UpdateTravelMutationFn = Apollo.MutationFunction<UpdateTravelMutation, UpdateTravelMutationVariables>;
+
+/**
+ * __useUpdateTravelMutation__
+ *
+ * To run a mutation, you first call `useUpdateTravelMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTravelMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTravelMutation, { data, loading, error }] = useUpdateTravelMutation({
+ *   variables: {
+ *      updateTravelId: // value for 'updateTravelId'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateTravelMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTravelMutation, UpdateTravelMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateTravelMutation, UpdateTravelMutationVariables>(UpdateTravelDocument, options);
+      }
+export type UpdateTravelMutationHookResult = ReturnType<typeof useUpdateTravelMutation>;
+export type UpdateTravelMutationResult = Apollo.MutationResult<UpdateTravelMutation>;
+export type UpdateTravelMutationOptions = Apollo.BaseMutationOptions<UpdateTravelMutation, UpdateTravelMutationVariables>;
+export const DeleteTravelDocument = gql`
+    mutation DeleteTravel($deleteTravelId: Int!) {
+  deleteTravel(id: $deleteTravelId) {
+    id
+    name
+  }
+}
+    `;
+export type DeleteTravelMutationFn = Apollo.MutationFunction<DeleteTravelMutation, DeleteTravelMutationVariables>;
+
+/**
+ * __useDeleteTravelMutation__
+ *
+ * To run a mutation, you first call `useDeleteTravelMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteTravelMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteTravelMutation, { data, loading, error }] = useDeleteTravelMutation({
+ *   variables: {
+ *      deleteTravelId: // value for 'deleteTravelId'
+ *   },
+ * });
+ */
+export function useDeleteTravelMutation(baseOptions?: Apollo.MutationHookOptions<DeleteTravelMutation, DeleteTravelMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteTravelMutation, DeleteTravelMutationVariables>(DeleteTravelDocument, options);
+      }
+export type DeleteTravelMutationHookResult = ReturnType<typeof useDeleteTravelMutation>;
+export type DeleteTravelMutationResult = Apollo.MutationResult<DeleteTravelMutation>;
+export type DeleteTravelMutationOptions = Apollo.BaseMutationOptions<DeleteTravelMutation, DeleteTravelMutationVariables>;
 export const GetTravelsDocument = gql`
     query GetTravels($input: GetTravelsInput!) {
   getTravels(input: $input) {

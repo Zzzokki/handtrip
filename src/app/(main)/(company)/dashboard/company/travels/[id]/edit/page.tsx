@@ -1,17 +1,19 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useCreateTravelByCompanyMutation, GetTravelsByCompanyDocument } from "@/types/generated";
+import { useRouter, useParams } from "next/navigation";
+import { useUpdateTravelMutation, useGetTravelQuery } from "@/types/generated";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, Loader2 } from "lucide-react";
+import { CheckCircle2, Loader2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { CreateTravelHeader, BasicInfoSection, AgendaSection, TravelSessionsSection } from "./_components";
+import { CreateTravelHeader, BasicInfoSection, AgendaSection, TravelSessionsSection } from "../../create/_components";
 import { Form } from "@/components/ui/form";
 import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { UploadGallery } from "./_components/UploadGallery";
+import { UploadGallery } from "../../create/_components/UploadGallery";
+import { useEffect } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const formSchema = z.object({
   name: z.string().min(1, "Аяллын нэр заавал шаардлагатай"),
@@ -48,58 +50,82 @@ const formSchema = z.object({
 
 export type FormDataType = z.infer<typeof formSchema>;
 
-export default function CreateTravelPage() {
+export default function EditTravelPage() {
   const router = useRouter();
+  const params = useParams();
+  const travelId = parseInt(params.id as string);
+
+  const { data, loading: loadingTravel } = useGetTravelQuery({
+    variables: { getTravelId: travelId },
+    skip: !travelId,
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-
-      // Description
       description: "",
-
-      // Cover Image
       coverImage: "",
-
-      // Duration
       duration: 1,
-
-      // Total Seat Number
       totalSeatNumber: 1,
-
-      // Destination
       destinationId: undefined,
-
-      // Gallery
       gallery: [],
-
-      // Agendas
       agendas: [],
-
-      // Subcategories
       subCategoryIds: [],
-
-      // Travel Sessions
       sessions: [],
     },
   });
 
-  console.log(form.formState.errors);
+  // Populate form when data is loaded
+  useEffect(() => {
+    if (data?.getTravel) {
+      const travel = data.getTravel;
 
-  const [createTravel, { loading }] = useCreateTravelByCompanyMutation({
-    onError: (error) => toast.error(`Аяллын багц үүсгэхэд алдаа гарлаа: ${error.message}`),
+      // Build agendas array - travel.agenda might be a single object or the GraphQL might return it differently
+      const agendas = travel.agenda
+        ? [
+            {
+              day: travel.agenda.day,
+              name: travel.agenda.name,
+              content: travel.agenda.description,
+            },
+          ]
+        : [];
+
+      form.reset({
+        name: travel.name,
+        description: travel.description,
+        coverImage: travel.coverImage || "",
+        duration: travel.duration,
+        totalSeatNumber: travel.totalSeatNumber,
+        destinationId: travel.destinationId,
+        gallery: travel.gallery || [],
+        subCategoryIds: travel.subCategories.map((sc) => sc.id),
+        agendas: agendas,
+        sessions: travel.travelSessions.map((session) => ({
+          startDate: new Date(session.startDate),
+          endDate: new Date(session.endDate),
+          guideId: session.guideId,
+          seatCost: session.seats?.[0]?.seatCost?.cost || 0,
+        })),
+      });
+    }
+  }, [data, form]);
+
+  const [updateTravel, { loading: updating }] = useUpdateTravelMutation({
+    onError: (error) => toast.error(`Аяллын багц шинэчлэхэд алдаа гарлаа: ${error.message}`),
     onCompleted: () => {
-      toast.success("Аяллын багц амжилттай үүслээ");
+      toast.success("Аяллын багц амжилттай шинэчлэгдлээ");
       router.push("/dashboard/company/travels");
     },
-    refetchQueries: ["GetTravelsByCompany"],
+    refetchQueries: ["GetTravelsByCompany", "GetTravel"],
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await createTravel({
+      await updateTravel({
         variables: {
+          updateTravelId: travelId,
           input: {
             name: values.name,
             description: values.description,
@@ -119,14 +145,13 @@ export default function CreateTravelPage() {
         },
       });
     } catch (error) {
-      console.error("Error creating travel:", error);
+      console.error("Error updating travel:", error);
     }
   };
 
   const handleFormError = (errors: any) => {
     console.log("Form validation errors:", errors);
 
-    // Show toast for validation errors
     const errorMessages = Object.entries(errors).map(([field, error]: [string, any]) => {
       return `${field}: ${error.message}`;
     });
@@ -138,13 +163,51 @@ export default function CreateTravelPage() {
     }
   };
 
-  const v = form.watch();
+  if (loadingTravel) {
+    return (
+      <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 w-full">
+        <div className="mb-6">
+          <Skeleton className="h-12 w-64 mb-2" />
+          <Skeleton className="h-6 w-96" />
+        </div>
+        <div className="space-y-6">
+          <Skeleton className="h-64 w-full" />
+          <Skeleton className="h-64 w-full" />
+          <Skeleton className="h-64 w-full" />
+        </div>
+      </div>
+    );
+  }
 
-  console.log(v);
+  if (!data?.getTravel) {
+    return (
+      <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 w-full">
+        <div className="text-center py-12">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Аялал олдсонгүй</h2>
+          <p className="text-gray-600 mb-6">Таны хайсан аялал олдсонгүй эсвэл устгагдсан байж магадгүй</p>
+          <Link href="/dashboard/company/travels">
+            <Button variant="outline">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Буцах
+            </Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 w-full">
-      <CreateTravelHeader />
+      <div className="mb-6">
+        <Link href="/dashboard/company/travels">
+          <Button variant="ghost" className="mb-4">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Буцах
+          </Button>
+        </Link>
+        <h1 className="text-3xl font-bold text-gray-900">Аялал засах</h1>
+        <p className="text-gray-600 mt-2">"{data.getTravel.name}" аяллын мэдээллийг шинэчлэх</p>
+      </div>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit, handleFormError)} className="space-y-6">
@@ -152,7 +215,6 @@ export default function CreateTravelPage() {
 
           <UploadGallery
             onUploadComplete={(urls) => {
-              console.log("urls", urls);
               form.setValue("gallery", urls);
             }}
           />
@@ -164,20 +226,20 @@ export default function CreateTravelPage() {
           <div className="sticky bottom-0 bg-white border-t border-gray-200 p-4 -mx-4 sm:-mx-6 lg:-mx-8 shadow-lg">
             <div className="max-w-7xl mx-auto flex gap-3 justify-end">
               <Link href="/dashboard/company/travels">
-                <Button type="button" variant="outline" className="border-gray-300 hover:bg-gray-100" disabled={loading}>
+                <Button type="button" variant="outline" className="border-gray-300 hover:bg-gray-100" disabled={updating}>
                   Цуцлах
                 </Button>
               </Link>
-              <Button type="submit" className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-md hover:shadow-lg transition-all" disabled={loading}>
-                {loading ? (
+              <Button type="submit" className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-md hover:shadow-lg transition-all" disabled={updating}>
+                {updating ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Үүсгэж байна...
+                    Шинэчилж байна...
                   </>
                 ) : (
                   <>
                     <CheckCircle2 className="w-4 h-4 mr-2" />
-                    Аяллын багц үүсгэх
+                    Хадгалах
                   </>
                 )}
               </Button>
