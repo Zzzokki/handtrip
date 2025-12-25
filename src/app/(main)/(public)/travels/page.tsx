@@ -55,7 +55,7 @@ export default function TravelsPage() {
   }, [data]);
 
   return (
-    <div className="bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 min-h-screen">
+    <div className="bg-blue-50 min-h-screen">
       <div className="container mx-auto px-4 pb-12 pt-20">
         <div className="flex gap-6">
           <div className="w-72 flex-shrink-0">

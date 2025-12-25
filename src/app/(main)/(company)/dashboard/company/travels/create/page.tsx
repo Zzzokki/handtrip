@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useCreateTravelByCompanyMutation } from "@/types/generated";
+import { useCreateTravelByCompanyMutation, GetTravelsByCompanyDocument } from "@/types/generated";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -93,6 +93,7 @@ export default function CreateTravelPage() {
       toast.success("Аяллын багц амжилттай үүслээ");
       router.push("/dashboard/company/travels");
     },
+    refetchQueries: [{ query: GetTravelsByCompanyDocument, variables: { input: { page: 1, limit: 100 } } }],
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {

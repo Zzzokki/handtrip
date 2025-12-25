@@ -37,6 +37,7 @@ export const customerTypeDefs = gql`
 
   type Query {
     getCustomer(id: Int!): Customer!
+    getCustomers: [Customer!]!
   }
   type Mutation {
     createCustomer(input: CreateCustomerInput!): Customer!

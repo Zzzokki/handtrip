@@ -43,8 +43,8 @@ export const SystemStatus = () => {
           {systems.map((system, idx) => {
             const Icon = system.icon;
             return (
-              <div key={idx} className="text-center p-4 rounded-lg bg-gradient-to-br from-slate-50 to-white border border-slate-100 hover:shadow-md transition-all">
-                <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-md">
+              <div key={idx} className="text-center p-4 rounded-lg bg-white border border-slate-100 hover:shadow-md transition-all">
+                <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-md">
                   <Icon className="w-6 h-6 text-white" />
                 </div>
                 <div className="text-sm font-semibold text-slate-900 mb-1">{system.name}</div>

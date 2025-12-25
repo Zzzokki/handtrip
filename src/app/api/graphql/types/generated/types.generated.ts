@@ -19,6 +19,17 @@ export type Scalars = {
   Timestamp: { input: Date | string | number; output: Date | string | number; }
 };
 
+export type AdminStats = {
+  __typename?: 'AdminStats';
+  activeOrders: Scalars['Int']['output'];
+  pendingCompanies: Scalars['Int']['output'];
+  todayOrders: Scalars['Int']['output'];
+  todayRevenue: Scalars['Float']['output'];
+  totalRevenue: Scalars['Float']['output'];
+  totalUsers: Scalars['Int']['output'];
+  verifiedCompanies: Scalars['Int']['output'];
+};
+
 export type Agenda = {
   __typename?: 'Agenda';
   createdAt: Scalars['Timestamp']['output'];
@@ -88,7 +99,7 @@ export type CreateGuideInput = {
 };
 
 export type CreateOrderInput = {
-  paymentIntentId: Scalars['String']['input'];
+  paymentIntentId?: InputMaybe<Scalars['String']['input']>;
   travelSessionId: Scalars['Int']['input'];
   travelers: Array<TravelerInput>;
 };
@@ -156,6 +167,7 @@ export type GetTravelsByCompanyResult = {
 };
 
 export type GetTravelsFilterInput = {
+  companyId?: InputMaybe<Scalars['Int']['input']>;
   destinationIds?: InputMaybe<Array<Scalars['Int']['input']>>;
   maxDuration?: InputMaybe<Scalars['Int']['input']>;
   maxPrice?: InputMaybe<Scalars['Int']['input']>;
@@ -233,6 +245,7 @@ export type Mutation = {
   updateCompany: Company;
   updateCustomer: Customer;
   updateGuide: Guide;
+  updateOrderPayment: UpdateOrderPaymentResponse;
   updateTravel: Travel;
 };
 
@@ -321,6 +334,11 @@ export type MutationupdateGuideArgs = {
 };
 
 
+export type MutationupdateOrderPaymentArgs = {
+  input: UpdateOrderPaymentInput;
+};
+
+
 export type MutationupdateTravelArgs = {
   id: Scalars['Int']['input'];
   input: CreateTravelInput;
@@ -357,10 +375,12 @@ export type Payment = {
 
 export type Query = {
   __typename?: 'Query';
+  getAdminStats: AdminStats;
   getCategories: Array<Category>;
   getCompanies: Array<Company>;
   getCompany: Company;
   getCustomer: Customer;
+  getCustomers: Array<Customer>;
   getDestinations: Array<Destination>;
   getGuideByCompany: Guide;
   getGuidesByCompany: Array<Guide>;
@@ -602,6 +622,18 @@ export type UpdateGuideInput = {
   profileImage?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UpdateOrderPaymentInput = {
+  orderId: Scalars['Int']['input'];
+  paymentIntentId: Scalars['String']['input'];
+};
+
+export type UpdateOrderPaymentResponse = {
+  __typename?: 'UpdateOrderPaymentResponse';
+  message: Scalars['String']['output'];
+  order: Order;
+  success: Scalars['Boolean']['output'];
+};
+
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -675,8 +707,10 @@ export type DirectiveResolverFn<TResult = Record<PropertyKey, never>, TParent = 
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Agenda: ResolverTypeWrapper<Agenda>;
+  AdminStats: ResolverTypeWrapper<AdminStats>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
+  Agenda: ResolverTypeWrapper<Agenda>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   AgendaItemInput: AgendaItemInput;
   Category: ResolverTypeWrapper<Category>;
@@ -700,7 +734,6 @@ export type ResolversTypes = {
   LoginAsCompanyResponse: ResolverTypeWrapper<LoginAsCompanyResponse>;
   LoginAsCustomerResponse: ResolverTypeWrapper<LoginAsCustomerResponse>;
   ManagerStats: ResolverTypeWrapper<ManagerStats>;
-  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
   Order: ResolverTypeWrapper<Omit<Order, 'travelSession' | 'travelers'> & { travelSession: ResolversTypes['TravelSession'], travelers: Array<ResolversTypes['Traveler']> }>;
   Payment: ResolverTypeWrapper<Payment>;
@@ -718,12 +751,16 @@ export type ResolversTypes = {
   UpdateCompanyInput: UpdateCompanyInput;
   UpdateCustomerInput: UpdateCustomerInput;
   UpdateGuideInput: UpdateGuideInput;
+  UpdateOrderPaymentInput: UpdateOrderPaymentInput;
+  UpdateOrderPaymentResponse: ResolverTypeWrapper<Omit<UpdateOrderPaymentResponse, 'order'> & { order: ResolversTypes['Order'] }>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Agenda: Agenda;
+  AdminStats: AdminStats;
   Int: Scalars['Int']['output'];
+  Float: Scalars['Float']['output'];
+  Agenda: Agenda;
   String: Scalars['String']['output'];
   AgendaItemInput: AgendaItemInput;
   Category: Category;
@@ -747,7 +784,6 @@ export type ResolversParentTypes = {
   LoginAsCompanyResponse: LoginAsCompanyResponse;
   LoginAsCustomerResponse: LoginAsCustomerResponse;
   ManagerStats: ManagerStats;
-  Float: Scalars['Float']['output'];
   Mutation: Record<PropertyKey, never>;
   Order: Omit<Order, 'travelSession' | 'travelers'> & { travelSession: ResolversParentTypes['TravelSession'], travelers: Array<ResolversParentTypes['Traveler']> };
   Payment: Payment;
@@ -764,6 +800,18 @@ export type ResolversParentTypes = {
   UpdateCompanyInput: UpdateCompanyInput;
   UpdateCustomerInput: UpdateCustomerInput;
   UpdateGuideInput: UpdateGuideInput;
+  UpdateOrderPaymentInput: UpdateOrderPaymentInput;
+  UpdateOrderPaymentResponse: Omit<UpdateOrderPaymentResponse, 'order'> & { order: ResolversParentTypes['Order'] };
+};
+
+export type AdminStatsResolvers<ContextType = Context, ParentType extends ResolversParentTypes['AdminStats'] = ResolversParentTypes['AdminStats']> = {
+  activeOrders?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  pendingCompanies?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  todayOrders?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  todayRevenue?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  totalRevenue?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  totalUsers?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  verifiedCompanies?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
 };
 
 export type AgendaResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Agenda'] = ResolversParentTypes['Agenda']> = {
@@ -885,6 +933,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   updateCompany?: Resolver<ResolversTypes['Company'], ParentType, ContextType, RequireFields<MutationupdateCompanyArgs, 'input'>>;
   updateCustomer?: Resolver<ResolversTypes['Customer'], ParentType, ContextType, RequireFields<MutationupdateCustomerArgs, 'input'>>;
   updateGuide?: Resolver<ResolversTypes['Guide'], ParentType, ContextType, RequireFields<MutationupdateGuideArgs, 'id' | 'input'>>;
+  updateOrderPayment?: Resolver<ResolversTypes['UpdateOrderPaymentResponse'], ParentType, ContextType, RequireFields<MutationupdateOrderPaymentArgs, 'input'>>;
   updateTravel?: Resolver<ResolversTypes['Travel'], ParentType, ContextType, RequireFields<MutationupdateTravelArgs, 'id' | 'input'>>;
 };
 
@@ -916,10 +965,12 @@ export type PaymentResolvers<ContextType = Context, ParentType extends Resolvers
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  getAdminStats?: Resolver<ResolversTypes['AdminStats'], ParentType, ContextType>;
   getCategories?: Resolver<Array<ResolversTypes['Category']>, ParentType, ContextType>;
   getCompanies?: Resolver<Array<ResolversTypes['Company']>, ParentType, ContextType>;
   getCompany?: Resolver<ResolversTypes['Company'], ParentType, ContextType, RequireFields<QuerygetCompanyArgs, 'id'>>;
   getCustomer?: Resolver<ResolversTypes['Customer'], ParentType, ContextType, RequireFields<QuerygetCustomerArgs, 'id'>>;
+  getCustomers?: Resolver<Array<ResolversTypes['Customer']>, ParentType, ContextType>;
   getDestinations?: Resolver<Array<ResolversTypes['Destination']>, ParentType, ContextType>;
   getGuideByCompany?: Resolver<ResolversTypes['Guide'], ParentType, ContextType, RequireFields<QuerygetGuideByCompanyArgs, 'id'>>;
   getGuidesByCompany?: Resolver<Array<ResolversTypes['Guide']>, ParentType, ContextType>;
@@ -1022,7 +1073,14 @@ export type TravelerResolvers<ContextType = Context, ParentType extends Resolver
   updatedAt?: Resolver<ResolversTypes['Timestamp'], ParentType, ContextType>;
 };
 
+export type UpdateOrderPaymentResponseResolvers<ContextType = Context, ParentType extends ResolversParentTypes['UpdateOrderPaymentResponse'] = ResolversParentTypes['UpdateOrderPaymentResponse']> = {
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  order?: Resolver<ResolversTypes['Order'], ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = Context> = {
+  AdminStats?: AdminStatsResolvers<ContextType>;
   Agenda?: AgendaResolvers<ContextType>;
   Category?: CategoryResolvers<ContextType>;
   Company?: CompanyResolvers<ContextType>;
@@ -1047,5 +1105,6 @@ export type Resolvers<ContextType = Context> = {
   Travel?: TravelResolvers<ContextType>;
   TravelSession?: TravelSessionResolvers<ContextType>;
   Traveler?: TravelerResolvers<ContextType>;
+  UpdateOrderPaymentResponse?: UpdateOrderPaymentResponseResolvers<ContextType>;
 };
 

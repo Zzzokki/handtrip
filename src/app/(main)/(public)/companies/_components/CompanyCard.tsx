@@ -33,7 +33,7 @@ export default function CompanyCard({ company }: CompanyCardProps) {
                 <img src={company.logo} alt={company.name} className="w-full h-full object-cover" />
               </div>
             ) : (
-              <div className="w-14 h-14 rounded-lg border-3 border-white shadow-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+              <div className="w-14 h-14 rounded-lg border-3 border-white shadow-lg bg-blue-600 flex items-center justify-center">
                 <Building2 className="w-7 h-7 text-white" />
               </div>
             )}

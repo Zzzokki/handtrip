@@ -14,7 +14,7 @@ export const FeaturedTravels = () => {
 
   if (loading) {
     return (
-      <section className="py-16 bg-gradient-to-b from-white to-gray-50">
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
@@ -29,7 +29,7 @@ export const FeaturedTravels = () => {
   const travels = data?.getTravels.travels || [];
 
   return (
-    <section className="py-12 bg-gradient-to-b from-white to-slate-50">
+    <section className="py-12 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 rounded-full mb-3">

@@ -28,5 +28,6 @@ export const getOrders: QueryResolvers["getOrders"] = async () => {
       },
     },
   });
+
   return orders;
 };

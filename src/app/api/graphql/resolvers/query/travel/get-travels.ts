@@ -7,6 +7,8 @@ export const getTravels: QueryResolvers["getTravels"] = async (_, { input }) => 
 
   const conditions: SQL[] = [];
 
+  if (filters.companyId) conditions.push(eq(travelTable.companyId, filters.companyId));
+
   if (filters.query) {
     const searchTerm = `%${filters.query.toLowerCase().trim()}%`;
 

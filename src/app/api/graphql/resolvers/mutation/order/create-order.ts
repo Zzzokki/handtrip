@@ -79,6 +79,11 @@ export const createOrder: MutationResolvers["createOrder"] = async (_, { input }
         travelSession: {
           with: {
             guide: true,
+            seats: {
+              with: {
+                seatCost: true,
+              },
+            },
           },
         },
         payment: true,

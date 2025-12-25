@@ -100,6 +100,8 @@ async function seed() {
         { name: "Хөгнө хан", location: "Булган аймаг" },
         { name: "Завхан нуур", location: "Завхан аймаг" },
         { name: "Дархадын хотгор", location: "Хөвсгөл аймаг" },
+        { name: "Алтай Таван Богд", location: "Баян-Өлгий аймаг" },
+        { name: "Хөгнө хан уул", location: "Булган аймаг" },
       ])
       .returning();
     console.log(`✅ Created ${destinations.length} destinations`);
@@ -286,8 +288,12 @@ async function seed() {
         travel: {
           name: "Хөвсгөл нуурын адал явдалт аялал",
           description: "Монголын Швейцарь гэгдэх Хөвсгөл нуураар морь унах, явган аялах, нуурт завиар аялах. Цагаан хот, Жанхай давааны үзэсгэлэнт байгаль.",
-          coverImage: "https://images.unsplash.com/photo-1559827260-dc66d52bef19",
-          gallery: ["https://images.unsplash.com/photo-1506905925346-21bda4d32df4", "https://images.unsplash.com/photo-1519681393784-d120267933ba"],
+          coverImage: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80",
+          gallery: [
+            "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+            "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80",
+            "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80",
+          ],
           duration: 10,
           totalSeatNumber: 15,
           companyId: companies[0].id,
@@ -311,8 +317,12 @@ async function seed() {
         travel: {
           name: "Говь - Элсэн манхан аялал",
           description: "Өмнөговийн элсэн манхан, Хонгорын элс, Баянзаг, Үүлэн хадны үзэсгэлэнт байгаль. Тэмээн унах, үлзүүр нэрвэгдэх, одны орой үзэх.",
-          coverImage: "https://images.unsplash.com/photo-1512100356356-de1b84283e18",
-          gallery: ["https://images.unsplash.com/photo-1523805009345-7448845a9e53", "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d"],
+          coverImage: "https://images.unsplash.com/photo-1512100356356-de1b84283e18?w=1200&q=80",
+          gallery: [
+            "https://images.unsplash.com/photo-1512100356356-de1b84283e18?w=800&q=80",
+            "https://images.unsplash.com/photo-1523805009345-7448845a9e53?w=800&q=80",
+            "https://images.unsplash.com/photo-1474418397713-7ede21d49118?w=800&q=80",
+          ],
           duration: 7,
           totalSeatNumber: 12,
           companyId: companies[2].id,
@@ -333,8 +343,12 @@ async function seed() {
         travel: {
           name: "Хархорин - Ердийн хорих аялал",
           description: "Монголын түүхэн нийслэл Хархорин, Эрдэнэ Зуу хийд, Орхоны хүрхрээ, Цэнхэрийн булаг зэрэг газруудаар соёлын аялал.",
-          coverImage: "https://images.unsplash.com/photo-1526495124232-a04e1849168c",
-          gallery: ["https://images.unsplash.com/photo-1580407196238-dac33f57c410", "https://images.unsplash.com/photo-1568605114967-8130f3a36994"],
+          coverImage: "https://images.unsplash.com/photo-1580407196238-dac33f57c410?w=1200&q=80",
+          gallery: [
+            "https://images.unsplash.com/photo-1580407196238-dac33f57c410?w=800&q=80",
+            "https://images.unsplash.com/photo-1526495124232-a04e1849168c?w=800&q=80",
+            "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80",
+          ],
           duration: 5,
           totalSeatNumber: 20,
           companyId: companies[1].id,
@@ -353,8 +367,12 @@ async function seed() {
         travel: {
           name: "Тэрэлж - Хустай нуруу аялал",
           description: "Тэрэлжийн байгалийн цогцолборт газар, Хустайн тахь ажиглах, мэлхийн хөшөө, Чингис хааны морин хөшөө үзэх. Нийслэлээс ойрын баярын аялал.",
-          coverImage: "https://images.unsplash.com/photo-1523805009345-7448845a9e53",
-          gallery: ["https://images.unsplash.com/photo-1559827260-dc66d52bef19", "https://images.unsplash.com/photo-1516426122078-c23e76319801"],
+          coverImage: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1200&q=80",
+          gallery: [
+            "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80",
+            "https://images.unsplash.com/photo-1542144582-1ba00456b5e3?w=800&q=80",
+            "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&q=80",
+          ],
           duration: 3,
           totalSeatNumber: 25,
           companyId: companies[0].id,
@@ -371,8 +389,12 @@ async function seed() {
         travel: {
           name: "Алтай - Нисдэг шувуу агнуурын аялал",
           description: "Баян-Өлгий, Алтайн нуруу, Казак соёл танилцах, нисдэг шувуу агнуурын уламжлал үзэх. Алтай таван богдын үзэсгэлэнт уулс.",
-          coverImage: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4",
-          gallery: ["https://images.unsplash.com/photo-1506905925346-21bda4d32df4", "https://images.unsplash.com/photo-1519681393784-d120267933ba"],
+          coverImage: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&q=80",
+          gallery: [
+            "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80",
+            "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80",
+            "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+          ],
           duration: 9,
           totalSeatNumber: 10,
           companyId: companies[4].id,
@@ -395,8 +417,12 @@ async function seed() {
         travel: {
           name: "Улаанбаатар хотын аялал",
           description: "Нийслэл хотын үзэсгэлэнт газрууд: Сүхбаатарын талбай, Гандантэгчинлэн хийд, Богд хааны ордон музей, Зайсан толгой, Чойжин ламын музей.",
-          coverImage: "https://images.unsplash.com/photo-1580407196238-dac33f57c410",
-          gallery: ["https://images.unsplash.com/photo-1568605114967-8130f3a36994", "https://images.unsplash.com/photo-1542144582-1ba00456b5e3"],
+          coverImage: "https://images.unsplash.com/photo-1542144582-1ba00456b5e3?w=1200&q=80",
+          gallery: [
+            "https://images.unsplash.com/photo-1542144582-1ba00456b5e3?w=800&q=80",
+            "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80",
+            "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&q=80",
+          ],
           duration: 2,
           totalSeatNumber: 30,
           companyId: companies[1].id,
@@ -412,8 +438,12 @@ async function seed() {
         travel: {
           name: "Хустай нуруу - Тахь ажиглах аялал",
           description: "Пржевальскийн морь буюу тахь ажиглах, байгалийн цогцолборт газраар явган аялах, зэрлэг амьтан ажиглах.",
-          coverImage: "https://images.unsplash.com/photo-1516426122078-c23e76319801",
-          gallery: ["https://images.unsplash.com/photo-1559827260-dc66d52bef19", "https://images.unsplash.com/photo-1523805009345-7448845a9e53"],
+          coverImage: "https://images.unsplash.com/photo-1474418397713-7ede21d49118?w=1200&q=80",
+          gallery: [
+            "https://images.unsplash.com/photo-1474418397713-7ede21d49118?w=800&q=80",
+            "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80",
+            "https://images.unsplash.com/photo-1523805009345-7448845a9e53?w=800&q=80",
+          ],
           duration: 2,
           totalSeatNumber: 18,
           companyId: companies[2].id,
@@ -429,8 +459,12 @@ async function seed() {
         travel: {
           name: "Орхон хөндийн аялал",
           description: "ЮНЕСКО-гийн дэлхийн өвд бүртгэгдсэн Орхон хөндий, Орхоны хүрхрээ, Товхон хийд, нүүдэлчин айл танилцах.",
-          coverImage: "https://images.unsplash.com/photo-1559827260-dc66d52bef19",
-          gallery: ["https://images.unsplash.com/photo-1506905925346-21bda4d32df4", "https://images.unsplash.com/photo-1580407196238-dac33f57c410"],
+          coverImage: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&q=80",
+          gallery: [
+            "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80",
+            "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+            "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80",
+          ],
           duration: 4,
           totalSeatNumber: 16,
           companyId: companies[1].id,
@@ -448,8 +482,12 @@ async function seed() {
         travel: {
           name: "Цагаан нуур - Архангай аялал",
           description: "Архангайн Цагаан нуур, рашаан сувилал, Хөгнө хан, Эрдэнэ хамт хийд. Амрах чиглэлийн аялал.",
-          coverImage: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4",
-          gallery: ["https://images.unsplash.com/photo-1512100356356-de1b84283e18", "https://images.unsplash.com/photo-1519681393784-d120267933ba"],
+          coverImage: "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=1200&q=80",
+          gallery: [
+            "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=800&q=80",
+            "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+            "https://images.unsplash.com/photo-1511593358241-7eea1f3c84e5?w=800&q=80",
+          ],
           duration: 6,
           totalSeatNumber: 14,
           companyId: companies[0].id,
@@ -469,8 +507,12 @@ async function seed() {
         travel: {
           name: "Хөгнө хан - Элсэн тасархайн аялал",
           description: "Хөгнө хан уул, Элсэн тасархай, Угийн нуур, Эрдэнэ хамт хийд. Баярын 3 хоногийн аялал.",
-          coverImage: "https://images.unsplash.com/photo-1523805009345-7448845a9e53",
-          gallery: ["https://images.unsplash.com/photo-1559827260-dc66d52bef19", "https://images.unsplash.com/photo-1506905925346-21bda4d32df4"],
+          coverImage: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=1200&q=80",
+          gallery: [
+            "https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=800&q=80",
+            "https://images.unsplash.com/photo-1523805009345-7448845a9e53?w=800&q=80",
+            "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&q=80",
+          ],
           duration: 3,
           totalSeatNumber: 20,
           companyId: companies[2].id,
@@ -587,11 +629,11 @@ async function seed() {
       const travel = travels[i];
       const guideIndex = i % guides.length;
 
-      // Create 2-3 sessions per travel
-      const numSessions = Math.floor(Math.random() * 2) + 2;
+      // Create 3-4 sessions per travel with future dates
+      const numSessions = Math.floor(Math.random() * 2) + 3;
       for (let j = 0; j < numSessions; j++) {
-        const startDate = new Date();
-        startDate.setDate(startDate.getDate() + 30 + j * 21); // Sessions 21 days apart
+        const startDate = new Date("2025-01-15"); // Start from January 15, 2025
+        startDate.setDate(startDate.getDate() + i * 14 + j * 28); // Stagger sessions
 
         const endDate = new Date(startDate);
         endDate.setDate(endDate.getDate() + travel.duration);
@@ -615,10 +657,11 @@ async function seed() {
     const seatCosts = await db
       .insert(seatCostTable)
       .values([
-        { cost: 450000 }, // Хямд (450,000₮)
-        { cost: 850000 }, // Дундаж (850,000₮)
-        { cost: 1500000 }, // Сайн (1,500,000₮)
-        { cost: 2500000 }, // Тансаг (2,500,000₮)
+        { cost: 650000 }, // Хямд (650,000₮)
+        { cost: 1200000 }, // Дундаж (1,200,000₮)
+        { cost: 1850000 }, // Сайн (1,850,000₮)
+        { cost: 2900000 }, // Тансаг (2,900,000₮)
+        { cost: 4500000 }, // VIP (4,500,000₮)
       ])
       .returning();
     console.log(`✅ Created ${seatCosts.length} seat cost tiers`);

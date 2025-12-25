@@ -13,7 +13,7 @@ export const FeaturedCompanies = () => {
 
   if (loading) {
     return (
-      <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
@@ -36,12 +36,12 @@ export const FeaturedCompanies = () => {
   }
 
   return (
-    <section className="py-12 bg-gradient-to-b from-slate-50 to-white">
+    <section className="py-12 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-purple-50 rounded-full mb-3">
-            <Sparkles className="w-3.5 h-3.5 text-purple-600" />
-            <span className="text-xs font-semibold text-purple-600">Итгэлтэй түншүүд</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 rounded-full mb-3">
+            <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+            <span className="text-xs font-semibold text-blue-600">Итгэлтэй түншүүд</span>
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Онцлох компаниуд</h2>
           <p className="text-sm text-gray-600 max-w-2xl mx-auto">Мэргэжлийн аялал жуулчлалын компаниудын гайхалтай санал, үйлчилгээг судлаарай</p>

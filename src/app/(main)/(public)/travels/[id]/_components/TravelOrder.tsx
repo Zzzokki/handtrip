@@ -46,7 +46,7 @@ export const TravelOrder = ({ travel }: TravelOrderProps) => {
 
   return (
     <Card className="overflow-hidden border-gray-200 shadow-md hover:shadow-lg transition-shadow duration-300">
-      <div className="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 px-5 py-3.5 relative overflow-hidden">
+      <div className="bg-blue-600 px-5 py-3.5 relative overflow-hidden">
         <div className="relative">
           <div className="flex items-center gap-2.5">
             <div className="p-1.5 bg-white/20 backdrop-blur-xl rounded-lg border border-white/30">
@@ -85,7 +85,7 @@ export const TravelOrder = ({ travel }: TravelOrderProps) => {
           </Select>
 
           {selectedSessionData && (
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-3.5 mt-2 hover:shadow-sm transition-shadow">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3.5 mt-2 hover:shadow-sm transition-shadow">
               <div className="flex items-start gap-2.5">
                 <div className="p-1.5 bg-blue-500 rounded-md mt-0.5">
                   <User className="w-4 h-4 text-white" />

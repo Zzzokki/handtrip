@@ -3,7 +3,7 @@
 import { useAuth } from "@/components";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { Building2, Home, LogOut, Plane, Settings, Ticket, Users } from "lucide-react";
+import { Building2, Home, HomeIcon, LogOut, Plane, Settings, Ticket, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -38,11 +38,10 @@ export const CompanySidebar = () => {
     <Sidebar className="w-[320px]">
       <SidebarHeader className="border-b">
         <div className="flex items-center gap-2 p-2">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
+          <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg">
             <Building2 className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-slate-900">{user?.name}</h2>
             <p className="text-sm text-slate-600">Компанийн бүртгэл</p>
           </div>
         </div>
@@ -57,7 +56,7 @@ export const CompanySidebar = () => {
 
                 return (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild className={cn(isActive && "bg-gradient-to-br from-blue-100 to-purple-100")}>
+                    <SidebarMenuButton asChild className={cn(isActive && "bg-blue-50 text-blue-600")}>
                       <Link href={item.url}>
                         <item.icon />
                         <span>{item.title}</span>
@@ -76,10 +75,18 @@ export const CompanySidebar = () => {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton asChild className={cn(pathname === "/dashboard/company/settings" && "bg-blue-50 text-blue-600")}>
                   <Link href="/dashboard/company/settings">
                     <Settings />
                     Тохиргоо
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link href="/">
+                    <HomeIcon />
+                    Нүүр хуудас руу буцах
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

@@ -43,7 +43,7 @@ export function BasicInfoSection({ form }: BasicInfoSectionProps) {
                   Аяллын нэр <span className="text-red-500">*</span>
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="Жишээ нь: Швейцарийн Альп уулсын адал явдал" {...field} />
+                  <Input placeholder="Жишээ нь: Алтайн уулсын адал явдал" {...field} />
                 </FormControl>
                 <FormDescription>Аяллын багцын тодорхой, сонирхолтой нэр оруулна уу.</FormDescription>
                 <FormMessage />

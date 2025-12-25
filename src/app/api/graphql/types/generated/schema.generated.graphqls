@@ -1,3 +1,13 @@
+type AdminStats {
+  activeOrders: Int!
+  pendingCompanies: Int!
+  todayOrders: Int!
+  todayRevenue: Float!
+  totalRevenue: Float!
+  totalUsers: Int!
+  verifiedCompanies: Int!
+}
+
 type Agenda {
   createdAt: Timestamp!
   day: Int!
@@ -64,7 +74,7 @@ input CreateGuideInput {
 }
 
 input CreateOrderInput {
-  paymentIntentId: String!
+  paymentIntentId: String
   travelSessionId: Int!
   travelers: [TravelerInput!]!
 }
@@ -128,6 +138,7 @@ type GetTravelsByCompanyResult {
 }
 
 input GetTravelsFilterInput {
+  companyId: Int
   destinationIds: [Int!]
   maxDuration: Int
   maxPrice: Int
@@ -199,6 +210,7 @@ type Mutation {
   updateCompany(input: UpdateCompanyInput!): Company!
   updateCustomer(input: UpdateCustomerInput!): Customer!
   updateGuide(id: Int!, input: UpdateGuideInput!): Guide!
+  updateOrderPayment(input: UpdateOrderPaymentInput!): UpdateOrderPaymentResponse!
   updateTravel(id: Int!, input: CreateTravelInput!): Travel!
 }
 
@@ -230,10 +242,12 @@ type Payment {
 }
 
 type Query {
+  getAdminStats: AdminStats!
   getCategories: [Category!]!
   getCompanies: [Company!]!
   getCompany(id: Int!): Company!
   getCustomer(id: Int!): Customer!
+  getCustomers: [Customer!]!
   getDestinations: [Destination!]!
   getGuideByCompany(id: Int!): Guide!
   getGuidesByCompany: [Guide!]!
@@ -380,4 +394,15 @@ input UpdateGuideInput {
   name: String
   phoneNumber: String
   profileImage: String
+}
+
+input UpdateOrderPaymentInput {
+  orderId: Int!
+  paymentIntentId: String!
+}
+
+type UpdateOrderPaymentResponse {
+  message: String!
+  order: Order!
+  success: Boolean!
 }

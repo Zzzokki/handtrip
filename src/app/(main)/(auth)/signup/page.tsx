@@ -66,7 +66,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 px-4 py-8 pt-20">
+    <div className="min-h-screen flex items-center justify-center bg-blue-50 px-4 py-8 pt-20">
       <div className="w-full max-w-md">
         <div className="text-center mb-6">
           <div className="inline-flex items-center gap-2 mb-3">
@@ -226,11 +226,7 @@ export default function SignupPage() {
               </Label>
             </div>
 
-            <Button
-              type="submit"
-              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 h-10 font-semibold shadow-md hover:shadow-lg transition-all duration-200"
-              disabled={loading}
-            >
+            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 h-10 font-semibold shadow-md hover:shadow-lg transition-all duration-200" disabled={loading}>
               {loading ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />

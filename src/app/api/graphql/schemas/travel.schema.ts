@@ -67,6 +67,7 @@ export const travelTypeDefs = gql`
 
   input GetTravelsFilterInput {
     query: String
+    companyId: Int
     destinationIds: [Int!]
     subCategoryIds: [Int!]
     minDuration: Int

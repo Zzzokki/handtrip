@@ -1,70 +1,45 @@
 "use client";
 
 import { OrdersHeader, OrdersTable } from "./_components";
-
-// Mock data - replace with actual GraphQL query
-const mockOrders = [
-  {
-    id: 1001,
-    orderStatus: 1,
-    totalPrice: 2500,
-    totalSeats: 2,
-    createdAt: "2024-11-28T10:30:00Z",
-    customer: {
-      firstName: "Бат",
-      lastName: "Болд",
-    },
-    company: {
-      name: "Travel Plus LLC",
-    },
-    travelSession: {
-      startDate: "2024-12-15T00:00:00Z",
-      endDate: "2024-12-20T00:00:00Z",
-    },
-  },
-  {
-    id: 1002,
-    orderStatus: 0,
-    totalPrice: 1800,
-    totalSeats: 1,
-    createdAt: "2024-11-29T14:20:00Z",
-    customer: {
-      firstName: "Сарнай",
-      lastName: "Доржийн",
-    },
-    company: {
-      name: "Nomad Adventures",
-    },
-    travelSession: {
-      startDate: "2024-12-10T00:00:00Z",
-      endDate: "2024-12-12T00:00:00Z",
-    },
-  },
-  {
-    id: 1003,
-    orderStatus: 1,
-    totalPrice: 3200,
-    totalSeats: 3,
-    createdAt: "2024-11-27T09:15:00Z",
-    customer: {
-      firstName: "Өлзий",
-      lastName: "Баярын",
-    },
-    company: {
-      name: "Sky Journey Co.",
-    },
-    travelSession: {
-      startDate: "2024-12-18T00:00:00Z",
-      endDate: "2024-12-25T00:00:00Z",
-    },
-  },
-];
+import { useGetOrdersQuery } from "@/types/generated";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ManagerOrdersPage() {
+  const { data, loading, error } = useGetOrdersQuery();
+
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto py-6 px-4">
+        <div className="flex items-center gap-4 mb-6">
+          <Skeleton className="w-12 h-12 rounded-xl" />
+          <div className="space-y-2">
+            <Skeleton className="h-7 w-48" />
+            <Skeleton className="h-5 w-64" />
+          </div>
+        </div>
+        <div className="space-y-3">
+          {[...Array(5)].map((_, i) => (
+            <Skeleton key={i} className="h-16 w-full" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-7xl mx-auto py-6 px-4">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">Алдаа гарлаа: {error.message}</div>
+      </div>
+    );
+  }
+
+  const orders = data?.getOrders || [];
+
   return (
-    <div className="max-w-6xl mx-auto py-8 w-full">
-      <OrdersHeader totalOrders={mockOrders.length} />
-      <OrdersTable orders={mockOrders} />
+    <div className="max-w-7xl mx-auto py-6 px-4">
+      <OrdersHeader totalOrders={orders.length} />
+      <OrdersTable orders={orders} />
     </div>
   );
 }

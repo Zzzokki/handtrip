@@ -2,28 +2,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Clock, XCircle, Eye } from "lucide-react";
-
-interface Order {
-  id: number;
-  orderStatus: number;
-  totalPrice: number;
-  totalSeats: number;
-  createdAt: string;
-  customer: {
-    firstName: string;
-    lastName: string;
-  };
-  company: {
-    name: string;
-  };
-  travelSession: {
-    startDate: string;
-    endDate: string;
-  };
-}
+import { OrderWithRelationsFragment } from "@/types/generated";
+import Link from "next/link";
 
 interface OrdersTableProps {
-  orders: Order[];
+  orders: OrderWithRelationsFragment[];
 }
 
 const ORDER_STATUS = {
@@ -37,10 +20,9 @@ export const OrdersTable = ({ orders }: OrdersTableProps) => {
     <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
       <Table>
         <TableHeader>
-          <TableRow className="bg-gradient-to-r from-slate-50 to-slate-100/50 hover:from-slate-50 hover:to-slate-100/50">
+          <TableRow className="bg-slate-50 hover:bg-slate-100">
             <TableHead className="font-bold text-slate-900">Захиалга №</TableHead>
             <TableHead className="font-bold text-slate-900">Үйлчлүүлэгч</TableHead>
-            <TableHead className="font-bold text-slate-900">Компани</TableHead>
             <TableHead className="font-bold text-slate-900">Хугацаа</TableHead>
             <TableHead className="font-bold text-slate-900 text-center">Суудал</TableHead>
             <TableHead className="font-bold text-slate-900 text-right">Үнэ</TableHead>
@@ -55,15 +37,12 @@ export const OrdersTable = ({ orders }: OrdersTableProps) => {
             const StatusIcon = status.icon;
 
             return (
-              <TableRow key={order.id} className={`${index % 2 === 0 ? "bg-white" : "bg-slate-50/50"} hover:bg-emerald-50/30 transition-colors`}>
+              <TableRow key={order.id} className={`${index % 2 === 0 ? "bg-white" : "bg-slate-50/50"} hover:bg-blue-50/30 transition-colors`}>
                 <TableCell className="font-semibold text-slate-900">#{order.id}</TableCell>
                 <TableCell>
                   <span className="font-medium text-slate-900">
                     {order.customer.firstName} {order.customer.lastName}
                   </span>
-                </TableCell>
-                <TableCell>
-                  <span className="text-sm text-slate-700">{order.company.name}</span>
                 </TableCell>
                 <TableCell>
                   <div className="flex flex-col text-sm">
@@ -75,7 +54,7 @@ export const OrdersTable = ({ orders }: OrdersTableProps) => {
                   <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-blue-100 text-blue-700 font-semibold text-sm">{order.totalSeats}</span>
                 </TableCell>
                 <TableCell className="text-right">
-                  <span className="font-bold text-slate-900">${order.totalPrice.toLocaleString()}</span>
+                  <span className="font-bold text-slate-900">₮{order.totalPrice.toLocaleString()}</span>
                 </TableCell>
                 <TableCell className="text-center">
                   <Badge className={`${status.color} border`}>
@@ -91,9 +70,11 @@ export const OrdersTable = ({ orders }: OrdersTableProps) => {
                   })}
                 </TableCell>
                 <TableCell className="text-center">
-                  <Button variant="ghost" size="sm" className="hover:bg-emerald-50 hover:text-emerald-600">
-                    <Eye className="w-4 h-4" />
-                  </Button>
+                  <Link href={`/manager/orders/${order.id}`}>
+                    <Button variant="ghost" size="sm" className="hover:bg-blue-50 hover:text-blue-600">
+                      <Eye className="w-4 h-4" />
+                    </Button>
+                  </Link>
                 </TableCell>
               </TableRow>
             );

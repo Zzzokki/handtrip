@@ -8,6 +8,7 @@ export const commonTypeDefs = gql`
     getMeAsCustomer: Customer!
     getMeAsCompany: Company!
     getManagerStats: ManagerStats!
+    getAdminStats: AdminStats!
   }
 
   type ManagerStats {
@@ -16,6 +17,16 @@ export const commonTypeDefs = gql`
     totalUsers: Int!
     totalRevenue: Float!
     activeTravels: Int!
+    todayOrders: Int!
+    pendingCompanies: Int!
+  }
+
+  type AdminStats {
+    totalUsers: Int!
+    verifiedCompanies: Int!
+    totalRevenue: Float!
+    activeOrders: Int!
+    todayRevenue: Float!
     todayOrders: Int!
     pendingCompanies: Int!
   }

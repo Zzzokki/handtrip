@@ -101,11 +101,7 @@ export const TravelerLoginForm = () => {
           </Link>
         </div>
 
-        <Button
-          type="submit"
-          className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 h-10 font-semibold shadow-md hover:shadow-lg transition-all duration-200"
-          disabled={loading}
-        >
+        <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 h-10 font-semibold shadow-md hover:shadow-lg transition-all duration-200" disabled={loading}>
           {loading ? (
             <>
               <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />

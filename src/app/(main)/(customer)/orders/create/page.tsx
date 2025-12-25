@@ -440,7 +440,7 @@ export default function CreateOrderPage() {
                     className="w-full h-10 text-sm font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all group"
                   >
                     <ShoppingCart className="w-4 h-4 mr-2" />
-                    {showPayment ? "Төлбөр төлөх хэсэг" : "Төлбөр төлөх рүү"}
+                    {showPayment ? "Төлбөр төлөх хэсэг" : "Төлбөр төлөх"}
                     <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </CardContent>

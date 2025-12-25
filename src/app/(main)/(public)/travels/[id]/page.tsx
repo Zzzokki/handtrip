@@ -148,9 +148,9 @@ export default function TravelDetailsPage() {
 
             {/* Agenda Card */}
             <Card className="border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden group">
-              <CardHeader className="pb-4 bg-gradient-to-br from-purple-50 to-pink-50 border-b border-purple-100">
+              <CardHeader className="pb-4 bg-blue-50 border-b border-blue-100">
                 <div className="flex items-center gap-2.5">
-                  <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg shadow-md">
+                  <div className="p-2 bg-blue-600 rounded-lg shadow-md">
                     <Calendar className="w-5 h-5 text-white" />
                   </div>
                   <div>
@@ -160,13 +160,13 @@ export default function TravelDetailsPage() {
                 </div>
               </CardHeader>
               <CardContent className="p-5">
-                <div className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 rounded-xl p-5 border border-blue-100">
+                <div className="bg-blue-50 rounded-xl p-5 border border-blue-100">
                   <div className="flex gap-4">
                     <div className="flex flex-col items-center flex-shrink-0">
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-600 text-white flex items-center justify-center shadow-lg ring-2 ring-blue-100">
+                      <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-lg ring-2 ring-blue-100">
                         <Calendar className="w-5 h-5" />
                       </div>
-                      <div className="w-0.5 flex-1 bg-gradient-to-b from-blue-300 via-indigo-300 to-transparent mt-3 rounded-full" />
+                      <div className="w-0.5 flex-1 bg-blue-200 mt-3 rounded-full" />
                     </div>
                     <div className="flex-1 pb-2">
                       <h3 className="font-bold text-lg mb-2 text-gray-900 flex items-center gap-2">

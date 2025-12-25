@@ -42,9 +42,6 @@ export const getManagerStats: QueryResolvers["getManagerStats"] = async () => {
     .from(orderTable)
     .where(and(gte(orderTable.createdAt, startOfDay), lte(orderTable.createdAt, endOfDay)));
 
-  // Get pending companies (assuming status 0 is pending, adjust if needed)
-  const [{ pendingCompanies }] = await db.select({ pendingCompanies: count() }).from(companyTable).where(eq(companyTable.isVerified, false));
-
   return {
     totalCompanies,
     totalOrders,
@@ -52,6 +49,6 @@ export const getManagerStats: QueryResolvers["getManagerStats"] = async () => {
     totalRevenue,
     activeTravels,
     todayOrders,
-    pendingCompanies,
+    pendingCompanies: 0,
   };
 };

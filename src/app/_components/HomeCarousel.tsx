@@ -36,9 +36,7 @@ export const HomeCarousel = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col justify-center items-start">
                     <div className="container mx-auto px-4">
                       <div className="flex flex-wrap gap-2 mb-3 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                        {travel.categories && travel.categories.length > 0 && (
-                          <Badge className="bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0 shadow-lg text-xs h-6">{travel.categories[0].name}</Badge>
-                        )}
+                        {travel.categories && travel.categories.length > 0 && <Badge className="bg-blue-600 text-white border-0 shadow-lg text-xs h-6">{travel.categories[0].name}</Badge>}
                         {travel.duration && (
                           <Badge className="bg-white/95 backdrop-blur-sm text-gray-900 border-0 shadow-lg text-xs h-6">
                             <Calendar className="w-3 h-3 mr-1" />

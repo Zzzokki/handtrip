@@ -53,7 +53,7 @@ export function AdminAuth({ children }: { children: React.ReactNode }) {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-gray-50 to-purple-50 p-4">
+      <div className="min-h-screen flex items-center justify-center bg-blue-50 p-4">
         <Card className="w-full max-w-md border border-gray-200 shadow-lg">
           <CardHeader className="text-center">
             <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4">

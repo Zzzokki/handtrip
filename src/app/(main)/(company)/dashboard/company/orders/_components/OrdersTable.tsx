@@ -36,14 +36,15 @@ export const OrdersTable = ({ orders }: OrdersTableProps) => {
       <Table>
         <TableHeader>
           <TableRow className="bg-gray-50 hover:bg-gray-50">
-            <TableHead className="font-semibold text-gray-900 h-10">Захиалга</TableHead>
-            <TableHead className="font-semibold text-gray-900 h-10">Үйлчлүүлэгч</TableHead>
-            <TableHead className="font-semibold text-gray-900 h-10">Огноо</TableHead>
-            <TableHead className="font-semibold text-gray-900 text-center h-10">Аялагч</TableHead>
-            <TableHead className="font-semibold text-gray-900 text-center h-10">Суудал</TableHead>
-            <TableHead className="font-semibold text-gray-900 text-right h-10">Үнэ</TableHead>
-            <TableHead className="font-semibold text-gray-900 text-center h-10">Төлөв</TableHead>
-            <TableHead className="font-semibold text-gray-900 h-10">Үүссэн</TableHead>
+            <TableHead className="font-medium text-xs text-gray-900 h-10">Захиалга</TableHead>
+            <TableHead className="font-medium text-xs text-gray-900 h-10">Үйлчлүүлэгч</TableHead>
+            <TableHead className="font-medium text-xs text-gray-900 h-10">Огноо</TableHead>
+            <TableHead className="font-medium text-xs text-gray-900 h-10">Аялагч</TableHead>
+            <TableHead className="font-medium text-xs text-gray-900 h-10">Суудал</TableHead>
+            <TableHead className="font-medium text-xs text-gray-900 h-10">Үнэ</TableHead>
+            <TableHead className="font-medium text-xs text-gray-900 h-10">Төлөв</TableHead>
+            <TableHead className="font-medium text-xs text-gray-900 h-10">Төлбөр</TableHead>
+            <TableHead className="font-medium text-xs text-gray-900 h-10">Үүссэн</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -65,28 +66,28 @@ export const OrdersTable = ({ orders }: OrdersTableProps) => {
                     {new Date(order.travelSession.endDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                   </div>
                 </TableCell>
-                <TableCell className="text-center py-2">
+                <TableCell className="py-2">
                   <span className="inline-flex items-center justify-center min-w-[1.75rem] h-6 px-1.5 rounded bg-purple-50 text-purple-700 font-medium text-xs">{order.travelers.length}</span>
                 </TableCell>
-                <TableCell className="text-center py-2">
+                <TableCell className="py-2">
                   <span className="inline-flex items-center justify-center min-w-[1.75rem] h-6 px-1.5 rounded bg-blue-50 text-blue-700 font-medium text-xs">{order.totalSeats}</span>
                 </TableCell>
-                <TableCell className="text-right py-2">
+                <TableCell className="py-2">
                   <span className="font-semibold text-gray-900 text-sm">₮{order.totalPrice.toLocaleString()}</span>
                 </TableCell>
                 <TableCell className="py-2">
-                  <div className="flex flex-col gap-1 items-center">
-                    <Badge className={`${status.color} text-xs px-2 py-0 font-medium`}>
-                      <StatusIcon className="w-3 h-3 mr-1" />
-                      {status.label}
+                  <Badge className={`${status.color} text-xs px-2 py-1 font-medium`}>
+                    <StatusIcon className="w-3 h-3 mr-1" />
+                    {status.label}
+                  </Badge>
+                </TableCell>
+                <TableCell className="py-2">
+                  {order.payment.isPaid && (
+                    <Badge className="bg-blue-600 text-white text-xs px-2 py-1 font-medium">
+                      <CreditCard className="w-3 h-3 mr-1" />
+                      Төлсөн
                     </Badge>
-                    {order.payment.isPaid && (
-                      <Badge className="bg-blue-600 text-white text-xs px-2 py-0 font-medium">
-                        <CreditCard className="w-3 h-3 mr-1" />
-                        Төлсөн
-                      </Badge>
-                    )}
-                  </div>
+                  )}
                 </TableCell>
                 <TableCell className="text-xs text-gray-600 py-2">
                   {new Date(order.createdAt).toLocaleDateString("en-US", {

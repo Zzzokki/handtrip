@@ -1,20 +1,30 @@
 import { QueryResolvers } from "@/api/types";
 import { db } from "@/database";
-import { eq } from "drizzle-orm";
 
 export const getOrdersByCompany: QueryResolvers["getOrdersByCompany"] = async (_, { companyId }) => {
-  // Get all orders for travels belonging to this company
+  const travels = await db.query.travelTable.findMany({
+    where: (table, { eq }) => eq(table.companyId, companyId),
+  });
+
+  const travelIds = travels.map((travel) => travel.id);
+
+  console.log("Travel IDs:", travelIds);
+
+  const travelSessions = await db.query.travelSessionTable.findMany({
+    where: (table, { inArray }) => inArray(table.travelId, travelIds),
+  });
+
+  const travelSessionIds = travelSessions.map((session) => session.id);
+
+  console.log("Travel Session IDs:", travelSessionIds);
+
   const orders = await db.query.orderTable.findMany({
+    where: (table, { inArray }) => inArray(table.travelSessionId, travelSessionIds),
     with: {
       customer: true,
       payment: true,
       travelSession: {
         with: {
-          travel: {
-            with: {
-              company: true,
-            },
-          },
           guide: true,
           seats: {
             with: {
@@ -35,8 +45,5 @@ export const getOrdersByCompany: QueryResolvers["getOrdersByCompany"] = async (_
     },
   });
 
-  // Filter orders where the travel's company matches the companyId
-  const companyOrders = orders.filter((order) => order.travelSession.travel.company.id === companyId);
-
-  return companyOrders;
+  return orders;
 };

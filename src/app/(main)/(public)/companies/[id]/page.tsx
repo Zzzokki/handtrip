@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useGetCompanyQuery, useGetTravelsByCompanyQuery, useGetCategoriesQuery, useGetSubCategoriesQuery } from "@/types/generated";
+import { useGetCompanyQuery, useGetTravelsQuery, useGetCategoriesQuery, useGetSubCategoriesQuery } from "@/types/generated";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CompanyHero, CompanyAbout, CompanyContact, TravelFilters, CompanyTravelsGrid } from "./_components";
@@ -21,8 +21,16 @@ export default function CompanyDetailPage() {
     variables: { getCompanyId: parseInt(id) },
   });
 
-  const { data: travelsData, loading: travelsLoading } = useGetTravelsByCompanyQuery({
-    variables: { input: { companyId: parseInt(id) } },
+  const { data: travelsData, loading: travelsLoading } = useGetTravelsQuery({
+    variables: {
+      input: {
+        page: 1,
+        limit: 100,
+        filters: {
+          companyId: parseInt(id),
+        },
+      },
+    },
   });
 
   const { data: categoriesData } = useGetCategoriesQuery();
@@ -30,7 +38,7 @@ export default function CompanyDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <div className="min-h-screen bg-slate-50">
         <div className="h-[500px] bg-gray-200 animate-pulse" />
         <div className="container mx-auto px-4 py-12">
           <div className="grid lg:grid-cols-3 gap-8">
@@ -47,7 +55,7 @@ export default function CompanyDetailPage() {
 
   if (error || !data?.getCompany) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex items-center justify-center px-4">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
         <Card className="max-w-md w-full border-0 shadow-xl rounded-2xl">
           <CardHeader className="text-center py-12">
             <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -57,7 +65,7 @@ export default function CompanyDetailPage() {
             <CardDescription className="text-base">Таны хайж буй компани олдсонгүй</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button onClick={() => router.push("/companies")} className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 h-12 rounded-xl">
+            <Button onClick={() => router.push("/companies")} className="w-full bg-blue-600 hover:bg-blue-700 h-12 rounded-xl">
               Бүх компаниуд үзэх
             </Button>
           </CardContent>
@@ -67,7 +75,7 @@ export default function CompanyDetailPage() {
   }
 
   const company = data.getCompany;
-  const allTravels = travelsData?.getTravelsByCompany?.travels || [];
+  const allTravels = travelsData?.getTravels?.travels || [];
 
   // Filter travels based on selected filters
   const filteredTravels = allTravels.filter((travel: any) => {
@@ -101,19 +109,14 @@ export default function CompanyDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-      {/* Hero Section */}
+    <div className="min-h-screen bg-slate-50">
       <CompanyHero company={company} />
 
-      {/* Content */}
       <div className="container mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-3 gap-6">
-          {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* About */}
             <CompanyAbout company={company} />
 
-            {/* Travel Packages */}
             {travelsLoading ? (
               <div className="space-y-6">
                 <div className="h-12 bg-gray-200 rounded animate-pulse" />
@@ -128,23 +131,8 @@ export default function CompanyDetailPage() {
             )}
           </div>
 
-          {/* Sidebar */}
           <div className="lg:col-span-1 space-y-6">
-            {/* Contact Card */}
             <CompanyContact company={company} travelCount={allTravels.length} />
-
-            {/* Filters */}
-            {categoriesData?.getCategories && subCategoriesData?.getSubCategories && (
-              <TravelFilters
-                categories={categoriesData.getCategories}
-                subCategories={subCategoriesData.getSubCategories}
-                selectedCategoryId={selectedCategoryId}
-                selectedSubCategoryIds={selectedSubCategoryIds}
-                onCategoryChange={handleCategoryChange}
-                onSubCategoryToggle={handleSubCategoryToggle}
-                onClearFilters={handleClearFilters}
-              />
-            )}
           </div>
         </div>
       </div>

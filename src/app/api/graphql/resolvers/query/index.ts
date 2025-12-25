@@ -6,3 +6,4 @@ export * from "./destination";
 export * from "./order";
 export * from "./guide";
 export * from "./manager";
+export * from "./admin";

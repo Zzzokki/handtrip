@@ -174,22 +174,6 @@ export default function OrderDetailPage() {
               )}
             </div>
           </div>
-
-          {/* Quick Actions */}
-          <div className="flex flex-wrap gap-2">
-            <Button variant="outline" size="sm" className="hover:bg-slate-100 hover:border-slate-300">
-              <Download className="w-4 h-4 mr-2" />
-              Татах
-            </Button>
-            <Button variant="outline" size="sm" className="hover:bg-slate-100 hover:border-slate-300">
-              <Share2 className="w-4 h-4 mr-2" />
-              Хуваалцах
-            </Button>
-            <Button variant="outline" size="sm" className="hover:bg-slate-100 hover:border-slate-300">
-              <MessageCircle className="w-4 h-4 mr-2" />
-              Холбоо барих
-            </Button>
-          </div>
         </div>
 
         {/* Travel Package Card */}

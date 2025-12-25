@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Eye, Edit, Trash2, Mail, Phone, Users, Plus } from "lucide-react";
+import { Eye, Trash2, Mail, Phone, Users, Plus } from "lucide-react";
 import { Guide } from "@/types/generated";
 import Link from "next/link";
 
@@ -74,12 +74,6 @@ export const GuidesTable = ({ guides, onDelete }: GuidesTableProps) => {
                 <Button variant="outline" size="sm" className="w-full border-gray-300 hover:bg-blue-50 hover:border-blue-400 hover:text-blue-700 transition-all">
                   <Eye className="w-3.5 h-3.5 mr-1.5" />
                   Харах
-                </Button>
-              </Link>
-
-              <Link href={`/dashboard/company/guides/${guide.id}/edit`}>
-                <Button variant="outline" size="sm" className="border-gray-300 hover:bg-indigo-50 hover:border-indigo-400 hover:text-indigo-700 transition-all px-3">
-                  <Edit className="w-3.5 h-3.5" />
                 </Button>
               </Link>
 

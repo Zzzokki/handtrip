@@ -17,7 +17,7 @@ export default function CompaniesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-16">
+      <div className="min-h-screen bg-white py-16">
         <div className="container mx-auto px-4">
           <div className="mb-12 animate-pulse text-center">
             <div className="h-8 bg-gray-200 rounded w-48 mx-auto mb-4" />
@@ -36,7 +36,7 @@ export default function CompaniesPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex items-center justify-center px-4">
+      <div className="min-h-screen bg-white flex items-center justify-center px-4">
         <Card className="max-w-md w-full border-0 shadow-xl rounded-2xl">
           <CardHeader className="text-center py-12">
             <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -51,8 +51,8 @@ export default function CompaniesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-      <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white py-12 md:py-16">
+    <div className="min-h-screen bg-white">
+      <div className="bg-blue-600 text-white py-12 md:py-16">
         <div className="container mx-auto px-4 text-center pt-8">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-sm rounded-full mb-4">
             <Sparkles className="w-3.5 h-3.5" />

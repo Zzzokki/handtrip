@@ -11,7 +11,7 @@ export default function LoginPage() {
   const [userType, setUserType] = useState<UserType>("traveler");
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 px-4 py-8 pt-20">
+    <div className="min-h-screen flex items-center justify-center bg-blue-50 px-4 py-8 pt-20">
       <div className="w-full max-w-md">
         <div className="text-center mb-6">
           <div className="inline-flex items-center gap-2 mb-3">
