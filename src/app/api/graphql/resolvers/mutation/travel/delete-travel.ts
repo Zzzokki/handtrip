@@ -15,8 +15,6 @@ export const deleteTravel: MutationResolvers["deleteTravel"] = async (_, { id },
     with: {
       destination: true,
       company: true,
-      category: true,
-      subCategory: true,
       travelSessions: {
         with: {
           guide: true,
