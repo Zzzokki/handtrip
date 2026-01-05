@@ -8,7 +8,12 @@ export const getOrders: QueryResolvers["getOrders"] = async () => {
       payment: true,
       travelSession: {
         with: {
-          travel: true,
+          travel: {
+            with: {
+              company: true,
+              destination: true,
+            },
+          },
           guide: true,
           seats: {
             with: {

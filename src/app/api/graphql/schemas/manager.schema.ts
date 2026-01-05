@@ -1,23 +1,16 @@
-import { builder } from "../builder";
+import { gql } from "graphql-tag";
 
-export const ManagerStats = builder
-  .objectRef<{
-    totalCompanies: number;
-    totalOrders: number;
-    totalUsers: number;
-    totalRevenue: number;
-    activeTravels: number;
-    todayOrders: number;
-    pendingCompanies: number;
-  }>("ManagerStats")
-  .implement({
-    fields: (t) => ({
-      totalCompanies: t.exposeInt("totalCompanies"),
-      totalOrders: t.exposeInt("totalOrders"),
-      totalUsers: t.exposeInt("totalUsers"),
-      totalRevenue: t.exposeFloat("totalRevenue"),
-      activeTravels: t.exposeInt("activeTravels"),
-      todayOrders: t.exposeInt("todayOrders"),
-      pendingCompanies: t.exposeInt("pendingCompanies"),
-    }),
-  });
+export const managerTypeDefs = gql`
+  type Manager {
+    id: Int!
+    firstName: String!
+    lastName: String!
+    email: String!
+    phoneNumber: String
+    username: String!
+    companyId: Int
+    company: Company
+    createdAt: Timestamp!
+    updatedAt: Timestamp!
+  }
+`;

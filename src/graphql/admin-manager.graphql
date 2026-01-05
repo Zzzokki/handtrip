@@ -1,0 +1,31 @@
+query GetMeAsAdmin {
+  getMeAsAdmin {
+    id
+    firstName
+    lastName
+    email
+    username
+    createdAt
+    updatedAt
+  }
+}
+
+query GetMeAsManager {
+  getMeAsManager {
+    id
+    firstName
+    lastName
+    email
+    phoneNumber
+    username
+    companyId
+    company {
+      id
+      name
+      logo
+      email
+    }
+    createdAt
+    updatedAt
+  }
+}

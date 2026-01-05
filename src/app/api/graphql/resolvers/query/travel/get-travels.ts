@@ -1,5 +1,5 @@
 import { QueryResolvers } from "@/api/types";
-import { db, destinationTable, travelSessionTable, travelTable } from "@/database";
+import { db, seatCostTable, seatTable, travelSessionTable, travelTable } from "@/database";
 import { and, count, eq, exists, gte, ilike, inArray, lte, or, SQL } from "drizzle-orm";
 
 export const getTravels: QueryResolvers["getTravels"] = async (_, { input }) => {
@@ -32,11 +32,7 @@ export const getTravels: QueryResolvers["getTravels"] = async (_, { input }) => 
       where: (table, { inArray }) => inArray(table.subCategoryId, filters.subCategoryIds!),
     });
 
-    console.log(joins, "SUBCATEGORY JOINS");
-
     const travelIds = joins.map((join) => join.travelId);
-
-    console.log(travelIds, "TRAVEL IDS");
 
     if (travelIds.length > 0) {
       conditions.push(inArray(travelTable.id, travelIds));
@@ -50,16 +46,47 @@ export const getTravels: QueryResolvers["getTravels"] = async (_, { input }) => 
   if (filters.maxDuration) conditions.push(lte(travelTable.duration, filters.maxDuration));
 
   const travels = await db.query.travelTable.findMany({
-    where: (travel) =>
-      and(
-        ...conditions,
+    where: (travel) => {
+      const whereClauses: SQL[] = [...conditions];
+
+      // Price filtering based on seat costs - must be done in where callback to access travel reference
+      if (filters.minPrice !== undefined && filters.minPrice !== null) {
+        whereClauses.push(
+          exists(
+            db
+              .select()
+              .from(travelSessionTable)
+              .innerJoin(seatTable, eq(seatTable.travelSessionId, travelSessionTable.id))
+              .innerJoin(seatCostTable, eq(seatCostTable.id, seatTable.seatCostId))
+              .where(and(eq(travelSessionTable.travelId, travel.id), gte(seatCostTable.cost, filters.minPrice)))
+          )
+        );
+      }
+
+      if (filters.maxPrice !== undefined && filters.maxPrice !== null) {
+        whereClauses.push(
+          exists(
+            db
+              .select()
+              .from(travelSessionTable)
+              .innerJoin(seatTable, eq(seatTable.travelSessionId, travelSessionTable.id))
+              .innerJoin(seatCostTable, eq(seatCostTable.id, seatTable.seatCostId))
+              .where(and(eq(travelSessionTable.travelId, travel.id), lte(seatCostTable.cost, filters.maxPrice)))
+          )
+        );
+      }
+
+      whereClauses.push(
         exists(
           db
             .select()
             .from(travelSessionTable)
             .where(and(gte(travelSessionTable.startDate, new Date()), eq(travelSessionTable.travelId, travel.id)))
         )
-      ),
+      );
+
+      return and(...whereClauses);
+    },
     offset: (page - 1) * limit,
     limit,
     with: {
@@ -82,21 +109,48 @@ export const getTravels: QueryResolvers["getTravels"] = async (_, { input }) => 
     },
   });
 
-  // Count total travels with the same filter conditions
+  // Build count query with same conditions
+  const countConditions: SQL[] = [...conditions];
+
+  if (filters.minPrice !== undefined && filters.minPrice !== null) {
+    countConditions.push(
+      exists(
+        db
+          .select()
+          .from(travelSessionTable)
+          .innerJoin(seatTable, eq(seatTable.travelSessionId, travelSessionTable.id))
+          .innerJoin(seatCostTable, eq(seatCostTable.id, seatTable.seatCostId))
+          .where(and(eq(travelSessionTable.travelId, travelTable.id), gte(seatCostTable.cost, filters.minPrice)))
+      )
+    );
+  }
+
+  if (filters.maxPrice !== undefined && filters.maxPrice !== null) {
+    countConditions.push(
+      exists(
+        db
+          .select()
+          .from(travelSessionTable)
+          .innerJoin(seatTable, eq(seatTable.travelSessionId, travelSessionTable.id))
+          .innerJoin(seatCostTable, eq(seatCostTable.id, seatTable.seatCostId))
+          .where(and(eq(travelSessionTable.travelId, travelTable.id), lte(seatCostTable.cost, filters.maxPrice)))
+      )
+    );
+  }
+
+  countConditions.push(
+    exists(
+      db
+        .select()
+        .from(travelSessionTable)
+        .where(and(gte(travelSessionTable.startDate, new Date()), eq(travelSessionTable.travelId, travelTable.id)))
+    )
+  );
+
   const [{ count: totalTravels }] = await db
     .select({ count: count() })
     .from(travelTable)
-    .where(
-      and(
-        ...conditions,
-        exists(
-          db
-            .select()
-            .from(travelSessionTable)
-            .where(and(gte(travelSessionTable.startDate, new Date()), eq(travelSessionTable.travelId, travelTable.id)))
-        )
-      )
-    );
+    .where(and(...countConditions));
 
   const totalPages = Math.ceil(totalTravels / limit);
 

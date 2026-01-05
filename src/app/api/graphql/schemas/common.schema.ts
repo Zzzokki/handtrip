@@ -7,6 +7,8 @@ export const commonTypeDefs = gql`
   type Query {
     getMeAsCustomer: Customer!
     getMeAsCompany: Company!
+    getMeAsAdmin: Admin!
+    getMeAsManager: Manager!
     getManagerStats: ManagerStats!
     getAdminStats: AdminStats!
   }

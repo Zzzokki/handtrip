@@ -14,7 +14,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-blue-50 px-4 py-8 pt-20">
       <div className="w-full max-w-md">
         <div className="text-center mb-6">
-          <div className="inline-flex items-center gap-2 mb-3">
+          <Link href="/" className="inline-flex items-center gap-2 mb-3 hover:opacity-80 transition-opacity">
             <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -26,7 +26,7 @@ export default function LoginPage() {
               </svg>
             </div>
             <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">HandTrip</h1>
-          </div>
+          </Link>
           <p className="text-gray-600 text-sm">Тавтай морилно уу! Бүртгэлдээ нэвтрэнэ үү</p>
         </div>
 

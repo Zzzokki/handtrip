@@ -1,6 +1,6 @@
 import { type Metadata } from "next";
 import { type PropsWithChildren } from "react";
-import { AdminAuth } from "./_components/AdminAuth";
+import { AdminAuth, AdminSidebar, AdminHeader } from "./_components";
 
 export const metadata: Metadata = {
   title: "Admin Dashboard",
@@ -8,5 +8,17 @@ export const metadata: Metadata = {
 };
 
 export default function AdminLayout({ children }: PropsWithChildren) {
-  return <AdminAuth>{children}</AdminAuth>;
+  return (
+    <AdminAuth>
+      <div className="flex h-screen overflow-hidden bg-gray-50">
+        <AdminSidebar />
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <AdminHeader />
+          <main className="flex-1 overflow-y-auto">
+            <div className="px-6 py-4">{children}</div>
+          </main>
+        </div>
+      </div>
+    </AdminAuth>
+  );
 }

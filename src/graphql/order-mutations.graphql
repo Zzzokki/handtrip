@@ -7,3 +7,30 @@ mutation CreateOrder($input: CreateOrderInput!) {
     }
   }
 }
+
+mutation UpdateOrderPayment($orderId: Int!, $paymentIntentId: String!) {
+  updateOrderPayment(orderId: $orderId, paymentIntentId: $paymentIntentId) {
+    success
+    message
+    order {
+      ...OrderWithRelations
+    }
+  }
+}
+
+mutation UpdatePaymentIntent($orderId: Int!, $paymentIntentId: String!) {
+  updatePaymentIntent(orderId: $orderId, paymentIntentId: $paymentIntentId) {
+    success
+    message
+  }
+}
+
+mutation CancelOrder($orderId: Int!) {
+  cancelOrder(orderId: $orderId) {
+    success
+    message
+    order {
+      ...OrderWithRelations
+    }
+  }
+}

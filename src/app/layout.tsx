@@ -1,5 +1,5 @@
 import { type Metadata } from "next";
-import { type PropsWithChildren } from "react";
+import { Suspense, type PropsWithChildren } from "react";
 
 import localFont from "next/font/local";
 import "./globals.css";
@@ -27,8 +27,10 @@ export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <ApolloWrapper>{children}</ApolloWrapper>
-        <Toaster />
+        <Suspense>
+          <ApolloWrapper>{children}</ApolloWrapper>
+          <Toaster />
+        </Suspense>
       </body>
     </html>
   );

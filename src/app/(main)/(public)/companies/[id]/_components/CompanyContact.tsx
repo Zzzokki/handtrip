@@ -12,31 +12,31 @@ interface CompanyContactProps {
 
 export default function CompanyContact({ company, travelCount }: CompanyContactProps) {
   return (
-    <Card className="border-0 shadow-md rounded-xl">
+    <Card className="shadow-sm rounded-xl border-gray-200">
       <CardHeader className="pb-3">
-        <CardTitle className="text-lg">Холбоо барих</CardTitle>
+        <CardTitle className="text-lg font-bold">Холбоо барих</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Contact Details */}
         <div className="space-y-3">
-          <div className="flex items-start gap-2">
-            <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
+          <div className="flex items-start gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
               <span className="text-sm">✉️</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs text-gray-500 mb-0.5">Имэйл</p>
+              <p className="text-xs text-gray-500 mb-0.5 font-medium">Имэйл</p>
               <a href={`mailto:${company.email}`} className="text-blue-600 hover:text-blue-700 text-sm font-medium hover:underline break-all">
                 {company.email}
               </a>
             </div>
           </div>
 
-          <div className="flex items-start gap-2">
-            <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center flex-shrink-0">
+          <div className="flex items-start gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center flex-shrink-0">
               <span className="text-sm">📞</span>
             </div>
             <div className="flex-1">
-              <p className="text-xs text-gray-500 mb-0.5">Утас</p>
+              <p className="text-xs text-gray-500 mb-0.5 font-medium">Утас</p>
               <a href={`tel:${company.phoneNumber}`} className="text-blue-600 hover:text-blue-700 text-sm font-medium hover:underline">
                 {company.phoneNumber}
               </a>
@@ -45,7 +45,7 @@ export default function CompanyContact({ company, travelCount }: CompanyContactP
         </div>
 
         {/* Contact Button */}
-        <div className="pt-3 border-t">
+        <div className="pt-2 border-t border-gray-100">
           <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 h-10 rounded-lg shadow-md hover:shadow-lg transition-all text-sm font-semibold">
             <span>Холбогдох</span>
             <ChevronRight className="w-4 h-4 ml-1" />
@@ -53,19 +53,19 @@ export default function CompanyContact({ company, travelCount }: CompanyContactP
         </div>
 
         {/* Quick Stats */}
-        <div className="pt-3 border-t">
-          <p className="font-semibold text-gray-900 mb-2 text-sm">Статистик</p>
-          <div className="space-y-2">
+        <div className="pt-3 border-t border-gray-100">
+          <p className="font-semibold text-gray-900 mb-2.5 text-sm">Статистик</p>
+          <div className="space-y-2.5">
             <div className="flex justify-between items-center">
-              <span className="text-gray-600 text-xs">Аяллын багцууд</span>
+              <span className="text-gray-600 text-xs font-medium">Аяллын багцууд</span>
               <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center">
-                  <span className="text-xs font-bold text-blue-600">{travelCount}</span>
+                <div className="px-2.5 py-1 rounded-lg bg-blue-50 border border-blue-100">
+                  <span className="text-sm font-bold text-blue-600">{travelCount}</span>
                 </div>
               </div>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-gray-600 text-xs">Гишүүн болсон</span>
+              <span className="text-gray-600 text-xs font-medium">Гишүүн болсон</span>
               <span className="font-semibold text-gray-900 text-sm">{new Date(company.createdAt).getFullYear()}</span>
             </div>
           </div>

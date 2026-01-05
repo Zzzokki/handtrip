@@ -15,9 +15,18 @@ export const createOrder: MutationResolvers["createOrder"] = async (_, { input }
   const { travelSessionId, travelers, paymentIntentId } = input;
 
   try {
-    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+    // If paymentIntentId is provided, verify payment succeeded
+    let isPaid = false;
+    let stripePaymentMethod = null;
 
-    if (paymentIntent.status !== "succeeded") throw new Error("Төлбөр төлөгдөөгүй байна. Эхлээд төлбөрөө төлнө үү.");
+    if (paymentIntentId) {
+      const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+      if (paymentIntent.status !== "succeeded") {
+        throw new Error("Төлбөр төлөгдөөгүй байна. Эхлээд төлбөрөө төлнө үү.");
+      }
+      isPaid = true;
+      stripePaymentMethod = paymentIntent.payment_method as string;
+    }
 
     const travelSession = await db.query.travelSessionTable.findFirst({
       where: eq(travelSessionTable.id, travelSessionId),
@@ -31,16 +40,21 @@ export const createOrder: MutationResolvers["createOrder"] = async (_, { input }
 
     if (availableSeats.length < travelers.length) throw new Error(`Хүрэлцэхүйц суудал байхгүй байна. Зөвхөн ${availableSeats.length} суудал үлдсэн.`);
 
-    const totalPrice = paymentIntent.amount;
+    // Calculate total price from available seats
+    const seatCost = await db.query.seatCostTable.findFirst({
+      where: eq(seatCostTable.id, availableSeats[0].seatCostId),
+    });
+
+    const totalPrice = (seatCost?.cost || 0) * travelers.length;
 
     const [payment] = await db
       .insert(paymentTable)
       .values({
         total: totalPrice,
-        isPaid: true,
-        paidAt: new Date(),
-        stripePaymentIntentId: paymentIntentId,
-        stripePaymentMethod: paymentIntent.payment_method as string,
+        isPaid,
+        paidAt: isPaid ? new Date() : null,
+        stripePaymentIntentId: paymentIntentId || null,
+        stripePaymentMethod,
       })
       .returning();
 
@@ -49,7 +63,7 @@ export const createOrder: MutationResolvers["createOrder"] = async (_, { input }
       .values({
         totalSeats: travelers.length,
         totalPrice,
-        orderStatus: 1,
+        orderStatus: isPaid ? 1 : 0, // 1 = confirmed if paid, 0 = pending if not paid
         customerId: user.id,
         travelSessionId,
         paymentId: payment.id,
@@ -60,7 +74,14 @@ export const createOrder: MutationResolvers["createOrder"] = async (_, { input }
       const travelerData = travelers[i];
       const seat = availableSeats[i];
 
-      await db.update(seatTable).set({ status: "occupied" }).where(eq(seatTable.id, seat.id));
+      // Only mark seats as occupied if payment is confirmed
+      // For unpaid orders, seats remain available until payment succeeds
+      if (isPaid) {
+        await db.update(seatTable).set({ status: "occupied" }).where(eq(seatTable.id, seat.id));
+      } else {
+        // Reserve the seat temporarily (you might want to add a 'reserved' status)
+        await db.update(seatTable).set({ status: "reserved" }).where(eq(seatTable.id, seat.id));
+      }
 
       await db.insert(travelerTable).values({
         name: travelerData.name,

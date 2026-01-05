@@ -36,16 +36,16 @@ export const StatCard = ({ title, value, subtitle, icon: Icon, color = "red" }: 
   const colors = colorConfig[color];
 
   return (
-    <Card className="hover:shadow-md transition-shadow">
+    <Card className="hover:shadow-sm transition-shadow border-gray-200">
       <CardContent className="p-4">
         <div className="flex items-start justify-between">
           <div className="flex-1">
-            <p className="text-sm font-medium text-gray-600 mb-1">{title}</p>
-            <p className="text-2xl font-bold text-gray-900 mb-0.5">{value}</p>
-            <p className="text-xs text-gray-500">{subtitle}</p>
+            <p className="text-xs font-medium text-gray-500 mb-1">{title}</p>
+            <p className="text-xl font-semibold text-gray-900 mb-0.5">{value}</p>
+            <p className="text-xs text-gray-400">{subtitle}</p>
           </div>
           <div className={`p-2 rounded-lg ${colors.bg}`}>
-            <Icon className={`w-5 h-5 ${colors.icon}`} />
+            <Icon className={`w-4 h-4 ${colors.icon}`} />
           </div>
         </div>
       </CardContent>

@@ -22,9 +22,21 @@ export const authTypeDefs = gql`
     company: Company!
   }
 
+  type LoginAsAdminResponse {
+    token: String!
+    admin: Admin!
+  }
+
+  type LoginAsManagerResponse {
+    token: String!
+    manager: Manager!
+  }
+
   type Mutation {
     loginAsCustomer(username: String!, password: String!): LoginAsCustomerResponse!
     loginAsCompany(username: String!, password: String!): LoginAsCompanyResponse!
+    loginAsAdmin(username: String!, password: String!): LoginAsAdminResponse!
+    loginAsManager(username: String!, password: String!): LoginAsManagerResponse!
 
     registerAsCustomer(input: RegisterAsCustomerInput!): LoginAsCustomerResponse!
   }

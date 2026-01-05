@@ -1,15 +1,16 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/components/providers";
-import { useGetOrderQuery, useGetTravelQuery } from "@/types/generated";
+import { useGetOrderQuery, useGetTravelQuery, useCancelOrderMutation } from "@/types/generated";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin, User, Mail, Phone, DollarSign, CheckCircle, Clock, XCircle, ArrowLeft, Users, Building2, Clock3 } from "lucide-react";
+import { toast } from "sonner";
 
 const ORDER_STATUS = {
   0: { label: "Хүлээгдэж буй", color: "bg-yellow-100 text-yellow-800", icon: Clock },
@@ -25,10 +26,13 @@ export default function OrderDetailPage() {
   const { id } = useParams<Params>();
   const router = useRouter();
   const { user, isAuthenticated, isLoading } = useAuth();
+  const [isCancelling, setIsCancelling] = useState(false);
 
-  const { data, loading, error } = useGetOrderQuery({
+  const { data, loading, error, refetch } = useGetOrderQuery({
     variables: { getOrderId: parseInt(id) },
   });
+
+  const [cancelOrder] = useCancelOrderMutation();
 
   const { data: travelData } = useGetTravelQuery({
     variables: { getTravelId: data?.getOrder?.travelSession.travelId || 0 },
@@ -36,6 +40,33 @@ export default function OrderDetailPage() {
   });
 
   const travel = travelData?.getTravel;
+
+  const handleCancelOrder = async () => {
+    if (!confirm("Та энэ захиалгыг цуцлахдаа итгэлтэй байна уу?")) {
+      return;
+    }
+
+    try {
+      setIsCancelling(true);
+      const result = await cancelOrder({
+        variables: { orderId: parseInt(id) },
+        refetchQueries: ["GetOrdersByCustomer"],
+        awaitRefetchQueries: true,
+      });
+
+      if (result.data?.cancelOrder.success) {
+        toast.success("Захиалга цуцлагдлаа");
+        await refetch();
+      } else {
+        toast.error(result.data?.cancelOrder.message || "Алдаа гарлаа");
+      }
+    } catch (error: any) {
+      console.error("Cancel order error:", error);
+      toast.error(error.message || "Захиалга цуцлахад алдаа гарлаа");
+    } finally {
+      setIsCancelling(false);
+    }
+  };
 
   useEffect(() => {
     if (!isLoading && (!isAuthenticated || user?.role !== "customer")) {
@@ -209,11 +240,17 @@ export default function OrderDetailPage() {
                 </div>
               </div>
 
-              {!order.payment.isPaid && (
-                <Button className="w-full mt-4">
-                  <DollarSign className="w-4 h-4 mr-2" />
-                  Төлбөр төлөх
-                </Button>
+              {!order.payment.isPaid && order.orderStatus !== 2 && (
+                <>
+                  <Button className="w-full mt-4" onClick={() => router.push(`/orders/payment?orderId=${order.id}`)}>
+                    <DollarSign className="w-4 h-4 mr-2" />
+                    Төлбөр төлөх
+                  </Button>
+                  <Button variant="outline" className="w-full mt-2 border-red-200 text-red-600 hover:bg-red-50" onClick={handleCancelOrder} disabled={isCancelling}>
+                    <XCircle className="w-4 h-4 mr-2" />
+                    {isCancelling ? "Цуцлаж байна..." : "Захиалга цуцлах"}
+                  </Button>
+                </>
               )}
             </CardContent>
           </Card>

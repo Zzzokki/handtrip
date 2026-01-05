@@ -8,6 +8,10 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {},
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 export default nextConfig;

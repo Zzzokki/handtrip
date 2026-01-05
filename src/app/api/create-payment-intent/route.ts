@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { db, orderTable } from "@/app/api/graphql/database";
+import { eq } from "drizzle-orm";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2025-12-15.clover",
@@ -7,7 +9,31 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
 
 export async function POST(req: NextRequest) {
   try {
-    const { amount, travelName, travelers } = await req.json();
+    const { amount, orderId } = await req.json();
+
+    // Validate the order exists and amount matches
+    if (orderId) {
+      const order = await db.query.orderTable.findFirst({
+        where: eq(orderTable.id, orderId),
+        with: {
+          payment: true,
+        },
+      });
+
+      if (!order) {
+        return NextResponse.json({ error: "Order not found" }, { status: 404 });
+      }
+
+      // Verify amount matches order total
+      if (order.payment.total !== amount) {
+        return NextResponse.json({ error: "Amount mismatch" }, { status: 400 });
+      }
+
+      // Don't create payment intent if already paid
+      if (order.payment.isPaid) {
+        return NextResponse.json({ error: "Order already paid" }, { status: 400 });
+      }
+    }
 
     // Create a PaymentIntent with the order amount and currency
     const paymentIntent = await stripe.paymentIntents.create({
@@ -17,8 +43,7 @@ export async function POST(req: NextRequest) {
         enabled: true,
       },
       metadata: {
-        travelName,
-        travelersCount: travelers.toString(),
+        orderId: orderId?.toString() || "",
       },
     });
 

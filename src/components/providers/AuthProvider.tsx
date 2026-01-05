@@ -70,8 +70,6 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 export const useAuth = () => useContext(AuthContext);
 
 export const getAuthToken = () => {
-  if (typeof window !== "undefined") {
-    return localStorage.getItem(AUTH_TOKEN_KEY);
-  }
+  if (typeof window !== "undefined") return localStorage.getItem(AUTH_TOKEN_KEY);
   return null;
 };

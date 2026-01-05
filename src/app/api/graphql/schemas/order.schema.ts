@@ -39,10 +39,27 @@ export const orderTypeDefs = gql`
   input CreateOrderInput {
     travelSessionId: Int!
     travelers: [TravelerInput!]!
-    paymentIntentId: String!
+    paymentIntentId: String
   }
 
   type CreateOrderResponse {
+    order: Order!
+    success: Boolean!
+    message: String!
+  }
+
+  type UpdateOrderPaymentResponse {
+    order: Order!
+    success: Boolean!
+    message: String!
+  }
+
+  type UpdatePaymentIntentResponse {
+    success: Boolean!
+    message: String!
+  }
+
+  type CancelOrderResponse {
     order: Order!
     success: Boolean!
     message: String!
@@ -58,5 +75,8 @@ export const orderTypeDefs = gql`
 
   type Mutation {
     createOrder(input: CreateOrderInput!): CreateOrderResponse!
+    updateOrderPayment(orderId: Int!, paymentIntentId: String!): UpdateOrderPaymentResponse!
+    updatePaymentIntent(orderId: Int!, paymentIntentId: String!): UpdatePaymentIntentResponse!
+    cancelOrder(orderId: Int!): CancelOrderResponse!
   }
 `;

@@ -79,7 +79,7 @@ export default function PaymentForm({ onSuccess, amount }: PaymentFormProps) {
             <CreditCard className="w-4 h-4 text-blue-600" />
             Төлөх дүн
           </span>
-          <span className="text-2xl font-bold text-gray-900">${amount.toFixed(2)}</span>
+          <span className="text-2xl font-bold text-gray-900">₮{amount.toLocaleString()}</span>
         </div>
         <div className="flex items-center gap-2 text-xs text-gray-600">
           <Lock className="w-3 h-3" />

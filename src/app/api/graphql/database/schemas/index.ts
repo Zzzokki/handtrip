@@ -4,6 +4,8 @@ export * from "./travel.schema";
 export * from "./destination.schema";
 export * from "./customer.schema";
 export * from "./company.schema";
+export * from "./admin.schema";
+export * from "./manager.schema";
 export * from "./traveler.schema";
 export * from "./agenda.schema";
 export * from "./order.schema";

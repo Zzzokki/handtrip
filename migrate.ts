@@ -9,7 +9,7 @@ async function migrate() {
   const sql = neon(process.env.DATABASE_URL!);
 
   console.log("Reading migration file...");
-  const migrationSQL = readFileSync(join(__dirname, "drizzle/0000_happy_captain_cross.sql"), "utf-8");
+  const migrationSQL = readFileSync(join(__dirname, "drizzle/0001_workable_madrox.sql"), "utf-8");
 
   console.log("Applying migration...");
   const statements = migrationSQL
@@ -19,7 +19,7 @@ async function migrate() {
 
   for (const statement of statements) {
     try {
-      await sql(statement);
+      await sql`${sql.unsafe(statement)}`;
       console.log("✓ Applied statement");
     } catch (error: any) {
       if (error.message.includes("already exists")) {

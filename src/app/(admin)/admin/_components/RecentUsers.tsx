@@ -19,17 +19,17 @@ export const RecentUsers = () => {
 
   if (loading) {
     return (
-      <Card className="border-slate-200">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Users className="w-5 h-5 text-slate-600" />
+      <Card className="border-gray-200">
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-sm font-semibold">
+            <Users className="w-4 h-4 text-gray-600" />
             Шинэ хэрэглэгчид
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
+          <div className="space-y-2">
             {[1, 2, 3, 4].map((i) => (
-              <Skeleton key={i} className="h-16 w-full" />
+              <Skeleton key={i} className="h-12 w-full" />
             ))}
           </div>
         </CardContent>
@@ -40,29 +40,29 @@ export const RecentUsers = () => {
   const customers = (data?.getCustomers || []).slice(0, 5);
 
   return (
-    <Card className="border-slate-200">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Users className="w-5 h-5 text-slate-600" />
+    <Card className="border-gray-200">
+      <CardHeader className="pb-3">
+        <CardTitle className="flex items-center gap-2 text-sm font-semibold">
+          <Users className="w-4 h-4 text-gray-600" />
           Шинэ хэрэглэгчид
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-3">
+        <div className="space-y-2">
           {customers.map((customer) => {
             const avatar = customer.firstName.charAt(0).toUpperCase();
             return (
-              <div key={customer.id} className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg transition-colors">
-                <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-semibold flex-shrink-0">{avatar}</div>
+              <div key={customer.id} className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded-md transition-colors">
+                <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-medium text-xs flex-shrink-0">{avatar}</div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-slate-900">
+                  <p className="text-xs font-medium text-gray-900">
                     {customer.firstName} {customer.lastName}
                   </p>
-                  <p className="text-xs text-slate-500 truncate">{customer.email}</p>
+                  <p className="text-xs text-gray-500 truncate">{customer.email}</p>
                 </div>
-                <div className="flex flex-col items-end gap-1 flex-shrink-0">
-                  <Badge className="bg-blue-100 text-blue-800 border-blue-200 border text-xs">Аяллагч</Badge>
-                  <span className="text-xs text-slate-400 whitespace-nowrap">{getTimeAgo(customer.createdAt)}</span>
+                <div className="flex flex-col items-end gap-0.5 flex-shrink-0">
+                  <Badge className="bg-blue-100 text-blue-800 border-blue-200 border text-xs px-2 py-0">Аяллагч</Badge>
+                  <span className="text-xs text-gray-400 whitespace-nowrap">{getTimeAgo(customer.createdAt)}</span>
                 </div>
               </div>
             );

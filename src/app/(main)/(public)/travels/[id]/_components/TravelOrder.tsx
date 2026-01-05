@@ -145,7 +145,7 @@ export const TravelOrder = ({ travel }: TravelOrderProps) => {
             disabled={!selectedSession}
           >
             <ShoppingCart className="w-5 h-5 mr-2" />
-            {user ? "Захиалга үүсгэх" : "Нэвтрэх"}
+            {user ? "Үргэлжлүүлэх" : "Нэвтрэх"}
             <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
           </Button>
 

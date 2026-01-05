@@ -41,18 +41,18 @@ export const StatCard = ({ title, value, subtitle, icon: Icon, color = "blue" }:
   const colors = colorConfig[color];
 
   return (
-    <Card className={`border border-gray-200 shadow-sm hover:shadow-md ${colors.hoverBorder} transition-all duration-200 bg-white`}>
-      <CardHeader className="p-4">
-        <div className="flex items-center justify-between">
-          <CardDescription className="text-xs font-medium text-gray-500 uppercase tracking-wide">{title}</CardDescription>
-          <div className={`w-9 h-9 rounded-lg ${colors.iconBg} flex items-center justify-center`}>
+    <Card className="hover:shadow-sm transition-shadow border-gray-200">
+      <CardContent className="p-4">
+        <div className="flex items-start justify-between">
+          <div className="flex-1">
+            <p className="text-xs font-medium text-gray-500 mb-1">{title}</p>
+            <p className="text-xl font-semibold text-gray-900 mb-0.5">{value}</p>
+            <p className="text-xs text-gray-400">{subtitle}</p>
+          </div>
+          <div className={`p-2 rounded-lg ${colors.iconBg}`}>
             <Icon className={`w-4 h-4 ${colors.iconColor}`} />
           </div>
         </div>
-      </CardHeader>
-      <CardContent className="px-4 pb-4 pt-0">
-        <div className="text-2xl font-bold text-gray-900">{value}</div>
-        <p className="text-xs text-gray-500 mt-0.5">{subtitle}</p>
       </CardContent>
     </Card>
   );

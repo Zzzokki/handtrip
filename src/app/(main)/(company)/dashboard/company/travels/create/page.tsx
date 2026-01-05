@@ -85,8 +85,6 @@ export default function CreateTravelPage() {
     },
   });
 
-  console.log(form.formState.errors);
-
   const [createTravel, { loading }] = useCreateTravelByCompanyMutation({
     onError: (error) => toast.error(`Аяллын багц үүсгэхэд алдаа гарлаа: ${error.message}`),
     onCompleted: () => {
@@ -138,10 +136,6 @@ export default function CreateTravelPage() {
     }
   };
 
-  const v = form.watch();
-
-  console.log(v);
-
   return (
     <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 w-full">
       <CreateTravelHeader />
@@ -152,7 +146,6 @@ export default function CreateTravelPage() {
 
           <UploadGallery
             onUploadComplete={(urls) => {
-              console.log("urls", urls);
               form.setValue("gallery", urls);
             }}
           />

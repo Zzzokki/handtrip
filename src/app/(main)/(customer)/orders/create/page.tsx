@@ -2,16 +2,13 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Elements } from "@stripe/react-stripe-js";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useGetTravelQuery, useCreateOrderMutation } from "@/types/generated";
 import { useAuth } from "@/components/providers/AuthProvider";
-import { Calendar, MapPin, Users, User, Mail, Phone, Plus, Trash2, ShoppingCart, ChevronRight, ArrowLeft, CreditCard } from "lucide-react";
-import { getStripe } from "@/lib/stripe";
-import PaymentForm from "@/components/PaymentForm";
+import { Calendar, MapPin, Users, User, Mail, Phone, Plus, Trash2, ShoppingCart, ChevronRight, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
 type Traveler = {
@@ -38,11 +35,6 @@ export default function CreateOrderPage() {
       dateOfBirth: "",
     }))
   );
-
-  const [showPayment, setShowPayment] = useState(false);
-  const [clientSecret, setClientSecret] = useState("");
-  const [paymentIntentId, setPaymentIntentId] = useState("");
-  const [stripePromise] = useState(() => getStripe());
 
   const [createOrder, { loading: creatingOrder }] = useCreateOrderMutation();
 
@@ -148,50 +140,8 @@ export default function CreateOrderPage() {
       return;
     }
 
-    const seatCost = availableSeats[0]?.seatCost?.cost || 0;
-    // Calculate total amount (seat cost * number of travelers)
-    const amount = seatCost * travelers.length;
-
     try {
-      // Create payment intent
-      const response = await fetch("/api/create-payment-intent", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          amount,
-          travelName: travel?.name || "",
-          travelers: travelers.length,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data.clientSecret) {
-        setClientSecret(data.clientSecret);
-        // Extract payment intent ID from client secret
-        const intentId = data.clientSecret.split("_secret_")[0];
-        setPaymentIntentId(intentId);
-
-        // Store travelers data in URL for success page
-        const travelersParam = encodeURIComponent(JSON.stringify(travelers));
-        const currentUrl = new URL(window.location.href);
-        currentUrl.searchParams.set("travelers", travelersParam);
-        window.history.replaceState({}, "", currentUrl.toString());
-
-        setShowPayment(true);
-      } else {
-        toast.error("Төлбөрийн систем эхлүүлэхэд алдаа гарлаа");
-      }
-    } catch (error) {
-      console.error("Payment error:", error);
-      toast.error("Алдаа гарлаа. Дахин оролдоно уу.");
-    }
-  };
-
-  const handlePaymentSuccess = async () => {
-    try {
+      // Create order with pending status
       const result = await createOrder({
         variables: {
           input: {
@@ -202,7 +152,6 @@ export default function CreateOrderPage() {
               phoneNumber: t.phoneNumber,
               dateOfBirth: new Date(t.dateOfBirth).toISOString(),
             })),
-            paymentIntentId,
           },
         },
         refetchQueries: ["GetOrdersByCustomer"],
@@ -210,8 +159,10 @@ export default function CreateOrderPage() {
       });
 
       if (result.data?.createOrder.success) {
-        toast.success("Төлбөр амжилттай! Захиалга баталгаажлаа.");
-        router.push("/customer");
+        const orderId = result.data.createOrder.order?.id;
+        toast.success("Захиалга үүсгэлээ. Төлбөр төлөх хэсэг рүү шилжиж байна...");
+        // Redirect to payment page
+        router.push(`/orders/payment?orderId=${orderId}`);
       } else {
         toast.error(result.data?.createOrder.message || "Захиалга үүсгэхэд алдаа гарлаа");
       }
@@ -231,144 +182,115 @@ export default function CreateOrderPage() {
 
         <div className="grid lg:grid-cols-3 gap-4">
           <div className="lg:col-span-2 space-y-3">
-            {!showPayment ? (
-              <>
-                <Card className="border-0 shadow-lg overflow-hidden">
-                  <div className="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-white/20 backdrop-blur-xl rounded-lg border border-white/30">
-                        <ShoppingCart className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <h1 className="text-xl font-bold text-white">Захиалга үүсгэх</h1>
-                        <p className="text-white/90 text-sm">Аялагчдын мэдээллийг бөглөнө үү</p>
-                      </div>
-                    </div>
+            <Card className="border-0 shadow-lg overflow-hidden">
+              <div className="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 p-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-white/20 backdrop-blur-xl rounded-lg border border-white/30">
+                    <ShoppingCart className="w-5 h-5 text-white" />
                   </div>
-                </Card>
+                  <div>
+                    <h1 className="text-xl font-bold text-white">Захиалга үүсгэх</h1>
+                    <p className="text-white/90 text-sm">Аялагчдын мэдээллийг бөглөнө үү</p>
+                  </div>
+                </div>
+              </div>
+            </Card>
 
-                <Card className="border-0 shadow-lg">
-                  <CardHeader className="border-b bg-gradient-to-r from-gray-50 to-white p-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className="p-1.5 bg-blue-100 rounded-lg">
-                          <Users className="w-4 h-4 text-blue-600" />
-                        </div>
-                        <div>
-                          <CardTitle className="text-lg">Аялагчдын мэдээлэл</CardTitle>
-                          <CardDescription className="text-sm">Нийт {travelers.length} аялагч</CardDescription>
-                        </div>
-                      </div>
-                      <Button
-                        onClick={addTraveler}
-                        disabled={travelers.length >= travel.totalSeatNumber}
-                        className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 h-8 text-sm"
-                      >
-                        <Plus className="w-4 h-4 mr-1" />
-                        Нэмэх
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="pt-4 space-y-3 p-4">
-                    {travelers.map((traveler, index) => (
-                      <div key={index} className="relative p-4 bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 rounded-xl border border-gray-200 hover:border-blue-300 transition-all">
-                        {travelers.length > 1 && (
-                          <Button variant="ghost" size="sm" onClick={() => removeTraveler(index)} className="absolute top-2 right-2 text-red-600 hover:text-red-700 hover:bg-red-50 h-8 w-8 p-0">
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        )}
-
-                        <div className="flex items-center gap-2 mb-4">
-                          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 text-white flex items-center justify-center text-sm font-bold">{index + 1}</div>
-                          <h3 className="text-base font-bold text-gray-900">{index + 1}-р аялагч</h3>
-                        </div>
-
-                        <div className="grid md:grid-cols-2 gap-3">
-                          <div className="md:col-span-2">
-                            <Label htmlFor={`name-${index}`} className="text-xs font-semibold text-gray-900 flex items-center gap-1.5 mb-1.5">
-                              <User className="w-3 h-3 text-blue-600" />
-                              Овог нэр
-                            </Label>
-                            <Input
-                              id={`name-${index}`}
-                              placeholder="Овог нэрээ бичнэ үү"
-                              value={traveler.name}
-                              onChange={(e) => updateTraveler(index, "name", e.target.value)}
-                              className="h-9 border focus:border-blue-500 bg-white text-sm"
-                            />
-                          </div>
-                          <div>
-                            <Label htmlFor={`email-${index}`} className="text-xs font-semibold text-gray-900 flex items-center gap-1.5 mb-1.5">
-                              <Mail className="w-3 h-3 text-blue-600" />
-                              И-мэйл
-                            </Label>
-                            <Input
-                              id={`email-${index}`}
-                              type="email"
-                              placeholder="example@email.com"
-                              value={traveler.email}
-                              onChange={(e) => updateTraveler(index, "email", e.target.value)}
-                              className="h-9 border focus:border-blue-500 bg-white text-sm"
-                            />
-                          </div>
-                          <div>
-                            <Label htmlFor={`phone-${index}`} className="text-xs font-semibold text-gray-900 flex items-center gap-1.5 mb-1.5">
-                              <Phone className="w-3 h-3 text-blue-600" />
-                              Утас
-                            </Label>
-                            <Input
-                              id={`phone-${index}`}
-                              placeholder="+976 9999 9999"
-                              value={traveler.phoneNumber}
-                              onChange={(e) => updateTraveler(index, "phoneNumber", e.target.value)}
-                              className="h-9 border focus:border-blue-500 bg-white text-sm"
-                            />
-                          </div>
-                          <div className="md:col-span-2">
-                            <Label htmlFor={`dob-${index}`} className="text-xs font-semibold text-gray-900 flex items-center gap-1.5 mb-1.5">
-                              <Calendar className="w-3 h-3 text-blue-600" />
-                              Төрсөн огноо
-                            </Label>
-                            <Input
-                              id={`dob-${index}`}
-                              type="date"
-                              value={traveler.dateOfBirth}
-                              onChange={(e) => updateTraveler(index, "dateOfBirth", e.target.value)}
-                              className="h-9 border focus:border-blue-500 bg-white text-sm"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </CardContent>
-                </Card>
-              </>
-            ) : (
-              <Card className="border-0 shadow-lg overflow-hidden">
-                <CardHeader className="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 text-white p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-white/20 backdrop-blur-xl rounded-lg border border-white/30">
-                      <CreditCard className="w-5 h-5 text-white" />
+            <Card className="border-0 shadow-lg">
+              <CardHeader className="border-b bg-gradient-to-r from-gray-50 to-white p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 bg-blue-100 rounded-lg">
+                      <Users className="w-4 h-4 text-blue-600" />
                     </div>
                     <div>
-                      <CardTitle className="text-lg font-bold">Төлбөр төлөх</CardTitle>
-                      <p className="text-white/90 text-sm">Төлбөрийн мэдээллийг бөглөнө үү</p>
+                      <CardTitle className="text-lg">Аялагчдын мэдээлэл</CardTitle>
+                      <CardDescription className="text-sm">Нийт {travelers.length} аялагч</CardDescription>
                     </div>
                   </div>
-                </CardHeader>
-                <CardContent className="p-6">
-                  {clientSecret && stripePromise && (
-                    <Elements stripe={stripePromise} options={{ clientSecret }}>
-                      <PaymentForm onSuccess={handlePaymentSuccess} amount={travelers.length * 100} />
-                    </Elements>
-                  )}
-                  <Button variant="outline" onClick={() => setShowPayment(false)} className="w-full mt-4">
-                    <ArrowLeft className="w-4 h-4 mr-2" />
-                    Буцах
+                  <Button
+                    onClick={addTraveler}
+                    disabled={travelers.length >= travel.totalSeatNumber}
+                    className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 h-8 text-sm"
+                  >
+                    <Plus className="w-4 h-4 mr-1" />
+                    Нэмэх
                   </Button>
-                </CardContent>
-              </Card>
-            )}
+                </div>
+              </CardHeader>
+              <CardContent className="pt-4 space-y-3 p-4">
+                {travelers.map((traveler, index) => (
+                  <div key={index} className="relative p-4 bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 rounded-xl border border-gray-200 hover:border-blue-300 transition-all">
+                    {travelers.length > 1 && (
+                      <Button variant="ghost" size="sm" onClick={() => removeTraveler(index)} className="absolute top-2 right-2 text-red-600 hover:text-red-700 hover:bg-red-50 h-8 w-8 p-0">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    )}
+
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 text-white flex items-center justify-center text-sm font-bold">{index + 1}</div>
+                      <h3 className="text-base font-bold text-gray-900">{index + 1}-р аялагч</h3>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-3">
+                      <div className="md:col-span-2">
+                        <Label htmlFor={`name-${index}`} className="text-xs font-semibold text-gray-900 flex items-center gap-1.5 mb-1.5">
+                          <User className="w-3 h-3 text-blue-600" />
+                          Овог нэр
+                        </Label>
+                        <Input
+                          id={`name-${index}`}
+                          placeholder="Овог нэрээ бичнэ үү"
+                          value={traveler.name}
+                          onChange={(e) => updateTraveler(index, "name", e.target.value)}
+                          className="h-9 border focus:border-blue-500 bg-white text-sm"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor={`email-${index}`} className="text-xs font-semibold text-gray-900 flex items-center gap-1.5 mb-1.5">
+                          <Mail className="w-3 h-3 text-blue-600" />
+                          И-мэйл
+                        </Label>
+                        <Input
+                          id={`email-${index}`}
+                          type="email"
+                          placeholder="example@email.com"
+                          value={traveler.email}
+                          onChange={(e) => updateTraveler(index, "email", e.target.value)}
+                          className="h-9 border focus:border-blue-500 bg-white text-sm"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor={`phone-${index}`} className="text-xs font-semibold text-gray-900 flex items-center gap-1.5 mb-1.5">
+                          <Phone className="w-3 h-3 text-blue-600" />
+                          Утас
+                        </Label>
+                        <Input
+                          id={`phone-${index}`}
+                          placeholder="+976 9999 9999"
+                          value={traveler.phoneNumber}
+                          onChange={(e) => updateTraveler(index, "phoneNumber", e.target.value)}
+                          className="h-9 border focus:border-blue-500 bg-white text-sm"
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <Label htmlFor={`dob-${index}`} className="text-xs font-semibold text-gray-900 flex items-center gap-1.5 mb-1.5">
+                          <Calendar className="w-3 h-3 text-blue-600" />
+                          Төрсөн огноо
+                        </Label>
+                        <Input
+                          id={`dob-${index}`}
+                          type="date"
+                          value={traveler.dateOfBirth}
+                          onChange={(e) => updateTraveler(index, "dateOfBirth", e.target.value)}
+                          className="h-9 border focus:border-blue-500 bg-white text-sm"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
           </div>
 
           <div className="lg:col-span-1">
@@ -436,11 +358,11 @@ export default function CreateOrderPage() {
 
                   <Button
                     onClick={handleSubmit}
-                    disabled={showPayment}
-                    className="w-full h-10 text-sm font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all group"
+                    disabled={creatingOrder}
+                    className="w-full h-10 text-sm font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all group disabled:opacity-50"
                   >
                     <ShoppingCart className="w-4 h-4 mr-2" />
-                    {showPayment ? "Төлбөр төлөх хэсэг" : "Төлбөр төлөх"}
+                    {creatingOrder ? "Уншиж байна..." : "Захиалах"}
                     <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </CardContent>

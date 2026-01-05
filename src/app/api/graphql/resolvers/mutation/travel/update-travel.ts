@@ -9,7 +9,6 @@ export const updateTravel: MutationResolvers["updateTravel"] = async (_, { id, i
     throw new Error("Зөвшөөрөлгүй: Зөвхөн компаниуд аялал засах боломжтой");
   }
 
-  // Check if travel exists and belongs to this company
   const existingTravel = await db.query.travelTable.findFirst({
     where: eq(travelTable.id, id),
   });

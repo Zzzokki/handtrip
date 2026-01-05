@@ -1,3 +1,13 @@
+type Admin {
+  createdAt: Timestamp!
+  email: String!
+  firstName: String!
+  id: Int!
+  lastName: String!
+  updatedAt: Timestamp!
+  username: String!
+}
+
 type AdminStats {
   activeOrders: Int!
   pendingCompanies: Int!
@@ -22,6 +32,12 @@ input AgendaItemInput {
   day: Int!
   description: String!
   name: String!
+}
+
+type CancelOrderResponse {
+  message: String!
+  order: Order!
+  success: Boolean!
 }
 
 type Category {
@@ -74,7 +90,7 @@ input CreateGuideInput {
 }
 
 input CreateOrderInput {
-  paymentIntentId: String!
+  paymentIntentId: String
   travelSessionId: Int!
   travelers: [TravelerInput!]!
 }
@@ -173,6 +189,11 @@ type Guide {
   updatedAt: Timestamp!
 }
 
+type LoginAsAdminResponse {
+  admin: Admin!
+  token: String!
+}
+
 type LoginAsCompanyResponse {
   company: Company!
   token: String!
@@ -181,6 +202,24 @@ type LoginAsCompanyResponse {
 type LoginAsCustomerResponse {
   customer: Customer!
   token: String!
+}
+
+type LoginAsManagerResponse {
+  manager: Manager!
+  token: String!
+}
+
+type Manager {
+  company: Company
+  companyId: Int
+  createdAt: Timestamp!
+  email: String!
+  firstName: String!
+  id: Int!
+  lastName: String!
+  phoneNumber: String
+  updatedAt: Timestamp!
+  username: String!
 }
 
 type ManagerStats {
@@ -194,6 +233,7 @@ type ManagerStats {
 }
 
 type Mutation {
+  cancelOrder(orderId: Int!): CancelOrderResponse!
   createCompany(input: CreateCompanyInput!): Company!
   createCustomer(input: CreateCustomerInput!): Customer!
   createDestination(location: String!, name: String!): Destination!
@@ -204,12 +244,16 @@ type Mutation {
   deleteCustomer(id: Int!): Customer!
   deleteGuide(id: Int!): Boolean!
   deleteTravel(id: Int!): Travel!
+  loginAsAdmin(password: String!, username: String!): LoginAsAdminResponse!
   loginAsCompany(password: String!, username: String!): LoginAsCompanyResponse!
   loginAsCustomer(password: String!, username: String!): LoginAsCustomerResponse!
+  loginAsManager(password: String!, username: String!): LoginAsManagerResponse!
   registerAsCustomer(input: RegisterAsCustomerInput!): LoginAsCustomerResponse!
   updateCompany(input: UpdateCompanyInput!): Company!
   updateCustomer(input: UpdateCustomerInput!): Customer!
   updateGuide(id: Int!, input: UpdateGuideInput!): Guide!
+  updateOrderPayment(orderId: Int!, paymentIntentId: String!): UpdateOrderPaymentResponse!
+  updatePaymentIntent(orderId: Int!, paymentIntentId: String!): UpdatePaymentIntentResponse!
   updateTravel(id: Int!, input: CreateTravelInput!): Travel!
 }
 
@@ -251,8 +295,10 @@ type Query {
   getGuideByCompany(id: Int!): Guide!
   getGuidesByCompany: [Guide!]!
   getManagerStats: ManagerStats!
+  getMeAsAdmin: Admin!
   getMeAsCompany: Company!
   getMeAsCustomer: Customer!
+  getMeAsManager: Manager!
   getOrder(id: Int!): Order!
   getOrders: [Order!]!
   getOrdersByCompany(companyId: Int!): [Order!]!
@@ -393,4 +439,15 @@ input UpdateGuideInput {
   name: String
   phoneNumber: String
   profileImage: String
+}
+
+type UpdateOrderPaymentResponse {
+  message: String!
+  order: Order!
+  success: Boolean!
+}
+
+type UpdatePaymentIntentResponse {
+  message: String!
+  success: Boolean!
 }

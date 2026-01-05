@@ -1,5 +1,4 @@
 import { TimestampResolver } from "graphql-scalars";
-import { db } from "@/database";
 import * as Mutation from "./mutation";
 import * as Query from "./query";
 

@@ -4,6 +4,8 @@ import { commonTypeDefs } from "./common.schema";
 import { customerTypeDefs } from "./customer.schema";
 import { authTypeDefs } from "./auth.schema";
 import { companyTypeDefs } from "./company.schema";
+import { adminTypeDefs } from "./admin.schema";
+import { managerTypeDefs } from "./manager.schema";
 import { travelTypeDefs } from "./travel.schema";
 import { categoryTypeDefs } from "./category.schema";
 import { destinationTypeDefs } from "./destination.schema";
@@ -28,6 +30,8 @@ export const typeDefs = mergeTypeDefs([
   authTypeDefs,
   customerTypeDefs,
   companyTypeDefs,
+  adminTypeDefs,
+  managerTypeDefs,
   travelTypeDefs,
   categoryTypeDefs,
   subCategoryTypeDefs,

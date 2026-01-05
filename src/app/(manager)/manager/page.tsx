@@ -1,7 +1,7 @@
 "use client";
 
 import { Building2, ShoppingBag, Users, Plane, DollarSign, Plus } from "lucide-react";
-import { ManagerHeader, StatCard, QuickActionCard } from "./_components";
+import { StatCard, QuickActionCard } from "./_components";
 import { useGetManagerStatsQuery } from "@/types/generated";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -12,16 +12,19 @@ export default function ManagerDashboard() {
 
   if (loading) {
     return (
-      <div className="max-w-6xl mx-auto py-6 w-full">
-        <ManagerHeader />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+      <div className="space-y-4">
+        <div>
+          <h1 className="text-xl font-semibold text-gray-900">Хянах самбар</h1>
+          <p className="text-sm text-gray-500">Платформын ерөнхий мэдээлэл</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map((i) => (
-            <Skeleton key={i} className="h-32 rounded-lg" />
+            <Skeleton key={i} className="h-24 rounded-lg" />
           ))}
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[1, 2, 3].map((i) => (
-            <Skeleton key={i} className="h-32 rounded-lg" />
+            <Skeleton key={i} className="h-24 rounded-lg" />
           ))}
         </div>
       </div>
@@ -29,11 +32,15 @@ export default function ManagerDashboard() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto py-6 w-full">
-      <ManagerHeader />
+    <div className="space-y-4">
+      {/* Page Header */}
+      <div>
+        <h1 className="text-xl font-semibold text-gray-900">Хянах самбар</h1>
+        <p className="text-sm text-gray-500">Платформын ерөнхий мэдээлэл</p>
+      </div>
 
       {/* Main Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard title="Нийт компани" value={stats?.totalCompanies || 0} subtitle="Бүртгэлтэй компаниуд" icon={Building2} color="blue" />
         <StatCard title="Нийт захиалга" value={stats?.totalOrders || 0} subtitle="Бүх захиалгууд" icon={ShoppingBag} color="green" />
         <StatCard title="Нийт хэрэглэгч" value={stats?.totalUsers || 0} subtitle="Бүртгэлтэй хэрэглэгчид" icon={Users} color="purple" />
@@ -41,7 +48,7 @@ export default function ManagerDashboard() {
       </div>
 
       {/* Secondary Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <StatCard title="Идэвхтэй аяллууд" value={stats?.activeTravels || 0} subtitle="Идэвхжиж буй" icon={Plane} color="blue" />
         <StatCard title="Шинэ захиалга" value={stats?.todayOrders || 0} subtitle="Өнөөдөр" icon={ShoppingBag} color="green" />
         <StatCard title="Батлах хүлээлттэй" value={stats?.pendingCompanies || 0} subtitle="Компанийн хүсэлт" icon={Building2} color="red" />

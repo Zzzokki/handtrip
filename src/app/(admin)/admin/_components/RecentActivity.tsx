@@ -25,17 +25,17 @@ export const RecentActivity = () => {
 
   if (loading) {
     return (
-      <Card className="border-slate-200">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Clock className="w-5 h-5 text-slate-600" />
+      <Card className="border-gray-200">
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-sm font-semibold">
+            <Clock className="w-4 h-4 text-gray-600" />
             Сүүлийн үйл ажиллагаа
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
+          <div className="space-y-2">
             {[1, 2, 3, 4].map((i) => (
-              <Skeleton key={i} className="h-16 w-full" />
+              <Skeleton key={i} className="h-12 w-full" />
             ))}
           </div>
         </CardContent>
@@ -46,31 +46,31 @@ export const RecentActivity = () => {
   const orders = (data?.getOrders || []).slice(0, 5);
 
   return (
-    <Card className="border-slate-200">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Clock className="w-5 h-5 text-slate-600" />
+    <Card className="border-gray-200">
+      <CardHeader className="pb-3">
+        <CardTitle className="flex items-center gap-2 text-sm font-semibold">
+          <Clock className="w-4 h-4 text-gray-600" />
           Сүүлийн үйл ажиллагаа
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
+        <div className="space-y-2">
           {orders.map((order) => {
             const status = ORDER_STATUS[order.orderStatus as keyof typeof ORDER_STATUS];
             return (
-              <div key={order.id} className="flex items-start gap-3 p-3 hover:bg-slate-50 rounded-lg transition-colors">
-                <div className="w-2 h-2 rounded-full bg-slate-400 mt-2" />
+              <div key={order.id} className="flex items-start gap-2 p-2 hover:bg-gray-50 rounded-md transition-colors">
+                <div className="w-1.5 h-1.5 rounded-full bg-gray-400 mt-1.5" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-slate-900">
+                  <p className="text-xs font-medium text-gray-900">
                     Захиалга #{order.id} - {order.customer.firstName} {order.customer.lastName}
                   </p>
-                  <p className="text-xs text-slate-500 mt-1">
+                  <p className="text-xs text-gray-500 mt-0.5">
                     ₮{order.totalPrice.toLocaleString()} • {order.totalSeats} суудал
                   </p>
                 </div>
-                <div className="flex flex-col items-end gap-1">
-                  <Badge className={`${status.color} border text-xs`}>{status.label}</Badge>
-                  <span className="text-xs text-slate-400 whitespace-nowrap">{getTimeAgo(order.createdAt)}</span>
+                <div className="flex flex-col items-end gap-0.5">
+                  <Badge className={`${status.color} border text-xs px-2 py-0`}>{status.label}</Badge>
+                  <span className="text-xs text-gray-400 whitespace-nowrap">{getTimeAgo(order.createdAt)}</span>
                 </div>
               </div>
             );
